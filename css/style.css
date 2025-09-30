@@ -10,9 +10,9 @@
   --purple: #6f42c1;
   --pink: #e83e8c;
   --red: #dc3545;
-  --orange: #fd7e14;
-  --yellow: #ffc107;
-  --green: #28a745;
+  --orange: #FFD700;
+  --yellow: #FFD700;
+  --green: #007A4D;
   --teal: #20c997;
   --cyan: #17a2b8;
   --white: #fff;
@@ -22,7 +22,7 @@
   --secondary: #6c757d;
   --success: #28a745;
   --info: #17a2b8;
-  --warning: #ffc107;
+  --warning: #FFD700;
   --danger: #dc3545;
   --light: #f8f9fa;
   --dark: #343a40;
