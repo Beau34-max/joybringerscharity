@@ -2377,3 +2377,13 @@ textarea.form-control {
     stroke-dashoffset: -136px;
   }
 }
+
+.partners img {
+  max-height: 80px;
+  transition: all 0.3s ease;
+  filter: grayscale(100%);
+}
+.partners img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
