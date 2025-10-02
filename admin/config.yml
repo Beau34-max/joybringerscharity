@@ -12,6 +12,7 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Charity Number", name: "charity_number", widget: "string" }
+      - { label: "Background Image", name: "background", widget: "image" }
       - label: "Buttons"
         name: "buttons"
         widget: "list"
@@ -49,6 +50,7 @@ collections:
         widget: "list"
         fields:
           - { label: "Title", name: "title", widget: "string" }
+          - { label: "Date", name: "date", widget: "datetime" }
           - { label: "Description", name: "description", widget: "text" }
           - { label: "Image", name: "image", widget: "image" }
           - { label: "Link", name: "link", widget: "string" }
@@ -77,3 +79,10 @@ collections:
       - { label: "Terms Link", name: "terms_link", widget: "string" }
       - { label: "Cookies Link", name: "cookies_link", widget: "string" }
       - { label: "Privacy Link", name: "privacy_link", widget: "string" }
+      - label: "Social Links"
+        name: "socials"
+        widget: "list"
+        fields:
+          - { label: "Platform", name: "platform", widget: "string" }
+          - { label: "URL", name: "url", widget: "string" }
+          - { label: "Icon Class", name: "icon", widget: "string" }

@@ -6,5 +6,12 @@
   "charity_no": "1212606",
   "terms_link": "#",
   "cookies_link": "#",
-  "privacy_link": "#"
+  "privacy_link": "#",
+  "socials": [
+    { "platform": "Facebook", "url": "https://www.facebook.com/Joybringero/", "icon": "icon-facebook" },
+    { "platform": "Instagram", "url": "https://www.instagram.com/joybringerscharity/", "icon": "icon-instagram" },
+    { "platform": "LinkedIn", "url": "https://www.linkedin.com/company/joybringers/", "icon": "icon-linkedin" },
+    { "platform": "Twitter", "url": "https://x.com/JoybringersC", "icon": "icon-twitter" },
+    { "platform": "TikTok", "url": "https://www.tiktok.com/@joybringersc", "icon": "icon-tiktok" }
+  ]
 }

@@ -1,6 +1,18 @@
 {
   "items": [
-    { "title": "Youth Empowerment Workshop", "description": "Training sessions in digital skills and creative arts.", "image": "images/event-1.jpg", "link": "event.html" },
-    { "title": "Outdoor Fun Day", "description": "Families enjoying sack races, football, and swimming.", "image": "images/event-2.jpg", "link": "event.html" }
+    {
+      "title": "Youth Empowerment Workshop",
+      "date": "2025-05-20T10:00:00Z",
+      "description": "Training sessions in digital skills and creative arts.",
+      "image": "images/event-1.jpg",
+      "link": "event.html"
+    },
+    {
+      "title": "Outdoor Fun Day",
+      "date": "2025-06-15T12:00:00Z",
+      "description": "Families enjoying sack races, football, and fun activities.",
+      "image": "images/event-2.jpg",
+      "link": "event.html"
+    }
   ]
 }

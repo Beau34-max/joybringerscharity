@@ -1,69 +1,97 @@
-async function loadData(file) {
-  const res = await fetch(file);
-  return res.json();
+// Load JSON helper
+async function loadJSON(path) {
+  const response = await fetch(path);
+  return await response.json();
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // HERO
-  const hero = await loadData("data/hero.json");
-  document.querySelector(".hero-title").innerText = hero.title;
-  document.querySelector(".hero-charity").innerText = hero.charity_number;
-  const heroButtons = document.querySelector(".hero-buttons");
-  heroButtons.innerHTML = "";
-  hero.buttons.forEach(btn => {
-    heroButtons.innerHTML += `<a href="${btn.link}" class="btn ${btn.style} px-4 py-3">${btn.text}</a>`;
+// HERO SECTION
+loadJSON("data/hero.json").then(data => {
+  document.querySelector("#hero-title").innerText = data.title;
+  document.querySelector("#hero-charity").innerText = data.charity_number;
+  document.querySelector("#hero-bg").style.backgroundImage = `url('${data.background}')`;
+
+  let btnContainer = document.querySelector("#hero-buttons");
+  btnContainer.innerHTML = "";
+  data.buttons.forEach(btn => {
+    btnContainer.innerHTML += `
+      <a href="${btn.link}" class="btn ${btn.style} px-4 py-3">${btn.text}</a>
+    `;
   });
+});
 
-  // IMPACT
-  const impact = await loadData("data/impact.json");
-  document.querySelector(".impact-count").innerText = impact.young_people_supported;
-  document.querySelector(".impact-donation").innerText = impact.donation_message;
-  document.querySelector(".impact-volunteer").innerText = impact.volunteer_message;
+// IMPACT SECTION
+loadJSON("data/impact.json").then(data => {
+  document.querySelector("#impact-count").innerText = data.young_people_supported;
+  document.querySelector("#impact-donation").innerText = data.donation_message;
+  document.querySelector("#impact-volunteer").innerText = data.volunteer_message;
+});
 
-  // PROGRAMMES
-  const programmes = await loadData("data/programmes.json");
-  const progWrap = document.querySelector(".programmes");
-  progWrap.innerHTML = "";
-  programmes.items.forEach(p => {
-    progWrap.innerHTML += `
+// PROGRAMMES SECTION
+loadJSON("data/programmes.json").then(data => {
+  let container = document.querySelector("#programmes-list");
+  container.innerHTML = "";
+  data.items.forEach(item => {
+    container.innerHTML += `
       <div class="cause-entry">
-        <a class="img" style="background-image:url(${p.image});"></a>
+        <a class="img" style="background-image: url('${item.image}');"></a>
         <div class="text p-3 p-md-4">
-          <h3>${p.title}</h3>
-          <p>${p.description}</p>
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
         </div>
-      </div>`;
+      </div>
+    `;
   });
+});
 
-  // EVENTS
-  const events = await loadData("data/events.json");
-  const eventWrap = document.querySelector(".events");
-  eventWrap.innerHTML = "";
-  events.items.forEach(e => {
-    eventWrap.innerHTML += `
-      <div class="blog-entry">
-        <a class="block-20" style="background-image:url(${e.image});"></a>
-        <div class="text p-4">
-          <h3>${e.title}</h3>
-          <p>${e.description}</p>
-          <p><a href="${e.link}">Join Event</a></p>
+// EVENTS SECTION
+loadJSON("data/events.json").then(data => {
+  let container = document.querySelector("#events-list");
+  container.innerHTML = "";
+  data.items.forEach(item => {
+    container.innerHTML += `
+      <div class="col-md-4 d-flex ftco-animate">
+        <div class="blog-entry align-self-stretch">
+          <a class="block-20" style="background-image: url('${item.image}');"></a>
+          <div class="text p-4 d-block">
+            <h3 class="heading mb-4">${item.title}</h3>
+            <p>${item.description}</p>
+            <p><a href="${item.link}">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+          </div>
         </div>
-      </div>`;
+      </div>
+    `;
   });
+});
 
-  // PARTNERS
-  const partners = await loadData("data/partners.json");
-  const partnerWrap = document.querySelector(".partners");
-  partnerWrap.innerHTML = "";
-  partners.items.forEach(p => {
-    partnerWrap.innerHTML += `<img src="${p.logo}" alt="${p.name}" class="img-fluid mb-3">`;
+// PARTNERS SECTION
+loadJSON("data/partners.json").then(data => {
+  let container = document.querySelector("#partners-list");
+  container.innerHTML = "";
+  data.items.forEach(partner => {
+    container.innerHTML += `
+      <div class="col-md-3 col-6 ftco-animate">
+        <a href="${partner.link}" target="_blank">
+          <img src="${partner.logo}" alt="${partner.name}" class="img-fluid mb-3">
+        </a>
+      </div>
+    `;
   });
+});
 
-  // FOOTER
-  const footer = await loadData("data/footer.json");
-  document.querySelector(".footer-email").innerText = footer.email;
-  document.querySelector(".footer-phone").innerText = footer.phone;
-  document.querySelector(".footer-company").innerText = footer.company;
-  document.querySelector(".footer-company-no").innerText = footer.company_no;
-  document.querySelector(".footer-charity-no").innerText = footer.charity_no;
+// FOOTER SECTION
+loadJSON("data/footer.json").then(data => {
+  document.querySelector("#footer-email").innerText = data.email;
+  document.querySelector("#footer-phone").innerText = data.phone;
+  document.querySelector("#footer-company").innerText = data.company;
+  document.querySelector("#footer-company-no").innerText = data.company_no;
+  document.querySelector("#footer-charity-no").innerText = data.charity_no;
+
+  // Socials
+  let socials = document.querySelector("#footer-socials");
+  socials.innerHTML = "";
+  data.socials.forEach(s => {
+    socials.innerHTML += `
+      <a href="${s.url}" target="_blank"><span class="${s.icon}"></span></a>
+    `;
+  });
 });

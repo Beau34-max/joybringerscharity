@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Joybringers - Helping Young People Believe, Belong, and Become</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Fonts -->
@@ -48,29 +48,21 @@
   </nav>
   <!-- END nav -->
 
-  <!-- ✅ Hero Carousel -->
-  <div class="owl-carousel-wrapper">
-
-    <div class="box-92819 text-center">
-      <h1 class="text-white mb-3">Helping Young People Believe, Belong, and Become</h1>
-      <p>Registered Charity Number 1212606</p>
-      <p>
-        <a href="donate.html" class="btn btn-warning py-3 px-4 rounded-0">Donate Now</a>
-        <a href="volunteer.html" class="btn btn-success py-3 px-4 rounded-0">Become a Volunteer</a>
-        <a href="partner.html" class="btn btn-success py-3 px-4 rounded-0">Partner With Us</a>
-      </p>
+  <!-- Hero -->
+  <div class="hero-wrap" id="hero-bg" style="background-image: url('images/bg_7.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-7 text-center ftco-animate">
+          <h1 class="mb-4" id="hero-title">Loading...</h1>
+          <p class="mb-4" id="hero-charity"></p>
+          <p id="hero-buttons"></p>
+        </div>
+      </div>
     </div>
-
-    <div class="owl-carousel owl-1">
-      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy1.jpg');"></div>
-      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy2.jpg');"></div>
-      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy3.jpg');"></div>
-    </div>
-
   </div>
 
-
-  <!-- ✅ Impact Counter -->
+  <!-- Impact Counter -->
   <section class="ftco-counter ftco-intro" id="section-counter">
     <div class="container">
       <div class="row no-gutters">
@@ -78,7 +70,7 @@
           <div class="block-18 color-1 align-items-stretch">
             <div class="text">
               <span>Since Launch Over</span>
-              <strong class="number" data-number="578">0</strong>
+              <strong class="number" id="impact-count">0</strong>
               <span>young people supported</span>
             </div>
           </div>
@@ -87,7 +79,7 @@
           <div class="block-18 color-2 align-items-stretch">
             <div class="text">
               <h3 class="mb-4">Donate Today</h3>
-              <p>£10 funds a workshop. £50 supports a skills session for a group.</p>
+              <p id="impact-donation"></p>
               <p><a href="donate.html" class="btn btn-white px-3 py-2 mt-2">Donate Now</a></p>
             </div>
           </div>
@@ -96,7 +88,7 @@
           <div class="block-18 color-3 align-items-stretch">
             <div class="text">
               <h3 class="mb-4">Volunteer With Us</h3>
-              <p>Your time and skills can make a real difference for young people.</p>
+              <p id="impact-volunteer"></p>
               <p><a href="volunteer.html" class="btn btn-white px-3 py-2 mt-2">Join Us</a></p>
             </div>
           </div>
@@ -105,7 +97,7 @@
     </div>
   </section>
 
-  <!-- ✅ What We Do -->
+  <!-- What We Do -->
   <section class="ftco-section bg-light">
     <div class="container-fluid">
       <div class="row justify-content-center mb-5 pb-3">
@@ -114,66 +106,27 @@
           <p>Our programmes empower children and young people through skills, creativity, and community connection.</p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12 ftco-animate">
-          <div class="carousel-cause owl-carousel">
-            <!-- Item 1 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/digital_skills.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Digital Skills Workshops</h3>
-                  <p>Learn coding, game design, and website building.</p>
-                </div>
-              </div>
-            </div>
-            <!-- Item 2 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/creative_arts.png);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Creative Arts Training</h3>
-                  <p>Dance, music, and visual arts to inspire creativity.</p>
-                </div>
-              </div>
-            </div>
-            <!-- Item 3 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/life_skills.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Skills for Life</h3>
-                  <p>CV writing, career guidance, and personal branding.</p>
-                </div>
-              </div>
-            </div>
-            <!-- Item 4 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/wellbeing.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Well-being & Financial Literacy</h3>
-                  <p>Mental health, budgeting, and self-care workshops.</p>
-                </div>
-              </div>
-            </div>
-            <!-- Item 5 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/community_trips.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Community Trips</h3>
-                  <p>Visits to museums, gardens, and nature reserves.</p>
-                </div>
-              </div>
-            </div>
-          </div><!-- END carousel -->
-        </div>
+      <div class="row" id="programmes-list">
+        <!-- JSON data will load here -->
       </div>
     </div>
   </section>
 
-  <!-- ✅ Partners -->
+  <!-- Events -->
+  <section class="ftco-section bg-light">
+    <div class="container">
+      <div class="row justify-content-center mb-5 pb-3">
+        <div class="col-md-7 text-center ftco-animate">
+          <h2 class="mb-4">Our Latest Events</h2>
+        </div>
+      </div>
+      <div class="row" id="events-list">
+        <!-- JSON data will load here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
   <section class="ftco-section bg-light partners">
     <div class="container">
       <div class="row justify-content-center mb-5 pb-3">
@@ -182,70 +135,13 @@
           <p>We are proud to collaborate with amazing organizations that share our vision.</p>
         </div>
       </div>
-      <div class="row text-center">
-        <div class="col-md-3 col-6 ftco-animate">
-          <img src="images/partners/blakelaw.png" alt="Blakelaw Council" class="img-fluid mb-3">
-        </div>
-        <div class="col-md-3 col-6 ftco-animate">
-          <img src="images/partners/coseng.png" alt="Coseng Limited UK" class="img-fluid mb-3">
-        </div>
-        <div class="col-md-3 col-6 ftco-animate">
-          <img src="images/partners/avire.gif" alt="Avire UK" class="img-fluid mb-3">
-        </div>
-        <div class="col-md-3 col-6 ftco-animate">
-          <img src="images/partners/fareshare.jpg" alt="FareShare" class="img-fluid mb-3">
-        </div>
+      <div class="row text-center" id="partners-list">
+        <!-- JSON data will load here -->
       </div>
     </div>
   </section>
 
-  <!-- ✅ Events -->
-  <section class="ftco-section bg-light">
-    <div class="container">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-7 text-center ftco-animate">
-          <h2 class="mb-4">Our Latest Events</h2>
-        </div>
-      </div>
-      <div class="row">
-        <!-- Event 1 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/event-1.jpg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Youth Empowerment Workshop</h3>
-              <p>Training sessions in digital skills and creative arts.</p>
-              <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-            </div>
-          </div>
-        </div>
-        <!-- Event 2 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/event-2.jpg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Outdoor Fun Day</h3>
-              <p>The young people and families enjoying sack races, running, football, swimming, and playing in the park.</p>
-              <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-            </div>
-          </div>
-        </div>
-        <!-- Event 3 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/event-3.jpg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Community Funfair</h3>
-              <p>Young people having fun and networking together in a safe environment.</p>
-              <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ✅ Volunteer Form -->
+  <!-- Volunteer Form -->
   <section class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
     <div class="overlay"></div>
     <div class="container">
@@ -257,10 +153,10 @@
           <h3 class="mb-3">Join Us as a Volunteer</h3>
           <form action="https://formspree.io/f/mqayqnja" method="POST" class="volunter-form">
             <div class="form-group">
-              <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+              <input type="text" name="name" class="form-control" placeholder="Your Name">
             </div>
             <div class="form-group">
-              <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+              <input type="email" name="email" class="form-control" placeholder="Your Email">
             </div>
             <div class="form-group">
               <textarea name="message" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
@@ -274,44 +170,41 @@
     </div>
   </section>
 
-  <!-- ✅ Footer -->
+  <!-- Footer -->
   <footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
     <div class="container">
       <div class="row align-items-center">
+
         <!-- Left Column -->
         <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
           <p>
-            Email us: <a href="mailto:info@joybringer.org.uk" style="color:#fff;">info@joybringer.org.uk</a><br>
-            Call us: <a href="tel:07780105816" style="color:#fff;">07780105816</a>
+            Email us: <span id="footer-email"></span><br>
+            Call us: <span id="footer-phone"></span>
           </p>
           <p>
-            <strong>JOYBRINGERS LTD</strong><br>
-            (Company No. 15400265)<br>
-            Registered Charity Number 1212606
+            <strong id="footer-company"></strong><br>
+            Company No: <span id="footer-company-no"></span><br>
+            Charity No: <span id="footer-charity-no"></span>
           </p>
         </div>
+
         <!-- Middle Column -->
         <div class="col-md-4 mb-4 mb-md-0 text-center">
           <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:80px;">
         </div>
+
         <!-- Right Column -->
         <div class="col-md-4 mb-4 mb-md-0 text-center text-md-right">
           <p>Follow us | <a href="contact.html" style="color:#fff;">Contact Us</a></p>
-          <div class="footer-social">
-            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook"><span class="icon-facebook"></span></a>
-            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram"><span class="icon-instagram"></span></a>
-            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin"><span class="icon-linkedin"></span></a>
-            <a href="https://x.com/JoybringersC" target="_blank" class="twitter"><span class="icon-twitter"></span></a>
-            <a href="https://www.tiktok.com/@joybringersc?_t=ZN-8xSqI9AImOM&_r=1" target="_blank" class="tiktok"><span class="icon-tiktok"></span></a>
-          </div>
+          <div id="footer-socials"></div>
           <p class="mt-2">
-            <a href="#" style="color:#fff;">Terms of use</a> / 
-            <a href="#" style="color:#fff;">Cookies</a> / 
-            <a href="#" style="color:#fff;">Privacy</a>
+            <a id="footer-terms" href="#" style="color:#fff;">Terms of use</a> / 
+            <a id="footer-cookies" href="#" style="color:#fff;">Cookies</a> / 
+            <a id="footer-privacy" href="#" style="color:#fff;">Privacy</a>
           </p>
         </div>
+
       </div>
-      <!-- Bottom -->
       <div class="row mt-4">
         <div class="col text-center">
           <p style="margin:0;">©2025 Joybringers. All Rights Reserved.</p>
@@ -320,29 +213,7 @@
     </div>
   </footer>
 
-  <!-- ✅ Social Icons Styling -->
-  <style>
-    .footer-social a {
-      display: inline-block;
-      margin: 0 5px;
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      border-radius: 50%;
-      text-align: center;
-      color: #fff;
-      font-size: 18px;
-      transition: 0.3s;
-    }
-    .footer-social a:hover { opacity: 0.8; }
-    .footer-social a.facebook { background: #1877F2; }
-    .footer-social a.instagram { background: #E4405F; }
-    .footer-social a.linkedin { background: #0A66C2; }
-    .footer-social a.twitter { background: #1DA1F2; }
-    .footer-social a.tiktok { background: #000000; }
-  </style>
-
-   <!-- Loader -->
+  <!-- Loader -->
   <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
       <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
@@ -350,7 +221,7 @@
     </svg>
   </div>
 
-  <!-- ✅ JS Files -->
+  <!-- JS Files -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -367,21 +238,7 @@
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- ✅ Carousel Init -->
-  <script>
-    $('.owl-1').owlCarousel({
-      loop:true,
-      autoplay:true,
-      autoplayTimeout:5000,
-      items:1,
-      nav:false,
-      dots:true,
-      animateOut: 'fadeOut',
-      animateIn: 'fadeIn'
-    });
-  </script>
-
-<!-- Our CMS Data Loader -->
-    <script src="js/cms-data.js"></script>
+  <!-- CMS Data Loader -->
+  <script src="js/cms-data.js"></script>
   </body>
 </html>

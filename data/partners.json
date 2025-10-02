@@ -1,7 +1,19 @@
 {
   "items": [
-    { "name": "Blakelaw Council", "logo": "images/partners/blakelaw.png", "link": "#" },
-    { "name": "Coseng Limited UK", "logo": "images/partners/coseng.png", "link": "#" },
-    { "name": "FareShare", "logo": "images/partners/fareshare.jpg", "link": "#" }
+    {
+      "name": "Blakelaw Council",
+      "logo": "images/partners/blakelaw.png",
+      "link": "https://blakelaw.org"
+    },
+    {
+      "name": "Coseng Limited UK",
+      "logo": "images/partners/coseng.png",
+      "link": "https://coseng.co.uk"
+    },
+    {
+      "name": "FareShare",
+      "logo": "images/partners/fareshare.jpg",
+      "link": "https://fareshare.org.uk"
+    }
   ]
 }
