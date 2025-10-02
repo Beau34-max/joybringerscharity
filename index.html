@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Joybringers - Helping Young People Believe, Belong, and Become</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <title>Joybringers - Helping Young People Believe, Belong, and Become</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-  <link rel="stylesheet" href="css/animate.css">
-  <link rel="stylesheet" href="css/owl.carousel.min.css">
-  <link rel="stylesheet" href="css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="css/magnific-popup.css">
-  <link rel="stylesheet" href="css/aos.css">
-  <link rel="stylesheet" href="css/ionicons.min.css">
-  <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-  <link rel="stylesheet" href="css/jquery.timepicker.css">
-  <link rel="stylesheet" href="css/flaticon.css">
-  <link rel="stylesheet" href="css/icomoon.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
 
-<body>
-
-  <!-- ✅ Navbar -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand" href="index.html">Joybringers</a>
@@ -47,26 +46,29 @@
       </div>
     </div>
   </nav>
-  <!-- END Navbar -->
+  <!-- END nav -->
 
-  <!-- ✅ Hero -->
-  <div class="hero-wrap" style="background-image: url('images/bg_7.jpg');" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-7 text-center ftco-animate">
-          <h1 class="mb-4 text-warning">JOYBRINGERS</h1>
-          <p class="mb-4">(Helping Young People Believe, Belong, and Become)</p>
-          <p class="mb-4">Registered Charity Number 1212606</p>
-          <p>
-            <a href="donate.html" class="btn btn-warning px-4 py-3">Donate Now</a>
-            <a href="volunteer.html" class="btn btn-success px-4 py-3">Become a Volunteer</a>
-            <a href="partner.html" class="btn btn-success px-4 py-3">Partner With Us</a>
-          </p>
-        </div>
-      </div>
+  <!-- ✅ Hero Carousel -->
+  <div class="owl-carousel-wrapper">
+
+    <div class="box-92819 text-center">
+      <h1 class="text-white mb-3">Helping Young People Believe, Belong, and Become</h1>
+      <p>Registered Charity Number 1212606</p>
+      <p>
+        <a href="donate.html" class="btn btn-warning py-3 px-4 rounded-0">Donate Now</a>
+        <a href="volunteer.html" class="btn btn-success py-3 px-4 rounded-0">Become a Volunteer</a>
+        <a href="partner.html" class="btn btn-success py-3 px-4 rounded-0">Partner With Us</a>
+      </p>
     </div>
+
+    <div class="owl-carousel owl-1">
+      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy1.jpg');"></div>
+      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy2.jpg');"></div>
+      <div class="ftco-cover-1 overlay" style="background-image: url('images/joy3.jpg');"></div>
+    </div>
+
   </div>
+
 
   <!-- ✅ Impact Counter -->
   <section class="ftco-counter ftco-intro" id="section-counter">
@@ -340,7 +342,7 @@
     .footer-social a.tiktok { background: #000000; }
   </style>
 
-  <!-- ✅ Loader -->
+   <!-- Loader -->
   <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
       <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
@@ -364,5 +366,20 @@
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-</body>
+
+  <!-- ✅ Carousel Init -->
+  <script>
+    $('.owl-1').owlCarousel({
+      loop:true,
+      autoplay:true,
+      autoplayTimeout:5000,
+      items:1,
+      nav:false,
+      dots:true,
+      animateOut: 'fadeOut',
+      animateIn: 'fadeIn'
+    });
+  </script>
+
+  </body>
 </html>
