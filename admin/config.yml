@@ -18,7 +18,7 @@ collections:
         fields:
           - { label: "Text", name: "text", widget: "string" }
           - { label: "Link", name: "link", widget: "string" }
-          - { label: "Style", name: "style", widget: "string" }
+          - { label: "Style (e.g. btn-warning, btn-success)", name: "style", widget: "string" }
 
   - name: "impact"
     label: "Impact Counter"
