@@ -2387,3 +2387,39 @@ textarea.form-control {
   filter: grayscale(0%);
   transform: scale(1.05);
 }
+
+
+/* Hero Carousel fix */
+.owl-carousel-wrapper {
+  position: relative;
+  height: 100vh; /* full screen height */
+  overflow: hidden;
+}
+
+.owl-carousel-wrapper .owl-carousel .ftco-cover-1 {
+  height: 100vh; /* full screen background */
+  background-size: cover;
+  background-position: center;
+}
+
+.owl-carousel-wrapper .box-92819 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  color: #fff;
+  max-width: 700px;
+  text-align: center;
+}
+
+.owl-carousel-wrapper .box-92819 h1 {
+  font-size: 48px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.owl-carousel-wrapper .box-92819 p {
+  color: #fff;
+  font-size: 18px;
+}
