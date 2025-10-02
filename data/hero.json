@@ -1,0 +1,9 @@
+{
+  "title": "Helping Young People Believe, Belong, and Become",
+  "charity_number": "Registered Charity Number 1212606",
+  "buttons": [
+    { "text": "Donate Now", "link": "donate.html", "style": "btn-warning" },
+    { "text": "Become a Volunteer", "link": "volunteer.html", "style": "btn-success" },
+    { "text": "Partner With Us", "link": "partner.html", "style": "btn-success" }
+  ]
+}
