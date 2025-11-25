@@ -402,7 +402,14 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
   e.preventDefault();
   const form = this;
 
-  // 1️⃣ Send to Formspark (saves to dashboard + sends admin email)
+  // Generate full name for EmailJS
+  const fullNameField = document.createElement("input");
+  fullNameField.type = "hidden";
+  fullNameField.name = "name";
+  fullNameField.value = form.first_name.value + " " + form.last_name.value;
+  form.appendChild(fullNameField);
+
+  // 1️⃣ Send to Formspark
   fetch(form.action, {
     method: "POST",
     body: new FormData(form)
@@ -410,13 +417,11 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
   .then(() => {
     console.log("Formspark submission OK.");
 
-    // 2️⃣ Send confirmation email to user
+    // 2️⃣ Send Email Confirmation
     return emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form);
   })
   .then(() => {
     console.log("EmailJS confirmation sent.");
-
-    // 3️⃣ Redirect to thank-you page
     window.location.href = "/thankyou";
   })
   .catch(err => {
@@ -429,3 +434,6 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
 
 </body>
 </html>
+
+
+
