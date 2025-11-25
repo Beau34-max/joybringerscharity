@@ -302,7 +302,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <!-- ✅ JS Files -->
-  <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -356,16 +355,23 @@ function eventCard(e, isUpcoming) {
           <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
           <p>${e.description}</p>
           ${isUpcoming ? `
-            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#registerModal"
-              data-title="${e.title}" data-date="${e.date}" data-time="${e.time}" data-location="${e.venue}">
+            <button class="btn btn-success btn-sm" 
+                    data-toggle="modal" data-target="#registerModal"
+                    data-title="${e.title}" 
+                    data-date="${e.date}" 
+                    data-time="${e.time}" 
+                    data-location="${e.venue}">
               Register Now
-            </button>` : `
+            </button>
+          ` : `
             <span class="badge badge-secondary">Event Ended</span>
           `}
         </div>
       </div>
-    </div>`;
+    </div>
+  `;
 }
+
 
 $(document).ready(() => {
   const today = new Date();
@@ -427,12 +433,13 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
 
       // Give Formspark time to finish
       setTimeout(() => {
-        $('#thankYouMessage').fadeOut(600, () => {
-          $('#registerModal').modal('hide');
-          form.reset();
-          // Do NOT reload the page — let Formspark finish
-        });
-      }, 2500);
+  $('#thankYouMessage').fadeOut(600, () => {
+    $('#registerModal').modal('hide');
+    form.reset();
+    window.location.href = "/thankyou";  // ✅ SAFE PLACE
+  });
+}, 2500);
+
     })
     .catch(err => {
       console.error("EmailJS Error:", err);
