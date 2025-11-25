@@ -295,7 +295,7 @@ document.querySelector("form[action='https://submit-form.com/tD0KPOiHr']")
     .then(() => console.log("Formspark received contact form"))
     .catch(err => console.error("Formspark Error:", err));
 
-    // 2️⃣ Send confirmation email via EmailJS
+    // 2️⃣ Send confirmation email via EmailJS contact page
     emailjs.sendForm("service_jqpd0af", "template_i9qyhxi", form)
     .then(() => {
         alert("✅ Thank you for contacting us! Your message has been received.");
