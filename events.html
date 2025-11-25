@@ -108,44 +108,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      
       <div class="modal-header bg-success text-white">
         <h5 id="registerModalLabel" class="modal-title">Register for Event</h5>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">&times;</button>
       </div>
 
-      <form id="eventRegisterForm" action="https://submit-form.com/3vHXAfvX2" method="POST">
+     <form id="eventRegisterForm" action="https://submit-form.com/3vHXAfvX2" method="POST">
 
-        <input type="hidden" name="_email.template" value="none">
-        <input type="hidden" name="event_name" id="event_name">
-        <input type="hidden" name="event_date" id="event_date">
-        <input type="hidden" name="event_time" id="event_time">
-        <input type="hidden" name="event_location" id="event_location">
+  <!-- ✅ Disable Web3Forms auto-responder (no duplicate emails) -->
+   <input type="hidden" name="_email.template" value="none">
+   
+  <!-- Event info (auto-filled by JS when modal opens) -->
+  <input type="hidden" name="event_name" id="event_name">
+  <input type="hidden" name="event_date" id="event_date">
+  <input type="hidden" name="event_time" id="event_time">
+  <input type="hidden" name="event_location" id="event_location">
+
 
         <div class="modal-body">
           <div class="container">
             <div class="row">
-              
               <div class="col-md-6 form-group">
                 <label>First Name *</label>
                 <input type="text" name="first_name" class="form-control" required>
               </div>
-
               <div class="col-md-6 form-group">
                 <label>Last Name *</label>
                 <input type="text" name="last_name" class="form-control" required>
               </div>
-
               <div class="col-md-6 form-group">
                 <label>Email *</label>
                 <input type="email" name="email" class="form-control" required>
               </div>
-
               <div class="col-md-6 form-group">
                 <label>Phone Number</label>
                 <input type="text" name="phone" class="form-control">
               </div>
-
               <div class="col-md-6 form-group">
                 <label>Gender *</label>
                 <select name="gender" class="form-control" required>
@@ -154,7 +152,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>Female</option>
                 </select>
               </div>
-
               <div class="col-md-6 form-group">
                 <label>How Many Person is attending *</label>
                 <select name="number_of_persons" class="form-control" required>
@@ -168,7 +165,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>6+</option>
                 </select>
               </div>
-
+             <!--  <div class="col-md-6 form-group">
+                <label>Age Range *</label>
+                <select name="age_range" class="form-control" required>
+                  <option value="">Please Select</option>
+                  <option>7 - 11</option>
+                  <option>12 - 15</option>
+                  <option>16 - 25</option>
+                  <option>26 & Above</option>
+                </select>
+              </div> -->
               <div class="col-md-6 form-group">
                 <label>Location *</label>
                 <select name="location" class="form-control" required onchange="toggleOtherLocation(this)">
@@ -184,25 +190,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>Other</option>
                 </select>
               </div>
-
               <div class="col-md-6 form-group d-none" id="otherLocationGroup">
                 <label>Specify Location</label>
                 <input type="text" name="other_location" class="form-control">
               </div>
-
-            </div><!-- row -->
-          </div><!-- container -->
-        </div><!-- modal-body -->
+            </div>
+          </div>
+        </div>
 
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Submit Registration</button>
         </div>
-
-      </form><!-- END FORM -->
-
-    </div><!-- modal-content -->
-  </div><!-- modal-dialog -->
-</div><!-- modal -->
+        <div class="thank-you-message" id="thankYouMessage">
+          ✅ Thank you for registering! Check your email for event details.
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- ✅ Footer -->
   <footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
@@ -212,7 +217,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
           <p>
             Email us: <a href="mailto:info@joybringer.org.uk" style="color:#fff;">info@joybringer.org.uk</a><br>
-            Call us: <a href="tel:+447500010317" style="color:#fff;">+447500010317</a>
+            Call us: <a href="tel:07780105816" style="color:#fff;">07780105816</a>
           </p>
           <p>
             <strong>JOYBRINGERS LTD</strong><br>
@@ -378,6 +383,7 @@ $(document).ready(() => {
     $('#event_date').val(b.data('date'));
     $('#event_time').val(b.data('time'));
     $('#event_location').val(b.data('location'));
+    $('#thankYouMessage').hide();
   });
 
 
@@ -393,42 +399,47 @@ function toggleOtherLocation(sel) {
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
 (function() {
-  emailjs.init("_TGXKABP5E9-_Sxzn");  // Your EmailJS Public Key
+  emailjs.init("_TGXKABP5E9-_Sxzn"); // your EmailJS public key
 })();
-</script>
 
-<script>
-document.getElementById("eventRegisterForm").addEventListener("submit", function (e) {
+document.getElementById("eventRegisterForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const form = this;
 
-
-
-  // 1️⃣ Send to Formspark
+  // 1️⃣ Send to Formspark (admin email + dashboard storage)
   fetch(form.action, {
     method: "POST",
     body: new FormData(form)
   })
   .then(() => {
-    console.log("Formspark submission OK.");
-
-    // 2️⃣ Send Email Confirmation
-    return emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form);
-  })
-  .then(() => {
-    console.log("EmailJS confirmation sent.");
-    window.location.href = "/thankyou";
+    console.log("Formspark submission saved.");
   })
   .catch(err => {
-    console.error("Error:", err);
-    alert("Something went wrong. Please try again.");
+    console.error("Formspark Error:", err);
   });
+
+  // 2️⃣ Send confirmation email to registrant
+  emailjs.sendForm('service_m8qsdzk', 'template_l0gb2le', form)
+    .then(() => {
+      console.log("EmailJS confirmation sent.");
+      // Show thank-you message
+      $('#thankYouMessage').fadeIn();
+
+      // Give Formspark time to finish
+      setTimeout(() => {
+        $('#thankYouMessage').fadeOut(600, () => {
+          $('#registerModal').modal('hide');
+          form.reset();
+          // Do NOT reload the page — let Formspark finish
+        });
+      }, 2500);
+    })
+    .catch(err => {
+      console.error("EmailJS Error:", err);
+      alert("Could not send confirmation email. Please try again.");
+    });
 });
 </script>
 
-
 </body>
 </html>
-
-
-
