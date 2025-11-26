@@ -412,6 +412,16 @@ function toggleOtherLocation(sel) {
 document.getElementById("eventRegisterForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const form = this;
+  const formData = new FormData(form);
+
+  // Convert FormData → plain object (keys match your sheet headers)
+    const formObject = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+
+    // Optional: add timestamp here, or let Apps Script add it
+    // formObject.timestamp = new Date().toISOString();
 
   // Save in Formspark
   fetch(form.action, {
@@ -420,6 +430,22 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
   })
   .then(() => console.log("Formspark saved"))
   .catch(err => console.error("Formspark error:", err));
+
+  // 2️⃣ Save ALSO in Google Sheets (YOUR WEB APP URL)
+  fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formObject)
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Google Sheets saved:", data);
+  })
+  .catch(err => {
+    console.error("Google Sheets error:", err);
+  });
 
   // Send EmailJS confirmation
   emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form)
