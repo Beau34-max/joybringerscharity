@@ -430,7 +430,7 @@ formData.forEach((value, key) => formObject[key] = value);
   .catch(err => console.error("Formspark error:", err));
 
   // 2️⃣ Save ALSO in Google Sheets (YOUR WEB APP URL)
-  fetch("https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhcuIZwR8iuqdD2M4psMkBqhIdiORSDdvmxYnsdoysBqIglhbpgKV2HIw9nHxhe1WmqBO9uPvO8rLhPt36gfc5VAOJlbpW3iPwMaFqUSnp9D5ZHwAwguNdjfetWxw1l61dqwFH3s4jrh0nGWUaRkiLsiNHpKJpyQpUZ5DPAPX_FTwiaev73yJ0Aqa6ru0WHH5ZLobv8wbgWVW8T2ce6o7VZpo1RwFeh8LSvM-ACKvrtCIFZi2xfs1AJoizzue7pkhp3O36hElrWUHB8W71YL3n02oJTrQ&lib=MhJARPQPfDjaAKfawWJaB9A0Dv--yvMGB", {
+  fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
