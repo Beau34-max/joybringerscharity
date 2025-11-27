@@ -414,11 +414,9 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
   const form = this;
   const formData = new FormData(form);
 
-  // Convert FormData → plain object (keys match your sheet headers)
-    const formObject = {};
-    formData.forEach((value, key) => {
-      formObject[key] = value;
-    });
+  // Convert FormData to simple object
+const formObject = {};
+formData.forEach((value, key) => formObject[key] = value);
 
     // Optional: add timestamp here, or let Apps Script add it
     // formObject.timestamp = new Date().toISOString();
@@ -432,7 +430,7 @@ document.getElementById("eventRegisterForm").addEventListener("submit", function
   .catch(err => console.error("Formspark error:", err));
 
   // 2️⃣ Save ALSO in Google Sheets (YOUR WEB APP URL)
-  fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
+  fetch("https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLiVY4AVm-91gBeHsyWeey4cH5OMv91lp3R7O1izJ7ihrGVLIBcQwEII9OUdWeP6jNmMj4Yopd7kAFwyUfnd0cgr6d3kn8fO7Zz7xcvZR2PxxYhmYEkt-Y4wPmVy2mf5OmBQCiqAy_AIfFcxrEB6YaW8rG59G6KItGXhPipeoq-A9kFlKCU8b9uv7I-igsiAVdpEY_UwKF1cDmyGDWD3KDAAFCYgDnM02sLGExd3hEdusBCFyIVQMM1wsZFcc_KCxg_9SXBnMAY5tNn1VDHTNJacT-6J2A&lib=MhJARPQPfDjaAKfawWJaB9A0Dv--yvMGB", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
