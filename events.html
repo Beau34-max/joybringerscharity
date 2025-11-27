@@ -437,7 +437,7 @@ formData.forEach((value, key) => formObject[key] = value);
     },
     body: JSON.stringify(formObject)
   })
-  .then(res => res.json())
+.then(res => res.text())
   .then(data => {
     console.log("Google Sheets saved:", data);
   })
