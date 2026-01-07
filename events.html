@@ -409,63 +409,65 @@ function toggleOtherLocation(sel) {
   emailjs.init("_TGXKABP5E9-_Sxzn");
 })();
 
-document.getElementById("eventRegisterForm").addEventListener("submit", function(e) {
+document.getElementById("eventRegisterForm").addEventListener("submit", async function(e) {
   e.preventDefault();
+
   const form = this;
+
+  // Disable button temporarily
+  const btn = form.querySelector("button[type='submit']");
+  btn.disabled = true;
+  btn.innerText = "Submitting...";
+
+  // Convert form to object
   const formData = new FormData(form);
+  const formObject = {};
+  formData.forEach((value, key) => formObject[key] = value);
 
-  // Convert FormData to simple object
-const formObject = {};
-formData.forEach((value, key) => formObject[key] = value);
+  // 1️⃣ Save backup in Formspark
+  fetch(form.action, { method: "POST", body: formData })
+    .catch(err => console.error("Formspark error:", err));
 
-    // Optional: add timestamp here, or let Apps Script add it
-    // formObject.timestamp = new Date().toISOString();
-
-  // Save in Formspark
-  fetch(form.action, {
-    method: "POST",
-    body: new FormData(form)
-  })
-  .then(() => console.log("Formspark saved"))
-  .catch(err => console.error("Formspark error:", err));
-
-  // 2️⃣ Save ALSO in Google Sheets (YOUR WEB APP URL)
-  fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
+  // 2️⃣ Save in Google Sheets (REAL Web App)
+  let gsResponse = await fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(formObject)
-  })
-.then(res => res.text())
-  .then(data => {
-    console.log("Google Sheets saved:", data);
-  })
-  .catch(err => {
-    console.error("Google Sheets error:", err);
   });
 
-  // Send EmailJS confirmation
-  emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form)
-    .then(() => {
-      console.log("EmailJS sent");
+  let gsResult = await gsResponse.json();
+  console.log("Google Sheets:", gsResult);
 
-      $('#thankYouMessage').fadeIn();
+  // ❌ If Google Sheets failed
+  if (!gsResult.success) {
+    alert("We could not save your registration. Please try again.");
+    btn.disabled = false;
+    btn.innerText = "Submit Registration";
+    return;
+  }
 
-      setTimeout(() => {
-        $('#thankYouMessage').fadeOut(600, () => {
-          $('#registerModal').modal('hide');
-          form.reset();
-          window.location.href = "/thankyou"; 
-        });
-      }, 2000);
-    })
-    .catch(err => {
-      console.error("EmailJS error:", err);
-      alert("Email failed. Please try again.");
+  // 3️⃣ Send EmailJS confirmation
+  try {
+    await emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form);
+  } catch (err) {
+    console.error("EmailJS error:", err);
+  }
+
+  // 4️⃣ Show thank-you message and redirect
+  $('#thankYouMessage').fadeIn();
+
+  setTimeout(() => {
+    $('#thankYouMessage').fadeOut(600, () => {
+      $('#registerModal').modal('hide');
+      form.reset();
+      window.location.href = "/thankyou";
     });
+  }, 2000);
 });
 </script>
+
 
 </body>
 </html>
