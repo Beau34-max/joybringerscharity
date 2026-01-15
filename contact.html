@@ -267,8 +267,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabaseClient;
 </script>
+
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -293,20 +296,20 @@ document.getElementById("contact-form").addEventListener("submit", async functio
 
   try {
     // Save to Supabase
-    const { error } = await supabase
-      .from("contact_submissions")
-      .insert([payload]);
+    const { error } = await window.supabaseClient
+  .from("contact_submissions")
+  .insert([payload]);
 
     if (error) {
       console.error("Supabase error:", error);
-      alert("❌ Failed to save message. Please try again.");
+      alert("❌ Supabase error: " + error.message);
       return;
     }
 
     // Send confirmation email
     await emailjs.sendForm("service_jqpd0af", "template_i9qyhxi", form);
 
-    alert("✅ Thank you for contacting us! Your message has been received.");
+    alert("✅ Thank you! Your message has been received.");
     form.reset();
 
   } catch (err) {
