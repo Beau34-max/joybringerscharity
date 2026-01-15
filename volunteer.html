@@ -386,12 +386,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       
       <div class="modal-body">
-        <form id="volunteerForm" class="volunteer-form" 
-      action="https://submit-form.com/L9P9Z95Id"
-      method="POST">
-
-  <!-- Disable Formspark auto-email -->
-  <input type="hidden" name="_email.template" value="none">
+     <form id="volunteerForm" class="volunteer-form">
 
   <!-- Role -->
   <input type="hidden" id="roleApplied" name="role">
@@ -591,58 +586,96 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-  
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script>
-  // Auto-fill role into hidden input
-  $('#volunteerFormModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget)
-    var role = button.data('role')
-    var modal = $(this)
-    modal.find('#roleApplied').val(role)
-  })
-</script>
 
-<!-- ✅ EmailJS Integration -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  (function(){
+<!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
+    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <!-- Auto-fill role -->
+  <script>
+    $('#volunteerFormModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var role = button.data('role');
+      var modal = $(this);
+      modal.find('#roleApplied').val(role);
+    });
+  </script>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
     // Initialize EmailJS with your public key
     emailjs.init("_TGXKABP5E9-_Sxzn");
-  })();
+  </script>
 
-  document.getElementById("volunteerForm").addEventListener("submit", function(e) {
+  <!-- Form submit -->
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const volunteerForm = document.getElementById("volunteerForm");
+  if (!volunteerForm) return;
+  if (!window.supabaseClient) {
+  console.error("Supabase client not found. Check your Supabase script and keys.");
+  alert("❌ Supabase is not loaded. Please refresh and try again.");
+  return;
+}
+
+
+  volunteerForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     const form = this;
 
-    // 1️⃣ Send to Formspark
-    fetch(form.action, {
-      method: "POST",
-      body: new FormData(form)
-    })
-    .then(() => console.log("Formspark received volunteer form"))
-    .catch(err => console.error("Formspark Error:", err));
+    const formData = new FormData(form);
 
-    // 2️⃣ Send confirmation email via EmailJS
-    emailjs.sendForm('service_m8qsdzk', 'template_56p9ftd', form)
-      .then(function() {
-        alert("✅ Thank you for applying! A confirmation email has been sent.");
-        $('#volunteerFormModal').modal('hide');
-        setTimeout(function() {
-          window.location.href = "https://joybringer.org.uk/thank-you";
-        }, 1500);
-      }, function(error) {
-        console.error("Email send failed:", error);
-        alert("Oops! Something went wrong. Please try again later.");
-      });
+    const payload = {
+      role: formData.get("role"),
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      dob: formData.get("dob"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      postcode: formData.get("postcode"),
+      country: formData.get("country"),
+      referral: formData.get("referral"),
+      consent: formData.get("consent") === "on",
+      source: "https://joybringer.org.uk/volunteer"
+    };
+
+    try {
+      // 1) Save to Supabase
+      const { error } = await window.supabaseClient
+        .from("volunteer_applications")
+        .insert([payload]);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        alert("❌ Supabase error: " + error.message);
+        return;
+      }
+
+      // 2) Send confirmation email via EmailJS
+      await emailjs.sendForm("service_m8qsdzk", "template_56p9ftd", form);
+
+      alert("✅ Thank you for applying! A confirmation email has been sent.");
+      $("#volunteerFormModal").modal("hide");
+      form.reset();
+
+      setTimeout(function () {
+        window.location.href = "https://joybringer.org.uk/thank-you";
+      }, 1200);
+
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("❌ Something went wrong. Please try again later.");
+    }
+  });
 });
-
 </script>
-
 
 </body>
 </html>
