@@ -89,7 +89,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       font-weight: bold;
     }
     .donation-toggle .btn.active {
-      background-color: #006526;
+      background-color: #012810;
       color: white;
     }
     .gift-aid-box {
@@ -419,8 +419,9 @@ if (!window.supabaseClient) {
   console.error("❌ Supabase client missing (not loaded)");
 } else {
   window.supabaseClient
-    .from("donation_paypal") // ✅ make sure this matches your table name EXACTLY
+    .from("donation_paypal")
     .insert([donationPayload])
+    .select()
     .then(function (res) {
       console.log("✅ Supabase response:", res);
 
@@ -434,7 +435,6 @@ if (!window.supabaseClient) {
       console.error("❌ Supabase request failed:", err);
     });
 }
-
             alert('Thank you, ' + details.payer.name.given_name +
               '! Your donation of £' + selectedAmount.toFixed(2) + ' was successful.');
             document.getElementById("thankYou").style.display = "block";
