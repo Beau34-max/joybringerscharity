@@ -113,11 +113,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">&times;</button>
       </div>
 
-     <form id="eventRegisterForm" action="https://submit-form.com/3vHXAfvX2" method="POST">
+<form id="eventRegisterForm" method="POST">
 
-  <!-- ✅ Disable Web3Forms auto-responder (no duplicate emails) -->
-   <input type="hidden" name="_email.template" value="none">
-   
   <!-- Event info (auto-filled by JS when modal opens) -->
   <input type="hidden" name="event_name" id="event_name">
   <input type="hidden" name="event_date" id="event_date">
@@ -318,13 +315,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
 
-<!-- ✅ Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
 <script>
 const events = [
-    { title: "6-Weeks Data Analytics Bootcamp", date: "2026-04-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
+    { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
   { title: "ONE MONTH CODING & Data CLASS", date: "2025-11-01", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park", description: "A one-month hands-on coding and data science class for ages 7 to 15 years.", image: "images/events/code.png" },
   { title: "BANQUET & AWARDS NIGHT", date: "2025-12-13", time: "18:00 PM", venue: "West Denton Community Centre, Hillhead Rd, West Denton, Newcastle upon Tyne NE5 1DN", description: "Celebrating excellence, impact and joy. You are invited. Dress code: Corporate/Black Tie", image: "images/banq.jpg" },
   { title: "Volunteer Hangout", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park", description: "A Day set aside for volunteers to come together, have fun and network", image: "images/events/bg_3.jpg" },
@@ -335,8 +328,8 @@ const events = [
   { title: "Joybringers FUN FAIR", date: "2025-08-16", time: "11:00 AM - 5:00 PM", venue: "Neon, Quorum Business Park", description: "Food, games, prizes, and fun for all ages.", image: "images/events/event7.jpg" },
   { title: "Explore the NE: Excursion to Alnwick Gardens", date: "2025-08-19", time: "9:30 AM - 6:30 PM", venue: "Alnwick, Northumberland", description: "A day of nature, learning, and exploration.", image: "images/events/event-2.jpg" },
   { title: "Practical Multiskilled Training for Young People", date: "2025-10-04", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "Hands-on training across key youth skills.", image: "images/events/event7.jpg" },
-  { title: "Multiskilled Workshop", date: "2024-08-18", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "Develop versatile skills through our practical workshop.", image: "images/events/code.png" },
-  { title: "CV Clinic & Mock Interview", date: "2024-07-20", time: "11:00 AM - 3:00 PM", venue: "Neon, Quorum Business Park", description: "Polish your CV and get interview-ready with pros.", image: "images/events/cv.j" }
+  { title: "Multiskilled Workshop", date: "2024-08-18", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "Develop versatile skills through our practical workshop.", image: "images/events/code.jpg" },
+  { title: "CV Clinic & Mock Interview", date: "2024-07-20", time: "11:00 AM - 3:00 PM", venue: "Neon, Quorum Business Park", description: "Polish your CV and get interview-ready with pros.", image: "images/events/cv.jpg" }
 ];
 
 function formatDate(dateStr) {
@@ -403,69 +396,97 @@ function toggleOtherLocation(sel) {
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co"; // ✅ CHANGE HERE if needed
+  const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO"; // ✅ CHANGE HERE if needed
+  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
 (function() {
   emailjs.init("_TGXKABP5E9-_Sxzn");
 })();
+</script>
 
+<script>
 document.getElementById("eventRegisterForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const form = this;
+
+  if (!window.supabaseClient) {
+    console.error("Supabase client not found.");
+    alert("❌ Supabase is not loaded. Please refresh and try again.");
+    return;
+  }
 
   // Disable button temporarily
   const btn = form.querySelector("button[type='submit']");
   btn.disabled = true;
   btn.innerText = "Submitting...";
 
-  // Convert form to object
   const formData = new FormData(form);
-  const formObject = {};
-  formData.forEach((value, key) => formObject[key] = value);
 
-  // 1️⃣ Save backup in Formspark
-  fetch(form.action, { method: "POST", body: formData })
-    .catch(err => console.error("Formspark error:", err));
+  // ✅ CHANGE HERE: build payload that matches Supabase table columns
+  const payload = {
+    event_name: formData.get("event_name"),
+    event_date: formData.get("event_date"),   // Supabase accepts "YYYY-MM-DD"
+    event_time: formData.get("event_time"),
+    event_location: formData.get("event_location"),
 
-  // 2️⃣ Save in Google Sheets (REAL Web App)
-  let gsResponse = await fetch("https://script.google.com/macros/s/AKfycbzRMcaDjKYgtp3a2gWMX2g8k_w9uuneXLrBoHIuvPD8yZhwQZkkmA4q4go9EJoZj76K/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(formObject)
-  });
+    first_name: formData.get("first_name"),
+    last_name: formData.get("last_name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    gender: formData.get("gender"),
+    number_of_persons: formData.get("number_of_persons"),
+    location: formData.get("location"),
+    other_location: formData.get("other_location"),
 
-  let gsResult = await gsResponse.json();
-  console.log("Google Sheets:", gsResult);
+    source: "joybringerscharity.org/events" // ✅ CHANGE HERE if you want
+  };
 
-  // ❌ If Google Sheets failed
-  if (!gsResult.success) {
-    alert("We could not save your registration. Please try again.");
+  try {
+    // ✅ CHANGE HERE: 1) Save to Supabase
+    const { error } = await window.supabaseClient
+      .from("event_registrations")  // ✅ CHANGE HERE: table name
+      .insert([payload]);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      alert("❌ Supabase error: " + error.message);
+      btn.disabled = false;
+      btn.innerText = "Submit Registration";
+      return;
+    }
+
+    // ✅ CHANGE HERE: 2) Send EmailJS confirmation
+    try {
+      await emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form); // ✅ CHANGE HERE if yours differs
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      // We still proceed because Supabase already saved it
+    }
+
+    // ✅ keep your thank-you behaviour
+    $('#thankYouMessage').fadeIn();
+
+    setTimeout(() => {
+      $('#thankYouMessage').fadeOut(600, () => {
+        $('#registerModal').modal('hide');
+        form.reset();
+        window.location.href = "/thankyou"; // ✅ CHANGE HERE if your page is different
+      });
+    }, 2000);
+
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("❌ Something went wrong. Please try again later.");
     btn.disabled = false;
     btn.innerText = "Submit Registration";
-    return;
   }
-
-  // 3️⃣ Send EmailJS confirmation
-  try {
-    await emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form);
-  } catch (err) {
-    console.error("EmailJS error:", err);
-  }
-
-  // 4️⃣ Show thank-you message and redirect
-  $('#thankYouMessage').fadeIn();
-
-  setTimeout(() => {
-    $('#thankYouMessage').fadeOut(600, () => {
-      $('#registerModal').modal('hide');
-      form.reset();
-      window.location.href = "/thankyou";
-    });
-  }, 2000);
 });
 </script>
 
