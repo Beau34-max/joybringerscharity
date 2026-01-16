@@ -162,16 +162,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>6+</option>
                 </select>
               </div>
-             <!--  <div class="col-md-6 form-group">
+             <div class="col-md-6 form-group">
                 <label>Age Range *</label>
                 <select name="age_range" class="form-control" required>
                   <option value="">Please Select</option>
-                  <option>7 - 11</option>
-                  <option>12 - 15</option>
+                  <!--<option>7 - 11</option>
+                  <option>12 - 15</option> -->
                   <option>16 - 25</option>
                   <option>26 & Above</option>
                 </select>
-              </div> -->
+              </div>
               <div class="col-md-6 form-group">
                 <label>Location *</label>
                 <select name="location" class="form-control" required onchange="toggleOtherLocation(this)">
@@ -441,6 +441,7 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
     email: formData.get("email"),
     phone: formData.get("phone"),
     gender: formData.get("gender"),
+    age_range: formData.get("age_range"),
     number_of_persons: formData.get("number_of_persons"),
     location: formData.get("location"),
     other_location: formData.get("other_location"),
