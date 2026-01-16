@@ -386,7 +386,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       
       <div class="modal-body">
-     <form id="volunteerForm" class="volunteer-form">
+       <form id="volunteerForm" class="volunteer-form">
 
   <!-- Role -->
   <input type="hidden" id="roleApplied" name="role">
@@ -587,93 +587,91 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
 
+<!-- ✅ Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
+  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 
-<!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
-    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+<script>
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest('[data-target="#volunteerFormModal"]');
+    if (!btn) return;
 
-  <!-- Auto-fill role -->
-  <script>
-    $('#volunteerFormModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var role = button.data('role');
-      var modal = $(this);
-      modal.find('#roleApplied').val(role);
-    });
-  </script>
+    const role = btn.getAttribute("data-role") || "";
+    const roleInput = document.getElementById("roleApplied");
+    if (roleInput) roleInput.value = role;
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
+    console.log("✅ Role captured:", role);
+  });
+</script>
+
+
+<!-- ✅ EmailJS Integration -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
     // Initialize EmailJS with your public key
     emailjs.init("_TGXKABP5E9-_Sxzn");
-  </script>
+  })();
+</script>
 
-  <!-- Form submit -->
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const volunteerForm = document.getElementById("volunteerForm");
-  if (!volunteerForm) return;
-  if (!window.supabaseClient) {
-  console.error("Supabase client not found. Check your Supabase script and keys.");
-  alert("❌ Supabase is not loaded. Please refresh and try again.");
-  return;
-}
+<script>
+document.getElementById("volunteerForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const form = this;
 
+  const formData = new FormData(form);
 
-  volunteerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const form = this;
+  const payload = {
+    role: formData.get("role"),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    dob: formData.get("dob"),
+    address: formData.get("address"),
+    city: formData.get("city"),
+    postcode: formData.get("postcode"),
+    country: formData.get("country"),
+    referral: formData.get("referral"),
+    consent: formData.get("consent") === "on",
+    source: "joybringerscharity.org/volunteer"
+  };
 
-    const formData = new FormData(form);
+  if (!payload.role) {
+    alert("❌ Please click 'Apply Now' on a role again (role not captured).");
+    return;
+  }
 
-    const payload = {
-      role: formData.get("role"),
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      dob: formData.get("dob"),
-      address: formData.get("address"),
-      city: formData.get("city"),
-      postcode: formData.get("postcode"),
-      country: formData.get("country"),
-      referral: formData.get("referral"),
-      consent: formData.get("consent") === "on",
-      source: "https://joybringer.org.uk/volunteer"
-    };
+  try {
+    // 1) Save to Supabase
+    const { error } = await window.supabaseClient
+      .from("volunteer_applications")
+      .insert([payload]);
 
-    try {
-      // 1) Save to Supabase
-      const { error } = await window.supabaseClient
-        .from("volunteer_applications")
-        .insert([payload]);
-
-      if (error) {
-        console.error("Supabase error:", error);
-        alert("❌ Supabase error: " + error.message);
-        return;
-      }
-
-      // 2) Send confirmation email via EmailJS
-      await emailjs.sendForm("service_m8qsdzk", "template_56p9ftd", form);
-
-      alert("✅ Thank you for applying! A confirmation email has been sent.");
-      $("#volunteerFormModal").modal("hide");
-      form.reset();
-
-      setTimeout(function () {
-        window.location.href = "https://joybringer.org.uk/thank-you";
-      }, 1200);
-
-    } catch (err) {
-      console.error("Submission error:", err);
-      alert("❌ Something went wrong. Please try again later.");
+    if (error) {
+      console.error("Supabase error:", error);
+      alert("❌ Supabase error: " + error.message);
+      return;
     }
-  });
+
+    // 2) Send confirmation email via EmailJS
+    await emailjs.sendForm("service_m8qsdzk", "template_56p9ftd", form);
+
+    alert("✅ Thank you for applying! A confirmation email has been sent.");
+    $("#volunteerFormModal").modal("hide");
+    form.reset();
+
+    setTimeout(function() {
+      window.location.href = "https://joybringer.org.uk/thank-you";
+    }, 1200);
+
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("❌ Something went wrong. Please try again later.");
+  }
 });
 </script>
 
