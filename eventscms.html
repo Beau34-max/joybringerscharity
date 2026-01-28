@@ -316,16 +316,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/main.js"></script>
 
 <script>
-const events = [
-  {
-  title: "Fruit Kebabs Workshop (Healthy Snacks Session) for ALL ages",
-  date: "2026-02-08",
-  time: "10:00 AM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A fun, hands-on healthy snacks session led by Donna Robinson from ASDA. Young people will learn basic food preparation skills and create colourful fruit kebabs while exploring healthy eating tips in a friendly and supportive environment. Please inform us of any food allergies during registration.",
-  image: "images/events/fruit-kebabs.jpg"
-},
-    { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
+/* =========================
+   ✅ FALLBACK EVENTS (YOUR CURRENT EVENTS)
+   ========================= */
+const fallbackEvents = [
+  // ✅ CHANGE HERE if you want to add/remove current hardcoded events
+  { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
   { title: "ONE MONTH CODING & Data CLASS", date: "2025-11-01", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park", description: "A one-month hands-on coding and data science class for ages 7 to 15 years.", image: "images/events/code.png" },
   { title: "BANQUET & AWARDS NIGHT", date: "2025-12-13", time: "18:00 PM", venue: "West Denton Community Centre, Hillhead Rd, West Denton, Newcastle upon Tyne NE5 1DN", description: "Celebrating excellence, impact and joy. You are invited. Dress code: Corporate/Black Tie", image: "images/banq.jpg" },
   { title: "Volunteer Hangout", date: "2026-02-21", time: "1:30:00 PM", venue: "Suite 3, Neon, Quorum Business Park", description: "A Day set aside for volunteers to come together, have fun and network", image: "images/events/bg_3.jpg" },
@@ -340,12 +336,25 @@ const events = [
   { title: "CV Clinic & Mock Interview", date: "2024-07-20", time: "11:00 AM - 3:00 PM", venue: "Neon, Quorum Business Park", description: "Polish your CV and get interview-ready with pros.", image: "images/events/cv.jpg" }
 ];
 
+/* =========================
+   ✅ HELPERS
+   ========================= */
 function formatDate(dateStr) {
+  if (!dateStr) return "";
   const d = new Date(dateStr);
+  if (isNaN(d)) return "";
   return d.toDateString();
 }
 
-// ✅ Updated function — only show Register button for upcoming events
+// ✅ Used to prevent duplicates (fallback + contentful)
+const renderedKeys = new Set();
+function makeKey(title, date, venue) {
+  return `${(title||"").toLowerCase()}|${date||""}|${(venue||"").toLowerCase()}`;
+}
+
+/* =========================
+   ✅ EVENT CARD (DISPLAY)
+   ========================= */
 function eventCard(e, isUpcoming) {
   return `
     <div class="col-md-4 d-flex">
@@ -354,15 +363,20 @@ function eventCard(e, isUpcoming) {
         <div class="p-3">
           <h5>${e.title}</h5>
           <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
-          <p><i class="fa fa-clock"></i> ${e.time}</p>
+          ${e.time ? `<p><i class="fa fa-clock"></i> ${e.time}</p>` : ""}
           <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
+
+          <!-- ✅ CHANGE HERE: this shows Age Range on the event card -->
+          ${e.ageRange ? `<p><strong>Age Range:</strong> ${e.ageRange}</p>` : ""}
+
           <p>${e.description}</p>
+
           ${isUpcoming ? `
-            <button class="btn btn-success btn-sm" 
+            <button class="btn btn-success btn-sm"
                     data-toggle="modal" data-target="#registerModal"
-                    data-title="${e.title}" 
-                    data-date="${e.date}" 
-                    data-time="${e.time}" 
+                    data-title="${e.title}"
+                    data-date="${e.date}"
+                    data-time="${e.time || ""}"
                     data-location="${e.venue}">
               Register Now
             </button>
@@ -375,29 +389,130 @@ function eventCard(e, isUpcoming) {
   `;
 }
 
-
-$(document).ready(() => {
+/* =========================
+   ✅ RENDER FALLBACK FIRST
+   ========================= */
+function renderFallbackEvents() {
   const today = new Date();
-  events.forEach(e => {
+  today.setHours(0,0,0,0);
+
+  fallbackEvents.forEach(e => {
     const eventDate = new Date(e.date);
     const isUpcoming = eventDate >= today;
     const section = isUpcoming ? "#upcoming-events" : "#past-events";
+
+    // ✅ prevent duplicates
+    const key = makeKey(e.title, e.date, e.venue);
+    if (renderedKeys.has(key)) return;
+    renderedKeys.add(key);
+
     $(section).append(eventCard(e, isUpcoming));
   });
+}
 
-  // Modal and form handling remain the same
-  $('#registerModal').on('show.bs.modal', function(event) {
-    const b = $(event.relatedTarget);
-    $('#event_name').val(b.data('title'));
-    $('#event_date').val(b.data('date'));
-    $('#event_time').val(b.data('time'));
-    $('#event_location').val(b.data('location'));
-    $('#thankYouMessage').hide();
-  });
+/* =========================
+   ✅ LOAD CONTENTFUL + APPEND
+   ========================= */
+async function loadEventsFromContentful() {
+  try {
+    // ✅ CHANGE HERE: Your Contentful Settings
+    const SPACE_ID = "26ds48cqk4vj";
+    const ACCESS_TOKEN = "v5eQNLdyj0I_iTHAkDwGBWGY3fTLLhfwoEWBclt0Mos"; // Delivery token (public ok)
+    const ENVIRONMENT = "master";
+    const CONTENT_TYPE = "events";
 
+    const url =
+      `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/${ENVIRONMENT}/entries` +
+      `?content_type=${CONTENT_TYPE}&include=2&order=fields.eventDate`;
 
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${ACCESS_TOKEN}` }
+    });
+
+    const data = await res.json();
+    console.log("Contentful events response:", data);
+
+    if (!data.items || data.items.length === 0) return;
+
+    // Map images
+    const assets = {};
+    (data.includes?.Asset || []).forEach(asset => {
+      assets[asset.sys.id] = asset.fields?.file?.url || "";
+    });
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    data.items.forEach(item => {
+      const f = item.fields || {};
+
+      const title = f.eventName || "Untitled Event";
+      const description = f.description || "";
+      const venue = f.location || f.Location || "";
+      const ageRange = f.ageRange || "";
+
+      const eventDateISO = f.eventDate || null;
+      const dateObj = eventDateISO ? new Date(eventDateISO) : null;
+
+        const status = (f.status || "").toLowerCase();
+        let isUpcoming = dateObj ? dateObj >= today : true;
+        if (status === "past") isUpcoming = false;
+        if (status === "upcoming") isUpcoming = true;
+
+      let image = "images/default-event.jpg";
+      const assetId = f.eventImage?.sys?.id;
+      if (assetId && assets[assetId]) image = "https:" + assets[assetId];
+
+      const eventForCard = {
+        title,
+        date: dateObj ? dateObj.toISOString().slice(0, 10) : "",
+        time: dateObj ? dateObj.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : "",
+        venue,
+        description,
+        image,
+        ageRange // ✅ included
+      };
+
+      // ✅ prevent duplicates (if contentful repeats something you already have)
+      const key = makeKey(eventForCard.title, eventForCard.date, eventForCard.venue);
+      if (renderedKeys.has(key)) return;
+      renderedKeys.add(key);
+
+      const section = isUpcoming ? "#upcoming-events" : "#past-events";
+      $(section).append(eventCard(eventForCard, isUpcoming));
+    });
+
+  } catch (err) {
+    console.error("Contentful load failed (fallback still showing):", err);
+  }
+}
+
+/* =========================
+   ✅ DOM READY
+   ========================= */
+$(document).ready(() => {
+  renderFallbackEvents();     // ✅ Always show your old events
+  loadEventsFromContentful(); // ✅ Then add new events from Contentful
 });
 
+/* =========================
+   ✅ MODAL POPULATION (VERY IMPORTANT)
+   Works for BOTH fallback + Contentful buttons
+   ========================= */
+$(document).on('show.bs.modal', '#registerModal', function (event) {
+  const b = $(event.relatedTarget);
+
+  $('#event_name').val(b.data('title') || "");
+  $('#event_date').val(b.data('date') || "");
+  $('#event_time').val(b.data('time') || "");
+  $('#event_location').val(b.data('location') || "");
+
+  $('#thankYouMessage').hide();
+});
+
+/* =========================
+   ✅ LOCATION "OTHER" TOGGLE
+   ========================= */
 function toggleOtherLocation(sel) {
   const box = document.getElementById('otherLocationGroup');
   box.classList.toggle('d-none', sel.value !== "Other");
@@ -406,17 +521,18 @@ function toggleOtherLocation(sel) {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co"; // ✅ CHANGE HERE if needed
-  const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO"; // ✅ CHANGE HERE if needed
+  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
   window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-(function() {
-  emailjs.init("_TGXKABP5E9-_Sxzn");
-})();
+  (function() {
+    emailjs.init("_TGXKABP5E9-_Sxzn");
+  })();
 </script>
+
 
 <script>
 document.getElementById("eventRegisterForm").addEventListener("submit", async function(e) {
@@ -498,6 +614,8 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
   }
 });
 </script>
+
+
 </div>
 </body>
 </html>
