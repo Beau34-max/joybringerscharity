@@ -172,6 +172,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>26 & Above</option>
                 </select>
               </div>
+              
+              <div class="col-md-6 form-group">
+                <label>Any Allergy? *</label>
+                <select name="has_allergy" id="has_allergy" class="form-control" required onchange="toggleAllergyDetails(this)">
+                  <option value="">Please Select</option>
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+
+              <div class="col-md-6 form-group d-none" id="allergyDetailsGroup">
+                <label>Please specify allergy *</label>
+                <input type="text" name="allergy_details" id="allergy_details" class="form-control" placeholder="e.g., nuts, dairy, gluten">
+              </div>
+
               <div class="col-md-6 form-group">
                 <label>Location *</label>
                 <select name="location" class="form-control" required onchange="toggleOtherLocation(this)">
@@ -194,7 +209,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
         </div>
-
+        
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Submit Registration</button>
         </div>
@@ -392,6 +407,11 @@ $(document).ready(() => {
     $('#event_date').val(b.data('date'));
     $('#event_time').val(b.data('time'));
     $('#event_location').val(b.data('location'));
+
+    $('#has_allergy').val("");
+    $('#allergy_details').val("");
+    $('#allergyDetailsGroup').addClass('d-none');
+    $('#allergy_details').removeAttr('required');
     $('#thankYouMessage').hide();
   });
 
@@ -401,6 +421,21 @@ $(document).ready(() => {
 function toggleOtherLocation(sel) {
   const box = document.getElementById('otherLocationGroup');
   box.classList.toggle('d-none', sel.value !== "Other");
+}
+function toggleAllergyDetails(sel) {
+  const group = document.getElementById('allergyDetailsGroup');
+  const details = document.getElementById('allergy_details');
+
+  const isYes = sel.value === "Yes";
+  group.classList.toggle('d-none', !isYes);
+
+  // Make details required only if Yes
+  if (isYes) {
+    details.setAttribute("required", "required");
+  } else {
+    details.removeAttribute("required");
+    details.value = "";
+  }
 }
 </script>
 
@@ -453,8 +488,12 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
     number_of_persons: formData.get("number_of_persons"),
     location: formData.get("location"),
     other_location: formData.get("other_location"),
+    
+        // ✅ ADD HERE: Allergy fields
+    has_allergy: formData.get("has_allergy"),              
+    allergy_details: formData.get("allergy_details") || "", 
 
-    source: "joybringerscharity.org/events" // ✅ CHANGE HERE if you want
+    source: "joybringerscharity.org/events"
   };
 
   try {
