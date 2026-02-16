@@ -138,7 +138,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <input type="email" name="email" class="form-control" required>
               </div>
               <div class="col-md-6 form-group">
-                <label>Phone Number</label>
+                <label>Phone Number *</label>
                 <input type="text" name="phone" class="form-control">
               </div>
               <div class="col-md-6 form-group">
@@ -333,6 +333,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
 const events = [
+   {
+    title: "6-Week Coding Bootcamp (Every Saturday)",
+    date: "2026-05-02", // start date used for registration window (opens 3 months before)
+    time: "Every Saturday (May 2 - June 6)",
+    venue: "TBC",
+    description: "6 weeks coding bootcamp. Runs every Saturday from May 2 to June 6.",
+    image: "images/events/code.png"
+  },
+  {
+    title: "Family Picnic",
+    date: "2026-07-25",
+    time: "10:00 AM - 4:00 PM",
+    venue: "Ridley Park",
+    description: "Family picnic and community bonding.",
+    image: "images/events/picnic.jpg"
+  },
+  {
+    title: "Sunderland Excursion",
+    date: "2026-08-08",
+    time: "10:00 AM - 4:00 PM",
+    venue: "Mowbray Park, Sunderland",
+    description: "Excursion to Mowbray Park, Sunderland.",
+    image: "images/events/sunderland.jpg"
+  },
+  {
+    title: "Pizza & Wrap Workshop",
+    date: "2026-09-12",
+    time: "10:00 AM - 12:00 PM",
+    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
+    description: "Hands-on pizza and wrap workshop (10am-12pm).",
+    image: "images/events/food.jpg"
+  },
+  {
+    title: "Multi-Skilled Workshop",
+    date: "2026-10-24",
+    time: "11:00 AM - 4:00 PM",
+    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
+    description: "Knitting, crocheting, nails, make-up, and art.",
+    image: "images/events/multiskill.jpg"
+  },
+  {
+    title: "Banquet & Awards Night",
+    date: "2026-11-28",
+    time: "6:00 PM",
+    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
+    description: "Banquet and awards night celebrating impact and excellence.",
+    image: "images/banq.jpg"
+  },
   {
   title: "Fruit Kebabs Workshop (Healthy Snacks Session) for ALL ages",
   date: "2026-02-07",
@@ -341,10 +389,10 @@ const events = [
   description: "A fun, hands-on healthy snacks session led by Donna Robinson from ASDA. Young people will learn basic food preparation skills and create colourful fruit kebabs while exploring healthy eating tips in a friendly and supportive environment. Please inform us of any food allergies during registration.",
   image: "images/events/fruits.jpg"
 },
-    { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
+  { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
   { title: "ONE MONTH CODING & Data CLASS", date: "2025-11-01", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park", description: "A one-month hands-on coding and data science class for ages 7 to 15 years.", image: "images/events/code.png" },
   { title: "BANQUET & AWARDS NIGHT", date: "2025-12-13", time: "18:00 PM", venue: "West Denton Community Centre, Hillhead Rd, West Denton, Newcastle upon Tyne NE5 1DN", description: "Celebrating excellence, impact and joy. You are invited. Dress code: Corporate/Black Tie", image: "images/banq.jpg" },
-  { title: "Volunteer Hangout", date: "2026-02-21", time: "1:30:00 PM", venue: "Suite 3, Neon, Quorum Business Park", description: "A Day set aside for volunteers to come together, have fun and network", image: "images/events/bg_3.jpg" },
+  { title: "Volunteer Hangout", date: "2026-02-21", time: "1:30 PM", venue: "Suite 3, Neon, Quorum Business Park", description: "A Day set aside for volunteers to come together, have fun and network", image: "images/events/bg_3.jpg" },
   { title: "One Day Free Multiskilled Workshop (Scratch Coding Bootcamp)", date: "2025-04-17", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "A hands-on Scratch coding bootcamp for young minds.", image: "images/events/cv.jpg" },
   { title: "Outdoor Picnic & Games for Young People", date: "2025-05-31", time: "12:00 PM - 5:00 PM", venue: "Leazes Park, Newcastle", description: "Relax and play! A fun day outdoors with games and food.", image: "images/events/event7.jpg" },
   { title: "One Month Free French/German Lesson", date: "2025-06-28", time: "10:00 AM - 12:00 PM", venue: "Online (Zoom)", description: "Learn French or German in a fun and engaging way.", image: "images/events/event-1.jpg" },
@@ -357,12 +405,84 @@ const events = [
 ];
 
 function formatDate(dateStr) {
-  const d = new Date(dateStr);
+  const d = new Date(dateStr + "T00:00:00");
   return d.toDateString();
 }
 
-// ✅ Updated function — only show Register button for upcoming events
+/* ✅ Handles month subtraction safely (end-of-month issues) */
+function addMonths(date, months) {
+  const d = new Date(date);
+  const day = d.getDate();
+  d.setMonth(d.getMonth() + months);
+  if (d.getDate() < day) d.setDate(0);
+  return d;
+}
+
+function formatLongDate(d) {
+  return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+}
+
+/* ✅ Registration rule: button becomes ACTIVE 3 months before event date */
+function registrationOpensOn(eventDateStr) {
+  const eventDate = new Date(eventDateStr + "T00:00:00");
+  const opens = addMonths(eventDate, -3);
+  return new Date(opens.getFullYear(), opens.getMonth(), opens.getDate()); // midnight
+}
+
+/* ✅ Updated: Upcoming events show Register button ONLY when within 3 months */
 function eventCard(e, isUpcoming) {
+  const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight
+  const opensDate = registrationOpensOn(e.date);
+  const isRegOpen = today >= opensDate;
+
+  // Past events
+  if (!isUpcoming) {
+    return `
+      <div class="col-md-4 d-flex">
+        <div class="event-card">
+          <img src="${e.image}" alt="${e.title}">
+          <div class="p-3">
+            <h5>${e.title}</h5>
+            <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
+            <p><i class="fa fa-clock"></i> ${e.time}</p>
+            <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
+            <p>${e.description}</p>
+            <span class="badge badge-secondary">Event Ended</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Upcoming events (reg open)
+  if (isRegOpen) {
+    return `
+      <div class="col-md-4 d-flex">
+        <div class="event-card">
+          <img src="${e.image}" alt="${e.title}">
+          <div class="p-3">
+            <h5>${e.title}</h5>
+            <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
+            <p><i class="fa fa-clock"></i> ${e.time}</p>
+            <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
+            <p>${e.description}</p>
+
+            <button class="btn btn-success btn-sm"
+              data-toggle="modal" data-target="#registerModal"
+              data-title="${e.title}"
+              data-date="${e.date}"
+              data-time="${e.time}"
+              data-location="${e.venue}">
+              Register Now
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Upcoming events (reg not open yet)
   return `
     <div class="col-md-4 d-flex">
       <div class="event-card">
@@ -373,35 +493,32 @@ function eventCard(e, isUpcoming) {
           <p><i class="fa fa-clock"></i> ${e.time}</p>
           <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
           <p>${e.description}</p>
-          ${isUpcoming ? `
-            <button class="btn btn-success btn-sm" 
-                    data-toggle="modal" data-target="#registerModal"
-                    data-title="${e.title}" 
-                    data-date="${e.date}" 
-                    data-time="${e.time}" 
-                    data-location="${e.venue}">
-              Register Now
-            </button>
-          ` : `
-            <span class="badge badge-secondary">Event Ended</span>
-          `}
+
+          <button class="btn btn-outline-success btn-sm" disabled>
+            Registration Not Open Yet
+          </button>
+          <div style="font-size: 12px; margin-top: 8px; color:#333;">
+            Opens on <strong>${formatLongDate(opensDate)}</strong> (3 months before)
+          </div>
         </div>
       </div>
     </div>
   `;
 }
 
-
 $(document).ready(() => {
-  const today = new Date();
+  // Compare by date only (midnight), not time-of-day
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  events.sort((a, b) => new Date(a.date) - new Date(b.date));
   events.forEach(e => {
-    const eventDate = new Date(e.date);
+    const eventDate = new Date(e.date + "T00:00:00");
     const isUpcoming = eventDate >= today;
     const section = isUpcoming ? "#upcoming-events" : "#past-events";
     $(section).append(eventCard(e, isUpcoming));
   });
 
-  // Modal and form handling remain the same
   $('#registerModal').on('show.bs.modal', function(event) {
     const b = $(event.relatedTarget);
     $('#event_name').val(b.data('title'));
@@ -415,9 +532,8 @@ $(document).ready(() => {
     $('#allergy_details').removeAttr('required');
     $('#thankYouMessage').hide();
   });
-
-
 });
+
 
 function toggleOtherLocation(sel) {
   const box = document.getElementById('otherLocationGroup');
