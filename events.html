@@ -373,8 +373,8 @@ const events = [
   date: "2026-09-12",
   time: "10:00 AM - 12:00 PM",
   venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A hands-on food workshop where participants will learn how to prepare simple pizzas and wraps. We’ll cover basic kitchen skills, healthy choices, and safe food handling in a friendly environment. Great for young people and families. Please inform us of any allergies or dietary needs during registration.",
-  image: "images/events/fk0.jpg"
+  description: "A hands-on food workshop where participants will learn how to prepare simple pizzas and wraps. We'll cover basic kitchen skills, healthy choices, and safe food handling in a friendly environment. Great for young people and families. Please inform us of any allergies or dietary needs during registration.",
+  image: "images/events/fk0.jpeg"
 },
 {
   title: "Multi-Skilled Workshop",
@@ -388,8 +388,8 @@ const events = [
   title: "Banquet & Awards Night",
   date: "2026-11-28",
   time: "6:00 PM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "An evening of celebration, appreciation, and joy...",
+  venue: "TBC",
+  description: "Join us for a special evening of celebration, recognition, and gratitude as we reflect on a year of impact at Joybringers. This elegant Banquet & Awards Night will honour outstanding volunteers, young achievers, partners, and community supporters who have made a difference throughout the year. Dress code: Corporate / Black Tie. Tickets: £10 per person or £30 per family (maximum of 5 people).",
   image: "images/Award.jpg",
 
   regOverrideOpen: true,      
@@ -512,7 +512,7 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
             Registration Not Open Yet
           </button>
           <div style="font-size: 12px; margin-top: 8px; color:#333;">
-            Opens on <strong>${formatLongDate(opensDate)}</strong> (3 months before)
+            Opens on <strong>${formatLongDate(opensDate)}</strong>
           </div>
         </div>
       </div>
@@ -688,7 +688,7 @@ if (ticketType === "family") payUrl = STRIPE_FAMILY_LINK;
 setTimeout(() => {
   $('#registerModal').modal('hide');
   form.reset();
-  
+
   // ✅ re-enable button (safety)
   btn.disabled = false;
   btn.innerText = "Submit Registration";
