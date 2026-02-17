@@ -393,7 +393,8 @@ const events = [
   image: "images/Award.jpg",
 
   regOverrideOpen: true,      
-  paidEvent: true             
+  paidEvent: true,  
+  featured: true           
 },
   {
   title: "Fruit Kebabs Workshop (Healthy Snacks Session) for ALL ages",
@@ -525,8 +526,15 @@ $(document).ready(() => {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   
-  events.sort((a, b) => new Date(a.date) - new Date(b.date));
-  events.forEach(e => {
+    events.sort((a, b) => {
+      // Featured event always first
+      if (a.featured) return -1;
+      if (b.featured) return 1;
+
+      // Otherwise sort by date
+      return new Date(a.date) - new Date(b.date);
+
+    });  events.forEach(e => {
     const eventDate = new Date(e.date + "T00:00:00");
     const isUpcoming = eventDate >= today;
     const section = isUpcoming ? "#upcoming-events" : "#past-events";
