@@ -44,6 +44,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       flex-shrink: 0;
     }
   </style>
+  
+  <style>
+/* Gold border */
+.event-card.featured {
+  border: 3px solid #d4af37;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+/* Featured badge */
+.featured-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #d4af37;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+</style>
+
   <style>
     body { background-color: #f9f9f9; font-family: 'Open Sans', sans-serif; }
     .event-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 30px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
@@ -454,7 +480,8 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
   if (!isUpcoming) {
     return `
       <div class="col-md-4 d-flex">
-        <div class="event-card">
+        <div class="event-card ${e.featured ? 'featured' : ''}">
+        ${e.featured ? `<div class="featured-badge"><i class="fa fa-star"></i> Featured Event</div>` : ``}
           <img src="${e.image}" alt="${e.title}">
           <div class="p-3">
             <h5>${e.title}</h5>
@@ -473,7 +500,7 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
   if (isRegOpen) {
     return `
       <div class="col-md-4 d-flex">
-        <div class="event-card">
+        <div class="event-card ${e.featured ? 'featured' : ''}">
           <img src="${e.image}" alt="${e.title}">
           <div class="p-3">
             <h5>${e.title}</h5>
@@ -500,7 +527,7 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
   // Upcoming events (reg not open yet)
   return `
     <div class="col-md-4 d-flex">
-      <div class="event-card">
+      <div class="event-card ${e.featured ? 'featured' : ''}">
         <img src="${e.image}" alt="${e.title}">
         <div class="p-3">
           <h5>${e.title}</h5>
