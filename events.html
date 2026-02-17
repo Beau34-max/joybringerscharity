@@ -120,6 +120,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <input type="hidden" name="event_date" id="event_date">
   <input type="hidden" name="event_time" id="event_time">
   <input type="hidden" name="event_location" id="event_location">
+  <input type="hidden" name="is_paid_event" id="is_paid_event" value="false">
 
 
         <div class="modal-body">
@@ -162,6 +163,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>6+</option>
                 </select>
               </div>
+
+              <div class="col-md-6 form-group d-none" id="ticketTypeGroup">
+              <label>Ticket Type *</label>
+              <select name="ticket_type" id="ticket_type" class="form-control">
+                <option value="">Please Select</option>
+                <option value="single">£10 - Single (per person)</option>
+                <option value="family">£30 - Family (max 5)</option>
+              </select>
+            </div>
+
              <div class="col-md-6 form-group">
                 <label>Age Range *</label>
                 <select name="age_range" class="form-control" required>
@@ -334,53 +345,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 const events = [
    {
-    title: "6-Week Coding Bootcamp (Every Saturday)",
-    date: "2026-05-02", // start date used for registration window (opens 3 months before)
-    time: "Every Saturday (May 2 - June 6)",
-    venue: "TBC",
-    description: "6 weeks coding bootcamp. Runs every Saturday from May 2 to June 6.",
-    image: "images/events/code.png"
-  },
-  {
-    title: "Family Picnic",
-    date: "2026-07-25",
-    time: "10:00 AM - 4:00 PM",
-    venue: "Ridley Park",
-    description: "Family picnic and community bonding.",
-    image: "images/events/picnic.jpg"
-  },
-  {
-    title: "Sunderland Excursion",
-    date: "2026-08-08",
-    time: "10:00 AM - 4:00 PM",
-    venue: "Mowbray Park, Sunderland",
-    description: "Excursion to Mowbray Park, Sunderland.",
-    image: "images/events/sunderland.jpg"
-  },
-  {
-    title: "Pizza & Wrap Workshop",
-    date: "2026-09-12",
-    time: "10:00 AM - 12:00 PM",
-    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
-    description: "Hands-on pizza and wrap workshop (10am-12pm).",
-    image: "images/events/food.jpg"
-  },
-  {
-    title: "Multi-Skilled Workshop",
-    date: "2026-10-24",
-    time: "11:00 AM - 4:00 PM",
-    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
-    description: "Knitting, crocheting, nails, make-up, and art.",
-    image: "images/events/multiskill.jpg"
-  },
-  {
-    title: "Banquet & Awards Night",
-    date: "2026-11-28",
-    time: "6:00 PM",
-    venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU",
-    description: "Banquet and awards night celebrating impact and excellence.",
-    image: "images/banq.jpg"
-  },
+  title: "6-Week Coding Bootcamp (Every Saturday)",
+  date: "2026-05-02",
+  time: "Every Saturday (May 2 - June 6)",
+  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
+  description: "A 6-week beginner-friendly coding bootcamp designed to build confidence and real digital skills. Each Saturday includes hands-on learning, fun challenges, and guided support from our team. Suitable for young people and anyone ready to learn step-by-step. Please come with a laptop if possible.",
+  image: "images/co5.jpg"
+},
+{
+  title: "Family Picnic",
+  date: "2026-07-25",
+  time: "10:00 AM - 4:00 PM",
+  venue: "Ridley Park",
+  description: "A relaxed family day out filled with games, laughter, and good company. Bring your picnic items, enjoy outdoor activities, and connect with other families in the community. This event is suitable for all ages and is a great way to build friendships and enjoy the summer together.",
+  image: "images/mp2.jpg"
+},
+{
+  title: "Sunderland Excursion",
+  date: "2026-08-08",
+  time: "10:00 AM - 4:00 PM",
+  venue: "Mowbray Park, Sunderland",
+  description: "Join us for a fun excursion to Sunderland for a day of sightseeing, bonding, and exploring together. We’ll spend time at Mowbray Park and enjoy a mix of relaxation and group activities. Perfect for families and young people who want a safe, friendly, and memorable day out.",
+  image: "images/bg_7.jpg"
+},
+{
+  title: "Pizza & Wrap Workshop",
+  date: "2026-09-12",
+  time: "10:00 AM - 12:00 PM",
+  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
+  description: "A hands-on food workshop where participants will learn how to prepare simple pizzas and wraps. We’ll cover basic kitchen skills, healthy choices, and safe food handling in a friendly environment. Great for young people and families. Please inform us of any allergies or dietary needs during registration.",
+  image: "images/events/fk0.jpg"
+},
+{
+  title: "Multi-Skilled Workshop",
+  date: "2026-10-24",
+  time: "11:00 AM - 4:00 PM",
+  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
+  description: "A practical skills day featuring a mix of creative and self-care activities including knitting, crocheting, nails, make-up, and art. Participants will rotate through mini sessions and learn simple techniques they can continue at home. A supportive space to build confidence, discover talents, and connect with others.",
+  image: "images/ms5.jpg"
+},
+{
+  title: "Banquet & Awards Night",
+  date: "2026-11-28",
+  time: "6:00 PM",
+  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
+  description: "An evening of celebration, appreciation, and joy...",
+  image: "images/Award.jpg",
+
+  regOverrideOpen: true,      
+  paidEvent: true             
+},
   {
   title: "Fruit Kebabs Workshop (Healthy Snacks Session) for ALL ages",
   date: "2026-02-07",
@@ -434,8 +448,7 @@ function eventCard(e, isUpcoming) {
   const now = new Date();
 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight
   const opensDate = registrationOpensOn(e.date);
-  const isRegOpen = today >= opensDate;
-
+  const isRegOpen = e.regOverrideOpen === true || (today >= opensDate);
   // Past events
   if (!isUpcoming) {
     return `
@@ -469,13 +482,14 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
             <p>${e.description}</p>
 
             <button class="btn btn-success btn-sm"
-              data-toggle="modal" data-target="#registerModal"
-              data-title="${e.title}"
-              data-date="${e.date}"
-              data-time="${e.time}"
-              data-location="${e.venue}">
-              Register Now
-            </button>
+            data-toggle="modal" data-target="#registerModal"
+            data-title="${e.title}"
+            data-date="${e.date}"
+            data-time="${e.time}"
+            data-location="${e.venue}"
+            data-paid="${e.paidEvent === true}">
+            Register Now
+          </button>
           </div>
         </div>
       </div>
@@ -525,6 +539,17 @@ $(document).ready(() => {
     $('#event_date').val(b.data('date'));
     $('#event_time').val(b.data('time'));
     $('#event_location').val(b.data('location'));
+      const isPaid = b.data('paid') === true;
+
+  $('#is_paid_event').val(isPaid ? "true" : "false");
+
+  if (isPaid) {
+    $('#ticketTypeGroup').removeClass('d-none');
+    $('#ticket_type').attr('required', true);
+  } else {
+    $('#ticketTypeGroup').addClass('d-none');
+    $('#ticket_type').removeAttr('required').val("");
+  }
 
     $('#has_allergy').val("");
     $('#allergy_details').val("");
@@ -563,6 +588,11 @@ function toggleAllergyDetails(sel) {
   window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
+<script>
+  const STRIPE_SINGLE_LINK = "https://book.stripe.com/eVq8wR3VM7CM1go95zefC00";
+  const STRIPE_FAMILY_LINK = "https://book.stripe.com/14A9AVcsie1a1go0z3efC01";
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
 (function() {
@@ -587,8 +617,8 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
   btn.disabled = true;
   btn.innerText = "Submitting...";
 
-  const formData = new FormData(form);
-
+    const formData = new FormData(form);
+    const isPaidEvent = formData.get("is_paid_event") === "true";
   // ✅ CHANGE HERE: build payload that matches Supabase table columns
   const payload = {
     event_name: formData.get("event_name"),
@@ -609,6 +639,9 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
         // ✅ ADD HERE: Allergy fields
     has_allergy: formData.get("has_allergy"),              
     allergy_details: formData.get("allergy_details") || "", 
+    
+    is_paid_event: isPaidEvent,
+    ticket_type: isPaidEvent ? (formData.get("ticket_type") || null) : null,
 
     source: "joybringerscharity.org/events"
   };
@@ -635,16 +668,37 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
       // We still proceed because Supabase already saved it
     }
 
-    // ✅ keep your thank-you behaviour
-    $('#thankYouMessage').fadeIn();
+    // ✅ Show quick success message
+$('#thankYouMessage').text("✅ Registration saved! Redirecting...").fadeIn();
 
-    setTimeout(() => {
-      $('#thankYouMessage').fadeOut(600, () => {
-        $('#registerModal').modal('hide');
-        form.reset();
-        window.location.href = "/thankyou"; // ✅ CHANGE HERE if your page is different
-      });
-    }, 2000);
+let payUrl = "";
+if (isPaidEvent) {
+  const ticketType = formData.get("ticket_type");
+    if (ticketType === "single") payUrl = STRIPE_SINGLE_LINK;
+if (ticketType === "family") payUrl = STRIPE_FAMILY_LINK;
+    
+    if (!payUrl) {
+    alert("❌ Please select a ticket type.");
+    btn.disabled = false;
+    btn.innerText = "Submit Registration";
+    return;
+  }
+}
+
+setTimeout(() => {
+  $('#registerModal').modal('hide');
+  form.reset();
+  
+  // ✅ re-enable button (safety)
+  btn.disabled = false;
+  btn.innerText = "Submit Registration";
+
+  if (isPaidEvent) {
+    window.location.href = payUrl;
+  } else {
+    window.location.href = "/thankyou";
+  }
+}, 1200);
 
   } catch (err) {
     console.error("Submission error:", err);
