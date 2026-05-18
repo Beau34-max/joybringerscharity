@@ -284,7 +284,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-  emailjs.init("6xlIRBT96J-bKz7s3");
+  emailjs.init({
+    publicKey: "6xlIRBT96J-bKz7s3"
+  });
 </script>
 
 <!-- Form submit -->
@@ -320,10 +322,11 @@ document.getElementById("contact-form").addEventListener("submit", async functio
     alert("✅ Thank you! Your message has been received.");
     form.reset();
 
-  } catch (err) {
-    console.error("Submission error:", err);
-    alert("❌ Something went wrong. Please try again later.");
-  }
+  } 
+  catch (err) {
+  console.error("Submission error:", err);
+  alert("❌ Submission failed: " + (err.text || err.message || "Unknown error"));
+}
 });
 </script>
 
