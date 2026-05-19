@@ -150,6 +150,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
         <div class="modal-body">
+          <div class="alert alert-success mb-4" id="selectedEventSummary">
+          <h5 class="mb-2" id="modalEventTitle"></h5>
+          <p class="mb-1"><strong>Date:</strong> <span id="modalEventDate"></span></p>
+          <p class="mb-1"><strong>Time:</strong> <span id="modalEventTime"></span></p>
+          <p class="mb-1"><strong>Venue:</strong> <span id="modalEventVenue"></span></p>
+          <p class="mb-0" id="modalEventDescription"></p>
+        </div>
           <div class="container">
             <div class="row">
               <div class="col-md-6 form-group">
@@ -486,6 +493,14 @@ function registrationOpensOn(eventDateStr) {
 }
 
 /* ✅ Updated: Upcoming events show Register button ONLY when within 3 months */
+function createEventSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function eventCard(e, isUpcoming) {
   const now = new Date();
 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight
@@ -530,9 +545,16 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
             data-date="${e.date}"
             data-time="${e.time}"
             data-location="${e.venue}"
+            data-description="${e.description}"
             data-paid="${e.paidEvent === true}">
             Register Now
           </button>
+
+          <a 
+            href="/events?event=${createEventSlug(e.title)}"
+            class="btn btn-outline-success btn-sm ml-2">
+            Share Registration Link
+          </a>
           </div>
         </div>
       </div>
@@ -576,15 +598,31 @@ $(document).ready(() => {
       // Otherwise sort by date
       return new Date(a.date) - new Date(b.date);
 
-    });  events.forEach(e => {
-    const eventDate = new Date(e.date + "T00:00:00");
-    const isUpcoming = eventDate >= today;
-    const section = isUpcoming ? "#upcoming-events" : "#past-events";
-    $(section).append(eventCard(e, isUpcoming));
-  });
+    });  
 
+    events.forEach(e => {
+  const eventDate = new Date(e.date + "T00:00:00");
+  const isUpcoming = eventDate >= today;
+  const section = isUpcoming ? "#upcoming-events" : "#past-events";
+  $(section).append(eventCard(e, isUpcoming));
+});
+  
   $('#registerModal').on('show.bs.modal', function(event) {
     const b = $(event.relatedTarget);
+
+    const title = b.data('title');
+    const date = b.data('date');
+    const time = b.data('time');
+    const location = b.data('location');
+    const description = b.data('description') || "";
+
+    $('#registerModalLabel').text(`Register for: ${title}`);
+    $('#modalEventTitle').text(title);
+    $('#modalEventDate').text(formatDate(date));
+    $('#modalEventTime').text(time);
+    $('#modalEventVenue').text(location);
+    $('#modalEventDescription').text(description);
+
     $('#event_name').val(b.data('title'));
     $('#event_date').val(b.data('date'));
     $('#event_time').val(b.data('time'));
@@ -607,6 +645,44 @@ $(document).ready(() => {
     $('#allergy_details').removeAttr('required');
     $('#thankYouMessage').hide();
   });
+  
+  const params = new URLSearchParams(window.location.search);
+const requestedEventSlug = params.get("event");
+
+if (requestedEventSlug) {
+  const matchedEvent = events.find(e => createEventSlug(e.title) === requestedEventSlug);
+
+  if (matchedEvent) {
+    const eventDate = new Date(matchedEvent.date + "T00:00:00");
+    const opensDate = registrationOpensOn(matchedEvent.date);
+
+    const isUpcoming = eventDate >= today;
+    const isRegistrationOpen =
+      matchedEvent.regOverrideOpen === true || today >= opensDate;
+
+    if (isUpcoming && isRegistrationOpen) {
+      const fakeButton = $(`
+        <button
+          data-toggle="modal"
+          data-target="#registerModal"
+          data-title="${matchedEvent.title}"
+          data-date="${matchedEvent.date}"
+          data-time="${matchedEvent.time}"
+          data-location="${matchedEvent.venue}"
+          data-description="${matchedEvent.description}"
+          data-paid="${matchedEvent.paidEvent === true}">
+        </button>
+      `);
+
+      $('body').append(fakeButton);
+      fakeButton.trigger('click');
+      fakeButton.remove();
+    } else {
+      alert("Registration for this event is not currently open.");
+    }
+  }
+}
+
 });
 
 
