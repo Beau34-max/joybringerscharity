@@ -226,9 +226,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </select>
               </div>
               
-              <div class="col-md-6 form-group">
-                <label>Any Allergy? *</label>
-                <select name="has_allergy" id="has_allergy" class="form-control" required onchange="toggleAllergyDetails(this)">
+              <div class="col-md-6 form-group" id="allergyQuestionGroup">
+              <label>Any Allergy? *</label>
+              <select name="has_allergy" id="has_allergy" class="form-control" required onchange="toggleAllergyDetails(this)">
                   <option value="">Please Select</option>
                   <option value="No">No</option>
                   <option value="Yes">Yes</option>
@@ -651,6 +651,7 @@ $(document).ready(() => {
     $('#allergy_details').val("");
     $('#allergyDetailsGroup').addClass('d-none');
     $('#allergy_details').removeAttr('required');
+    toggleAllergyQuestionForEvent(location);
     $('#thankYouMessage').hide();
   });
   
@@ -715,6 +716,48 @@ function toggleAllergyDetails(sel) {
 }
 </script>
 
+<script>
+function isOnlineEvent(locationText) {
+  const text = String(locationText || "").toLowerCase();
+
+  return (
+    text.includes("online") ||
+    text.includes("zoom") ||
+    text.includes("teams") ||
+    text.includes("virtual") ||
+    text.includes("meet") ||
+    text.includes("microsoft teams")
+  );
+}
+
+function toggleAllergyQuestionForEvent(locationText) {
+  const allergyQuestionGroup = document.getElementById("allergyQuestionGroup");
+  const hasAllergy = document.getElementById("has_allergy");
+  const allergyDetailsGroup = document.getElementById("allergyDetailsGroup");
+  const allergyDetails = document.getElementById("allergy_details");
+
+  const online = isOnlineEvent(locationText);
+
+  if (online) {
+    allergyQuestionGroup.classList.add("d-none");
+    hasAllergy.removeAttribute("required");
+    hasAllergy.value = "No";
+
+    allergyDetailsGroup.classList.add("d-none");
+    allergyDetails.removeAttribute("required");
+    allergyDetails.value = "";
+  } else {
+    allergyQuestionGroup.classList.remove("d-none");
+    hasAllergy.setAttribute("required", "required");
+    hasAllergy.value = "";
+
+    allergyDetailsGroup.classList.add("d-none");
+    allergyDetails.removeAttribute("required");
+    allergyDetails.value = "";
+  }
+}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co"; // ✅ CHANGE HERE if needed
@@ -770,9 +813,8 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
     location: formData.get("location"),
     other_location: formData.get("other_location"),
     
-        // ✅ ADD HERE: Allergy fields
-    has_allergy: formData.get("has_allergy"),              
-    allergy_details: formData.get("allergy_details") || "", 
+  has_allergy: formData.get("has_allergy") || "No",
+  allergy_details: formData.get("allergy_details") || "",
     
     is_paid_event: isPaidEvent,
     ticket_type: isPaidEvent ? (formData.get("ticket_type") || null) : null,
