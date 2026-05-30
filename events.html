@@ -391,89 +391,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/main.js"></script>
 
 <script>
-const events = [
-   {
-  title: "6-Week R-Programming coding Bootcamp (Every Saturday)",
-  date: "2026-05-02",
-  time: "10AM Every Saturday (May 2 - June 6)",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A 6-week beginner-friendly R-Programming coding bootcamp designed to build confidence and real digital skills. Each Saturday includes hands-on learning, fun challenges, and guided support from our team. Suitable for young people and anyone ready to learn step-by-step. Please come with a laptop if possible.",
-  image: "images/co5.jpg"
-},
-{
-  title: "ParentConnect Online Programme",
-  date: "2026-06-20",
-  time: "11:00 AM - 12:30 PM",
-  venue: "Online Via Teams",
-  description: "ParentConnect is a supportive online programme for mums, dads, single parents, and carers of all backgrounds. This session will provide practical discussions, helpful tips, and real conversations about supporting children, strengthening families, and helping young people grow in confidence.",
-  image: "images/events/parentconnect.jpeg"
-},
-{
-  title: "Family Picnic",
-  date: "2026-07-25",
-  time: "10:00 AM - 4:00 PM",
-  venue: "Ridley Park",
-  description: "A relaxed family day out filled with games, laughter, and good company. Bring your picnic items and a change of clothes for water splash play, take part in fun outdoor activities, and connect with other families in the community. Suitable for all ages, this is a wonderful opportunity to build friendships, create memories, and enjoy the summer together.",
-  image: "images/events/rp.jpg"
-},
-{
-  title: "Explore Sunderland: Excursion to Mowbray Park",
-  date: "2026-08-15",
-  time: "10:00 AM - 4:00 PM",
-  venue: "Mowbray Park, Sunderland",
-  description: "Join us for a fun excursion to Sunderland for a day of sightseeing, bonding, and exploring together. We’ll spend time at Mowbray Park and enjoy a mix of relaxation and group activities. Perfect for families and young people who want a safe, friendly, and memorable day out.",
-  image: "images/events/mp.jpg"
-},
-{
-  title: "Pizza & Wrap Workshop",
-  date: "2026-09-12",
-  time: "10:00 AM - 12:00 PM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A hands-on food workshop where participants will learn how to prepare simple pizzas and wraps. We'll cover basic kitchen skills, healthy choices, and safe food handling in a friendly environment. Great for young people and families. Please inform us of any allergies or dietary needs during registration.",
-  image: "images/events/fk0.jpeg"
-},
-{
-  title: "Multi-Skilled Workshop (Ages 7-15, 16-25)",
-  date: "2026-10-24",
-  time: "11:00 AM - 4:00 PM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A practical skills day featuring a mix of creative and self-care activities including knitting, crocheting, nails, make-up, and art. Participants will rotate through mini sessions and learn simple techniques they can continue at home. A supportive space to build confidence, discover talents, and connect with others.",
-  image: "images/co12.jpg"
-},
-{
-  title: "Banquet & Awards Ceremony",
-  date: "2026-11-28",
-  time: "01:00 PM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "Join us for a special afternoon of celebration, recognition, and gratitude as we reflect on a year of impact at Joybringers. This elegant Banquet & Awards Night will honour outstanding volunteers, young achievers, partners, and community supporters who have made a difference throughout the year. Dress code: Corporate / Black Tie. Tickets: £10 per person or £30 per family (maximum of 5 people).",
-  image: "images/Award.jpg",
-
-  regOverrideOpen: true,      
-  paidEvent: true,  
-  featured: true           
-},
-  {
-  title: "Fruit Kebabs Workshop (Healthy Snacks Session) for ALL ages",
-  date: "2026-02-07",
-  time: "10:00 AM",
-  venue: "Suite 3, Neon, Quorum Business Park, NE12 8BU",
-  description: "A fun, hands-on healthy snacks session led by Donna Robinson from ASDA. Young people will learn basic food preparation skills and create colourful fruit kebabs while exploring healthy eating tips in a friendly and supportive environment. Please inform us of any food allergies during registration.",
-  image: "images/events/fruits.jpg"
-},
-  { title: "6-Weeks Data Analytics Bootcamp", date: "2026-02-21", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park,NE12 8BU", description: "Hands-on data analytics training for ages 16-25. Laptop with Excel and Power BI required.", image: "images/events/da2.jpg" },
-  { title: "ONE MONTH CODING & Data CLASS", date: "2025-11-01", time: "10:00 AM", venue: "Suite 3, Neon, Quorum Business Park", description: "A one-month hands-on coding and data science class for ages 7 to 15 years.", image: "images/events/code.png" },
-  { title: "BANQUET & AWARDS NIGHT", date: "2025-12-13", time: "18:00 PM", venue: "West Denton Community Centre, Hillhead Rd, West Denton, Newcastle upon Tyne NE5 1DN", description: "Celebrating excellence, impact and joy. You are invited. Dress code: Corporate/Black Tie", image: "images/banq.jpg" },
-  { title: "Volunteer Hangout", date: "2026-05-30", time: "1:00 PM", venue: "Suite 3, Neon, Quorum Business Park", description: "A Day set aside for volunteers to come together, have fun and network", image: "images/events/bg_3.jpg" },
-  { title: "One Day Free Multiskilled Workshop (Scratch Coding Bootcamp)", date: "2025-04-17", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "A hands-on Scratch coding bootcamp for young minds.", image: "images/events/event-6.jpg" },
-  { title: "Outdoor Picnic & Games for Young People", date: "2025-05-31", time: "12:00 PM - 5:00 PM", venue: "Leazes Park, Newcastle", description: "Relax and play! A fun day outdoors with games and food.", image: "images/ff3.jpg" },
-  { title: "One Month Free French/German Lesson", date: "2025-06-28", time: "10:00 AM - 12:00 PM", venue: "Online (Zoom)", description: "Learn French or German in a fun and engaging way.", image: "images/events/event-1.jpg" },
-  { title: "Explore the NE: Excursion to Beamish", date: "2025-07-19", time: "9:00 AM - 6:00 PM", venue: "Beamish, County Durham", description: "Explore the North East's cultural past with us.", image: "images/events/an.JPG" },
-  { title: "Joybringers FUNFAIR", date: "2025-08-16", time: "11:00 AM - 5:00 PM", venue: "Neon, Quorum Business Park", description: "Food, games, prizes, and fun for all ages.", image: "images/events/event7.jpg" },
-  { title: "Explore the NE: Excursion to Alnwick Gardens", date: "2025-08-19", time: "9:30 AM - 6:30 PM", venue: "Alnwick, Northumberland", description: "A day of nature, learning, and exploration.", image: "images/event-2.jpg" },
-  { title: "Practical Multiskilled Training for Young People", date: "2025-10-04", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "Hands-on training across key youth skills.", image: "images/events/event4.jpg" },
-  { title: "Multiskilled Workshop", date: "2024-08-18", time: "10:00 AM - 4:00 PM", venue: "Neon, Quorum Business Park", description: "Develop versatile skills through our practical workshop.", image: "images/events/code.png" },
-  { title: "CV Clinic & Mock Interview", date: "2024-07-20", time: "11:00 AM - 3:00 PM", venue: "Neon, Quorum Business Park", description: "Polish your CV and get interview-ready with pros.", image: "images/events/cv.jpg" }
-];
+/* Events are now loaded from /data/events.json — managed via the admin panel at /admin */
 
 function formatDate(dateStr) {
   const d = new Date(dateStr + "T00:00:00");
@@ -594,10 +512,14 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
 }
 
 $(document).ready(() => {
+  fetch('/data/events.json')
+    .then(r => r.json())
+    .then(data => {
+      const events = data.items || [];
   // Compare by date only (midnight), not time-of-day
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  
+
     events.sort((a, b) => {
       // Featured event always first
       if (a.featured) return -1;
@@ -692,6 +614,11 @@ if (requestedEventSlug) {
   }
 }
 
+    }) // end .then(data =>)
+    .catch(() => {
+      document.getElementById('upcoming-events').innerHTML =
+        '<div class="col-12 text-center py-5"><p class="text-muted">Unable to load events. Please try refreshing the page.</p></div>';
+    });
 });
 
 

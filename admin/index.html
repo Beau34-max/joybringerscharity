@@ -1,18 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Joybringers CMS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <!-- ✅ Load Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Joybringers Admin Panel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+<body>
 
-    <!-- ✅ Optional: load your site styles for CMS preview -->
-    <script>
-      CMS.registerPreviewStyle("/css/style.css");
-      CMS.registerPreviewStyle("/css/custom.css");
-    </script>
-  </body>
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay">
+  <div class="loading-inner">
+    <div class="spinner-border text-light" style="width:3rem;height:3rem;" role="status"></div>
+    <p id="loading-message" class="mt-3 text-white fw-semibold">Working...</p>
+  </div>
+</div>
+
+<!-- ALERTS -->
+<div id="alert-container"></div>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-brand-icon">
+        <i class="fas fa-heart-pulse"></i>
+      </div>
+      <h2>Joybringers</h2>
+      <p class="text-muted mb-0">Admin Panel</p>
+    </div>
+
+    <!-- FIRST-TIME SETUP -->
+    <div id="setup-screen" style="display:none">
+      <div class="alert alert-info py-2 px-3 mb-4" style="font-size:0.875rem">
+        <i class="fas fa-info-circle"></i> First time here — create your admin password below.
+      </div>
+      <form id="setup-form">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Create Admin Password</label>
+          <input type="password" class="form-control" id="setup-password" required minlength="8" placeholder="Minimum 8 characters">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Confirm Password</label>
+          <input type="password" class="form-control" id="setup-confirm" required placeholder="Repeat password">
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">
+            GitHub Personal Access Token
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=Joybringers+Admin" target="_blank" class="ms-2 badge bg-info text-decoration-none" style="font-size:11px">
+              <i class="fas fa-external-link-alt"></i> Get one here
+            </a>
+          </label>
+          <input type="password" class="form-control" id="setup-token" required placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <div class="form-text">Generate a GitHub token with <strong>repo</strong> scope. It lets the admin save changes to the website.</div>
+        </div>
+        <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+          <i class="fas fa-lock"></i> Create Admin Access
+        </button>
+      </form>
+    </div>
+
+    <!-- NORMAL LOGIN -->
+    <div id="normal-login" style="display:none">
+      <form id="login-form">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Admin Password</label>
+          <input type="password" class="form-control" id="login-password" required autofocus placeholder="Enter admin password">
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">GitHub Token <small class="text-muted fw-normal">(paste to update, or leave blank to use saved)</small></label>
+          <input type="password" class="form-control" id="login-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx (optional)">
+        </div>
+        <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+      <div class="text-center mt-3">
+        <a href="/" class="text-muted small"><i class="fas fa-arrow-left"></i> Back to Website</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADMIN PANEL ===================== -->
+<div id="admin-panel">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <i class="fas fa-heart-pulse"></i>
+        <span>Joybringers</span>
+      </div>
+      <small style="color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:1px;text-transform:uppercase;">Admin Panel</small>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-tab="events" onclick="switchTab('events');return false;">
+        <i class="fas fa-calendar-alt"></i> Events
+      </a>
+      <a href="#" class="sidebar-link" data-tab="photos" onclick="switchTab('photos');return false;">
+        <i class="fas fa-images"></i> Photos &amp; Gallery
+      </a>
+      <a href="#" class="sidebar-link" data-tab="content" onclick="switchTab('content');return false;">
+        <i class="fas fa-pen-to-square"></i> Website Content
+      </a>
+      <a href="#" class="sidebar-link" data-tab="settings" onclick="switchTab('settings');return false;">
+        <i class="fas fa-gear"></i> Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="btn btn-outline-light btn-sm w-100 mb-2">
+        <i class="fas fa-external-link-alt"></i> View Live Website
+      </a>
+      <button onclick="logout()" class="btn btn-outline-danger btn-sm w-100">
+        <i class="fas fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-link p-0 text-dark d-md-none" onclick="toggleSidebar()">
+          <i class="fas fa-bars fs-5"></i>
+        </button>
+        <h1 class="page-title mb-0" id="page-title">Events</h1>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span id="connection-badge" class="badge bg-success-subtle text-success-emphasis border border-success-subtle">
+          <i class="fas fa-circle-dot" style="font-size:8px"></i> Connected
+        </span>
+      </div>
+    </div>
+
+    <!-- ============ EVENTS TAB ============ -->
+    <div id="tab-events" class="admin-tab">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-calendar-alt text-success"></i> Manage Events</h2>
+          <p class="text-muted mb-0 small">Add, edit or delete events. Saved changes go live in ~1 minute.</p>
+        </div>
+        <button class="btn btn-success" onclick="openNewEventModal()">
+          <i class="fas fa-plus"></i> Add New Event
+        </button>
+      </div>
+
+      <div class="stats-row mb-4">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-upcoming">–</div>
+          <div class="stat-label">Upcoming</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-past">–</div>
+          <div class="stat-label">Past</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-featured">–</div>
+          <div class="stat-label">Featured</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-paid">–</div>
+          <div class="stat-label">Paid</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between gap-3">
+          <span><i class="fas fa-list-ul"></i> All Events</span>
+          <input type="text" class="form-control form-control-sm" style="max-width:220px"
+                 id="event-search" placeholder="Search..." oninput="filterEvents()">
+        </div>
+        <div class="card-body p-3" id="events-list">
+          <p class="text-muted">Loading events...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PHOTOS TAB ============ -->
+    <div id="tab-photos" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-images text-success"></i> Photos &amp; Gallery</h2>
+          <p class="text-muted mb-0 small">Upload photos to use on the website or in events.</p>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-cloud-upload-alt"></i> Upload New Photo</div>
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+              <label class="form-label">Select Photo</label>
+              <input type="file" class="form-control" id="photo-upload-input" accept="image/*" onchange="previewUploadPhoto()">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Save to Folder</label>
+              <select class="form-select" id="photo-folder">
+                <option value="images/events">images/events — Event Photos</option>
+                <option value="images/team">images/team — Team Photos</option>
+                <option value="images/uploads">images/uploads — General</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-success w-100" onclick="uploadPhoto()">
+                <i class="fas fa-upload"></i> Upload Photo
+              </button>
+            </div>
+          </div>
+
+          <div id="photo-upload-preview" class="mt-3 p-3 bg-light rounded" style="display:none">
+            <div class="d-flex align-items-start gap-3">
+              <img id="photo-preview-img" style="max-height:180px;max-width:300px;border-radius:6px;object-fit:cover;" alt="Preview">
+              <div>
+                <p class="fw-semibold mb-1" id="photo-preview-name"></p>
+                <p class="text-muted small mb-0" id="photo-preview-size"></p>
+                <p class="text-success small mt-2 mb-0">Ready to upload</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <span><i class="fas fa-photo-film"></i> Event Photos <span class="text-muted fw-normal">(images/events/)</span></span>
+          <button class="btn btn-outline-secondary btn-sm" onclick="renderGallery()">
+            <i class="fas fa-rotate"></i> Refresh
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="row g-3" id="gallery-grid">
+            <p class="text-muted">Loading photos...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CONTENT TAB ============ -->
+    <div id="tab-content" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-pen-to-square text-success"></i> Website Content</h2>
+          <p class="text-muted mb-0 small">Edit sections of the live website. Changes go live in ~1 minute.</p>
+        </div>
+      </div>
+
+      <div class="accordion" id="contentAccordion">
+
+        <!-- Impact / Stats -->
+        <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImpact">
+              <i class="fas fa-chart-bar text-success me-2"></i> Homepage Impact Numbers
+            </button>
+          </h2>
+          <div id="collapseImpact" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Young People Supported</label>
+                  <input type="number" class="form-control" id="impact-young-people" placeholder="e.g. 500">
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label fw-semibold">Donation Call-to-Action Text</label>
+                  <textarea class="form-control" id="impact-donation" rows="2" placeholder="e.g. Your donation helps us reach more young people..."></textarea>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Volunteer Call-to-Action Text</label>
+                  <textarea class="form-control" id="impact-volunteer" rows="2" placeholder="e.g. Join our team of volunteers..."></textarea>
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-success" onclick="saveImpact()">
+                    <i class="fas fa-save"></i> Save Impact Numbers
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer / Contact -->
+        <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFooter">
+              <i class="fas fa-address-card text-success me-2"></i> Contact &amp; Footer Info
+            </button>
+          </h2>
+          <div id="collapseFooter" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Email Address</label>
+                  <input type="email" class="form-control" id="footer-email">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone Number</label>
+                  <input type="text" class="form-control" id="footer-phone">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Company Name</label>
+                  <input type="text" class="form-control" id="footer-company">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Company Number</label>
+                  <input type="text" class="form-control" id="footer-company-no">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Charity Number</label>
+                  <input type="text" class="form-control" id="footer-charity-no">
+                </div>
+                <div class="col-12"><hr class="my-1"><h6 class="mt-2">Social Media Links</h6></div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fab fa-facebook text-primary"></i> Facebook URL</label>
+                  <input type="url" class="form-control" id="footer-facebook" placeholder="https://facebook.com/...">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fab fa-instagram text-danger"></i> Instagram URL</label>
+                  <input type="url" class="form-control" id="footer-instagram" placeholder="https://instagram.com/...">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fab fa-linkedin text-primary"></i> LinkedIn URL</label>
+                  <input type="url" class="form-control" id="footer-linkedin" placeholder="https://linkedin.com/...">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fab fa-x-twitter"></i> Twitter / X URL</label>
+                  <input type="url" class="form-control" id="footer-twitter" placeholder="https://x.com/...">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fab fa-tiktok"></i> TikTok URL</label>
+                  <input type="url" class="form-control" id="footer-tiktok" placeholder="https://tiktok.com/@...">
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-success" onclick="saveFooter()">
+                    <i class="fas fa-save"></i> Save Footer Info
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Partners -->
+        <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartners">
+              <i class="fas fa-handshake text-success me-2"></i> Partners &amp; Supporters
+            </button>
+          </h2>
+          <div id="collapsePartners" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="text-muted small">These appear in the Partners section on the homepage.</p>
+              <div id="partners-list-editor"></div>
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-outline-success btn-sm" onclick="addPartnerRow()">
+                  <i class="fas fa-plus"></i> Add Partner
+                </button>
+                <button class="btn btn-success btn-sm" onclick="savePartners()">
+                  <i class="fas fa-save"></i> Save Partners
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ SETTINGS TAB ============ -->
+    <div id="tab-settings" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <h2 class="mb-1"><i class="fas fa-gear text-success"></i> Settings</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header"><i class="fas fa-lock"></i> Change Admin Password</div>
+            <div class="card-body">
+              <form id="change-password-form" onsubmit="changePassword(event)">
+                <div class="mb-3">
+                  <label class="form-label">Current Password</label>
+                  <input type="password" class="form-control" id="current-password" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">New Password</label>
+                  <input type="password" class="form-control" id="new-password" required minlength="8">
+                </div>
+                <div class="mb-4">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" class="form-control" id="confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-success">
+                  <i class="fas fa-key"></i> Update Password
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 d-flex flex-column gap-4">
+          <div class="card">
+            <div class="card-header"><i class="fab fa-github"></i> GitHub Token</div>
+            <div class="card-body">
+              <p class="text-muted small">Your GitHub token is stored in this browser. It lets the admin save changes to the live website.</p>
+              <div class="mb-3">
+                <label class="form-label">Update Token</label>
+                <input type="password" class="form-control" id="new-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+              </div>
+              <button class="btn btn-success" onclick="updateToken()">
+                <i class="fas fa-rotate"></i> Update Token
+              </button>
+              <hr>
+              <p class="small text-muted mb-0">
+                <i class="fas fa-circle-info text-info"></i>
+                Need a token?
+                <a href="https://github.com/settings/tokens/new?scopes=repo&description=Joybringers+Admin" target="_blank">Generate one on GitHub</a>
+                — select the <strong>repo</strong> scope.
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><i class="fas fa-circle-info"></i> How Publishing Works</div>
+            <div class="card-body">
+              <ol class="small mb-0">
+                <li class="mb-1">You make changes in this admin panel</li>
+                <li class="mb-1">Changes are committed to GitHub (the website's code repository)</li>
+                <li class="mb-1">Vercel detects the change and rebuilds the website automatically</li>
+                <li><strong>The live website updates in about 1 minute</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===================== EVENT MODAL ===================== -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="event-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#006526;color:white">
+        <h5 class="modal-title" id="event-modal-title">Add New Event</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="event-form">
+          <input type="hidden" id="event-idx">
+          <input type="hidden" id="event-current-image">
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Event Title <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="event-title" required placeholder="e.g. Summer Coding Bootcamp">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="event-date" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Time</label>
+              <input type="text" class="form-control" id="event-time" placeholder="e.g. 10:00 AM – 2:00 PM">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Venue <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="event-venue" required placeholder="Venue name and address">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="event-description" rows="4" required placeholder="Describe the event — who it's for, what will happen, what to bring..."></textarea>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">Event Image</label>
+              <input type="file" class="form-control" id="event-image" accept="image/*" onchange="previewEventImage()">
+              <div class="form-text">Leave blank to keep the existing image. Uploading a new one will replace it.</div>
+              <div id="event-image-preview-wrap" class="mt-2" style="display:none">
+                <img id="event-image-preview" style="max-height:180px;border-radius:8px;object-fit:cover;" alt="Image preview">
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">Event Options</label>
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <div class="option-card">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="event-featured">
+                      <label class="form-check-label fw-semibold" for="event-featured">
+                        <i class="fas fa-star text-warning"></i> Featured
+                      </label>
+                    </div>
+                    <p class="text-muted small mb-0 mt-1">Shown first with a gold border and "Featured" badge</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="option-card">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="event-paid">
+                      <label class="form-check-label fw-semibold" for="event-paid">
+                        <i class="fas fa-ticket text-info"></i> Paid Event
+                      </label>
+                    </div>
+                    <p class="text-muted small mb-0 mt-1">Shows ticket type field in the registration form</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="option-card">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="event-reg-override">
+                      <label class="form-check-label fw-semibold" for="event-reg-override">
+                        <i class="fas fa-door-open text-success"></i> Registration Open
+                      </label>
+                    </div>
+                    <p class="text-muted small mb-0 mt-1">Opens registration now (bypasses the 3-month rule)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success fw-semibold" onclick="saveEvent()">
+          <i class="fas fa-save"></i> Save Event
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="admin.js"></script>
+</body>
 </html>
