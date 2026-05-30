@@ -131,6 +131,7 @@ function showAlert(type, message) {
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-backdrop').classList.toggle('open');
 }
 
 function switchTab(tabId) {
@@ -163,11 +164,20 @@ function initLoginScreen() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  /* Always verify the stored token with GitHub before skipping login.
+     This prevents stale / expired tokens from bypassing the login screen. */
   if (isLoggedIn() && getToken()) {
-    showAdminPanel();
-    switchTab('events');
-    return;
+    try {
+      await verifyToken(getToken());
+      showAdminPanel();
+      switchTab('events');
+      return;
+    } catch (_) {
+      /* Token invalid — clear auth and fall through to login */
+      localStorage.removeItem('jb_logged_in');
+      localStorage.removeItem('jb_github_token');
+    }
   }
 
   document.getElementById('login-screen').style.display = 'flex';
