@@ -11,43 +11,180 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Volunteer with Joybringers</title>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
-
-  <!-- Your main template CSS -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Your brand overrides -->
   <link rel="stylesheet" href="css/custom.css">
-
-  <style>
-    /* Sticky Footer Layout */
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    nav.navbar {
-      flex-shrink: 0;
-    }
-    main {
-      flex: 1; /* Pushes footer down */
-    }
-    footer {
-      flex-shrink: 0;
-    }
-  </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+  <style>
+    html, body { height:100%; margin:0; display:flex; flex-direction:column; }
+    nav.navbar { flex-shrink:0; }
+    main { flex:1; }
+    footer { flex-shrink:0; }
+
+    /* ── Hero ── */
+    .vol-hero {
+      background: linear-gradient(135deg, #004d1a 0%, #006526 50%, #008c38 100%);
+      color: white;
+      padding: 70px 0 80px;
+      position: relative;
+    }
+    .vol-hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    .vol-hero h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .vol-hero p.lead {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+    }
+    .vol-hero-wave {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .vol-hero-wave svg { display:block; }
+
+    /* ── Stats bar ── */
+    .vol-stats-bar {
+      background: #fff;
+      border-bottom: 1px solid #e9ecef;
+      padding: 28px 0;
+    }
+    .vol-stat { text-align: center; }
+    .vol-stat-number { font-size: 1.9rem; font-weight: 700; color: #006526; line-height: 1; }
+    .vol-stat-label  { font-size: 0.78rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+
+    /* ── Roles section ── */
+    .vol-section { padding: 60px 0; background: #f8f9fa; }
+    .vol-section-header { margin-bottom: 36px; }
+    .vol-section-header h2 { font-size: 1.75rem; font-weight: 700; color: #1a1a2e; }
+    .vol-section-header p { color: #6c757d; }
+
+    /* ── Filter pills ── */
+    .vol-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .vol-filter-btn {
+      background: white;
+      border: 2px solid #dee2e6;
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #495057;
+      cursor: pointer;
+      transition: all 0.18s;
+      outline: none;
+    }
+    .vol-filter-btn:hover  { border-color: #006526; color: #006526; }
+    .vol-filter-btn.active { background: #006526; border-color: #006526; color: white; }
+
+    /* ── Role card ── */
+    .vol-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid var(--cc, #006526);
+      border-radius: 8px;
+      padding: 22px 20px;
+      margin-bottom: 20px;
+      position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 20px);
+    }
+    .vol-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); transform: translateY(-2px); }
+    .vol-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .vol-cat-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .vol-urgent { background: #dc3545; color: white; font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .vol-card h5 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 6px 0 8px; }
+    .vol-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .vol-chip { font-size: 0.74rem; color: #6c757d; background: #f1f5f9; border-radius: 20px; padding: 3px 10px; display: inline-flex; align-items: center; gap: 4px; }
+    .vol-card p.vol-summary { font-size: 0.85rem; color: #4a5568; line-height: 1.55; flex:1; margin-bottom: 14px; }
+    .vol-card .btn-view { font-size: 0.82rem; font-weight: 600; align-self: flex-start; }
+
+    /* ── Modal ── */
+    .vol-modal-header-detail { padding: 20px 24px 16px; border-bottom: 1px solid #e9ecef; }
+    .vol-modal-header-apply  { background: #006526; color: white; padding: 20px 24px; }
+    .vol-modal-header-apply .close { color: white; opacity: 1; }
+    .vol-detail-left  { padding: 28px; }
+    .vol-detail-right { background: #f8fafc; border-left: 1px solid #e9ecef; padding: 28px; }
+    .vol-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #006526;
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+    .vol-section-label:first-child { margin-top: 0; }
+    .vol-list { list-style: none; padding: 0; margin: 0; }
+    .vol-list li {
+      padding: 6px 0 6px 22px;
+      position: relative;
+      font-size: 0.875rem;
+      color: #4a5568;
+      border-bottom: 1px solid #f0f4f8;
+    }
+    .vol-list li::before { content: '✓'; position: absolute; left: 0; color: #006526; font-weight: 700; }
+    .vol-gains-list li::before { content: '★'; color: #f59e0b; }
+    .vol-meta-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #e9ecef; font-size: 0.85rem; color: #4a5568; }
+    .vol-meta-item i { color: #006526; width: 14px; text-align: center; }
+    .vol-meta-item:last-child { border-bottom: none; }
+    .vol-form-heading { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #006526; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; margin: 20px 0 14px; }
+    .vol-form-heading:first-child { margin-top: 0; }
+
+    /* ── CV upload ── */
+    .vol-cv-area {
+      border: 2px dashed #ced4da;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #fafafa;
+    }
+    .vol-cv-area:hover, .vol-cv-area.dragover { border-color: #006526; background: #f0fff4; }
+    .vol-cv-area label { cursor: pointer; color: #006526; font-weight: 600; }
+    #cv-upload { display: none; }
+
+    /* ── Thank you modal ── */
+    .vol-thanks { text-align: center; padding: 40px 30px; }
+    .vol-thanks .fa-check-circle { font-size: 3.5rem; color: #006526; margin-bottom: 16px; display: block; }
+    .vol-thanks h4 { font-weight: 700; color: #1a1a2e; }
+    .vol-thanks p { color: #6c757d; }
+
+    @media (max-width: 767px) {
+      .vol-hero h1 { font-size: 1.9rem; }
+      .vol-detail-right { border-left: none; border-top: 1px solid #e9ecef; }
+    }
+  </style>
 </head>
 <body>
-   <!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -66,619 +203,811 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li class="nav-item"><a href="/what-we-do" class="nav-link">What We Do</a></li>
         <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
         <li class="nav-item active"><a href="/volunteer" class="nav-link">Volunteer</a></li>
-<!-- <li class="nav-item"><a href="partner" class="nav-link">Partnerships</a></li>-->
-         <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
+        <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
         <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<!-- END nav -->
 
-<!-- Main Content -->
 <main>
-  <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4">Volunteer Opportunities</h2>
-    <div class="row">
 
- <!-- Director for communication Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Director for communication Volunteer</h5>
-            <p class="card-text">Assist with bookkeeping, accounts management, and financial reporting for the charity.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Director for communication Volunteer">
-              Apply Now
-            </button>
-          </div>
+  <!-- ── HERO ── -->
+  <section class="vol-hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <p class="vol-hero-eyebrow"><i class="fas fa-heart mr-1"></i> Join Our Team</p>
+          <h1>Make a Real Difference<br>in Your Community</h1>
+          <p class="lead">Volunteer with Joybringers and help transform lives across Newcastle and beyond. Whether you have a few hours a week or specialist skills to share — there's a place for you here.</p>
+          <a href="#roles" class="btn btn-light btn-lg px-4 font-weight-bold" style="color:#006526;">
+            See Open Roles &nbsp;<i class="fas fa-arrow-down"></i>
+          </a>
         </div>
       </div>
-
-      
-      <!-- Accountant Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Accountant Volunteer</h5>
-            <p class="card-text">Assist with bookkeeping, accounts management, and financial reporting for the charity.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Accountant Volunteer">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Digital Analyst Volunteer -->
-<div class="col-md-4 job-card">
-  <div class="card h-100">
-    <div class="card-body">
-      <h5 class="card-title">Digital Analyst Volunteer</h5>
-      <p class="card-text">Transform digital data into clear reports and insights to improve fundraising, awareness, and engagement.</p>
-      <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Digital Analyst Volunteer">
-        Apply Now
-      </button>
     </div>
-  </div>
-</div>
-
-<!-- HR Assistant Volunteer -->
-<div class="col-md-4 job-card">
-  <div class="card h-100">
-    <div class="card-body">
-      <h5 class="card-title">HR Assistant Volunteer</h5>
-      <p class="card-text">Support recruitment, onboarding, volunteer records, and HR communications to strengthen our people operations.</p>
-      <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="HR Assistant Volunteer">
-        Apply Now
-      </button>
+    <div class="vol-hero-wave">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" height="60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C300,80 900,-20 1200,30 L1200,60 L0,60 Z" fill="#f8f9fa"/>
+      </svg>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- Administrative Assistant (Nonprofit Charity) -->
-<div class="col-md-4 job-card">
-  <div class="card h-100">
-    <div class="card-body">
-      <h5 class="card-title">Administrative Assistant</h5>
-      <p class="card-text">Provide day-to-day administrative and operational support, helping the team stay organized and responsive.</p>
-      <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Administrative Assistant">
-        Apply Now
-      </button>
+  <!-- ── STATS ── -->
+  <section class="vol-stats-bar">
+    <div class="container">
+      <div class="row">
+        <div class="col-6 col-md-3 vol-stat">
+          <div class="vol-stat-number">50+</div>
+          <div class="vol-stat-label">Active Volunteers</div>
+        </div>
+        <div class="col-6 col-md-3 vol-stat">
+          <div class="vol-stat-number">500+</div>
+          <div class="vol-stat-label">Lives Touched</div>
+        </div>
+        <div class="col-6 col-md-3 vol-stat">
+          <div class="vol-stat-number">21</div>
+          <div class="vol-stat-label">Open Roles</div>
+        </div>
+        <div class="col-6 col-md-3 vol-stat">
+          <div class="vol-stat-number">100%</div>
+          <div class="vol-stat-label">Volunteer-Powered</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-
-      <!-- Secretary Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Secretary Volunteer</h5>
-            <p class="card-text">Support board and staff meetings, take minutes, manage correspondence, and handle admin tasks.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Secretary Volunteer">
-              Apply Now
-            </button>
+  <!-- ── ROLES ── -->
+  <section class="vol-section" id="roles">
+    <div class="container">
+      <div class="vol-section-header">
+        <div class="row align-items-end">
+          <div class="col-md-7">
+            <h2>Current Opportunities</h2>
+            <p>Browse all roles and click <strong>View Full Role</strong> to read the full description before you apply.</p>
+          </div>
+          <div class="col-md-5 text-md-right">
+            <p class="text-muted" style="font-size:0.85rem;"><i class="fas fa-fire-alt text-danger mr-1"></i> = Urgently needed</p>
           </div>
         </div>
-      </div>
-
-      <!-- Compliance Manager Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Compliance Manager Volunteer</h5>
-            <p class="card-text">Ensure policies, safeguarding, and governance standards are followed across our activities.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Compliance Manager Volunteer">
-              Apply Now
-            </button>
-          </div>
+        <!-- Filter pills -->
+        <div class="vol-filters mt-3" id="vol-filters">
+          <button class="vol-filter-btn active" data-filter="all">All Roles</button>
+          <button class="vol-filter-btn" data-filter="operations">Operations</button>
+          <button class="vol-filter-btn" data-filter="finance">Finance</button>
+          <button class="vol-filter-btn" data-filter="digital">Digital & Tech</button>
+          <button class="vol-filter-btn" data-filter="marketing">Marketing</button>
+          <button class="vol-filter-btn" data-filter="community">Community</button>
+          <button class="vol-filter-btn" data-filter="support">Support</button>
         </div>
       </div>
-
-      <!-- Digital Media Analyst Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Digital Media Analyst Volunteer</h5>
-            <p class="card-text">Monitor and report on digital media performance, tracking engagement and improving strategy.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Digital Media Analyst Volunteer">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project Manager -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Project Manager</h5>
-            <p class="card-text">Oversee charity projects, manage deadlines, assign responsibilities, and ensure successful delivery.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Project Manager">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-<!-- Food Bank Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Food Bank Volunteer</h5>
-            <p class="card-text">Support in collecting surplus food donations from partner stores like ASDA, KFC, Tesco and Nandos.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Food Bank Volunteer">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Business Analyst -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Business Analyst</h5>
-            <p class="card-text">Analyze data and trends, provide actionable insights, and guide business decision-making.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Business Analyst">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Website Designer/Manager -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Website Designer/Manager</h5>
-            <p class="card-text">Design and update Joybringers' website, ensuring accessibility, functionality, and appeal.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Website Designer/Manager">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fundraising Coordinator -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Fundraising Coordinator</h5>
-            <p class="card-text">Plan and coordinate fundraising campaigns to raise awareness and resources for Joybringers.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Fundraising Coordinator">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- IT Workshop Assistant -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">IT Workshop Assistant</h5>
-            <p class="card-text">Support delivery of IT skills workshops, helping young people learn coding and digital skills.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="IT Workshop Assistant">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Community Outreach Volunteer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Community Outreach Volunteer</h5>
-            <p class="card-text">Engage with communities, build connections, and represent Joybringers at events and activities.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Community Outreach Volunteer">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Counselling Support Manager -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Counselling Support Manager</h5>
-            <p class="card-text">Provide emotional support and coordinate counselling sessions for children and young people.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Counselling Support Manager">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Marketing Manager -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Marketing Manager</h5>
-            <p class="card-text">Develop and implement strategies to promote Joybringers, manage campaigns and social media.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Marketing Manager">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Graphic Designer -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Graphic Designer</h5>
-            <p class="card-text">Create appealing designs for marketing, campaigns, and promotional materials.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Graphic Designer">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Parenting Workshop Facilitator -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Parenting Workshop Facilitator</h5>
-            <p class="card-text">Lead workshops for parents on child development, positive parenting, and family well-being.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Parenting Workshop Facilitator">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Language Tutor -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Language Tutor</h5>
-            <p class="card-text">Support children in improving reading, writing, and communication skills.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Language Tutor">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data and Research Analyst -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Data and Research Analyst</h5>
-            <p class="card-text">Assist in data collection, analysis, and reporting to measure program impact and success.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Data and Research Analyst">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Volunteer Recruitment Specialist -->
-      <div class="col-md-4 job-card">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Volunteer Recruitment Specialist</h5>
-            <p class="card-text">Lead recruitment efforts, onboard new volunteers, and ensure smooth integration into the team.</p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#volunteerFormModal" data-role="Volunteer Recruitment Specialist">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <!-- Grid rendered by JS -->
+      <div class="row" id="roles-grid"></div>
     </div>
-  </div>
+  </section>
+
 </main>
 
-<!-- Volunteer Form Modal -->
-<div class="modal fade" id="volunteerFormModal" tabindex="-1" role="dialog" aria-labelledby="volunteerFormModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+<!-- ═══════════════════════════════════════════════════════
+     COMBINED MODAL — detail view + apply view
+═══════════════════════════════════════════════════════ -->
+<div class="modal fade" id="volModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
-      
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title">Volunteer Application Form</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+      <!-- VIEW A: ROLE DETAIL -->
+      <div id="view-detail">
+        <div class="vol-modal-header-detail">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <span id="d-cat-badge" class="vol-cat-badge"></span>
+              <h4 id="d-title" class="mt-2 mb-0" style="font-weight:700;color:#1a1a2e;"></h4>
+            </div>
+            <button type="button" class="close ml-3" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+        </div>
+        <div class="modal-body p-0">
+          <div class="row no-gutters">
+            <!-- Left: description -->
+            <div class="col-md-8 vol-detail-left" style="border-right:1px solid #e9ecef; overflow-y:auto; max-height:75vh;">
+              <p class="vol-section-label">About This Role</p>
+              <p id="d-about" style="font-size:0.9rem;color:#4a5568;line-height:1.65;"></p>
+              <p class="vol-section-label">Key Responsibilities</p>
+              <ul class="vol-list" id="d-responsibilities"></ul>
+              <p class="vol-section-label">What We&rsquo;re Looking For</p>
+              <ul class="vol-list" id="d-requirements"></ul>
+              <p class="vol-section-label">What You&rsquo;ll Gain</p>
+              <ul class="vol-list vol-gains-list" id="d-gains"></ul>
+            </div>
+            <!-- Right: sidebar -->
+            <div class="col-md-4 vol-detail-right">
+              <p class="text-muted mb-3" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Role Summary</p>
+              <div class="vol-meta-item"><i class="fas fa-map-marker-alt"></i><span id="d-location"></span></div>
+              <div class="vol-meta-item"><i class="fas fa-clock"></i><span id="d-commitment"></span></div>
+              <div class="vol-meta-item"><i class="fas fa-tag"></i><span id="d-category"></span></div>
+              <div class="vol-meta-item"><i class="fas fa-calendar-check"></i>Start ASAP — flexible</div>
+              <button class="btn btn-success btn-block mt-4 py-3 font-weight-bold" onclick="showApplyView()">
+                <i class="fas fa-paper-plane mr-2"></i>Apply for This Role
+              </button>
+              <p class="text-center text-muted mt-2" style="font-size:0.78rem;">Takes about 5 minutes</p>
+              <hr>
+              <p class="text-muted text-center mb-2" style="font-size:0.82rem;">Questions about this role?</p>
+              <a href="mailto:info@joybringerscharity.org" class="btn btn-outline-secondary btn-block btn-sm">
+                <i class="fas fa-envelope mr-1"></i> info@joybringerscharity.org
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div class="modal-body">
-       <form id="volunteerForm" class="volunteer-form">
 
-  <!-- Role -->
-  <input type="hidden" id="roleApplied" name="role">
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>Full Name *</label>
-              <input type="text" class="form-control" name="name" required>
+      <!-- VIEW B: APPLICATION FORM -->
+      <div id="view-apply" style="display:none;">
+        <div class="vol-modal-header-apply">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="mb-0" style="font-size:0.78rem;opacity:0.8;">Applying for</p>
+              <h5 class="mb-0 font-weight-bold" id="a-role-title"></h5>
             </div>
-            <div class="form-group col-md-6">
-              <label>Email Address *</label>
-              <input type="email" class="form-control" name="email" required>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+        </div>
+        <div class="modal-body" style="overflow-y:auto; max-height:80vh;">
+          <button type="button" class="btn btn-link btn-sm p-0 mb-3 text-success font-weight-bold" onclick="showDetailView()">
+            <i class="fas fa-arrow-left mr-1"></i> Back to role details
+          </button>
+          <form id="volunteerForm">
+            <input type="hidden" id="roleApplied" name="role">
+
+            <p class="vol-form-heading">Personal Details</p>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Full Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="name" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Email Address <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" name="email" required>
+              </div>
             </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>Mobile Phone *</label>
-              <input type="tel" class="form-control" name="phone" required>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Mobile Phone <span class="text-danger">*</span></label>
+                <input type="tel" class="form-control" name="phone" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date of Birth <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" name="dob" required>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label>Date of Birth *</label>
-              <input type="date" class="form-control" name="dob" required>
+
+            <p class="vol-form-heading">Address</p>
+            <div class="form-group">
+              <label>Street Address <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="address" required placeholder="House number and street name">
             </div>
-          </div>
-
-          <div class="form-group">
-            <label>Full Address *</label>
-            <input type="text" class="form-control" name="address" required>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>City *</label>
-              <input type="text" class="form-control" name="city" required>
+            <div class="form-row">
+              <div class="form-group col-md-5">
+                <label>City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="city" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Postcode <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="postcode" required>
+              </div>
+              <div class="form-group col-md-3">
+                <label>Country</label>
+                <select class="form-control" name="country">
+                  <option value="UK" selected>UK</option>
+                  <option>Nigeria</option>
+                  <option>USA</option>
+                  <option>Canada</option>
+                  <option>Other</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label>Postcode *</label>
-              <input type="text" class="form-control" name="postcode" required>
+
+            <p class="vol-form-heading">Your CV <span class="text-muted font-weight-normal" style="font-size:0.78rem; text-transform:none; letter-spacing:0;">(Optional — PDF, DOC or DOCX, max 5 MB)</span></p>
+            <div class="vol-cv-area" id="cv-drop-area">
+              <i class="fas fa-cloud-upload-alt fa-2x text-success mb-2 d-block"></i>
+              <p class="mb-1" style="font-size:0.875rem;">Drag &amp; drop your CV here, or <label for="cv-upload" class="mb-0">browse to upload</label></p>
+              <p class="text-muted mb-0" style="font-size:0.78rem;">Or email it to info@joybringerscharity.org</p>
+              <input type="file" id="cv-upload" name="cv" accept=".pdf,.doc,.docx">
+              <div id="cv-info" class="mt-2" style="display:none;">
+                <span class="badge badge-success py-1 px-2" id="cv-filename"></span>
+                <button type="button" class="btn btn-link btn-sm text-danger p-0 ml-1" onclick="clearCV()">
+                  <i class="fas fa-times"></i> Remove
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>Country *</label>
-            <select class="form-control" name="country" required>
-              <option value="">Select Country</option>
-              <option value="UK">United Kingdom</option>
-              <option value="Nigeria">Nigeria</option>
-              <option value="USA">United States</option>
-              <option value="Canada">Canada</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
+            <p class="vol-form-heading">About You</p>
+            <div class="form-group">
+              <label>Why do you want to volunteer with Joybringers? <span class="text-danger">*</span></label>
+              <textarea class="form-control" name="motivation" rows="3" required placeholder="Tell us what draws you to this role and what you hope to contribute..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>How did you hear about Joybringers?</label>
+              <select class="form-control" name="referral">
+                <option value="">Select an option</option>
+                <option>Joybringers Website</option>
+                <option>Social Media</option>
+                <option>Do-it / Reach Volunteering</option>
+                <option>Google Search</option>
+                <option>Friend or Colleague</option>
+                <option>Word of Mouth</option>
+                <option>Previous Event or Programme</option>
+                <option>Other</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label>How did you hear about Joybringers?</label>
-            <select name="referral" class="form-control" required>
-              <option value="">Select an option</option>
-              <option value="Website">Joybringers Website</option>
-              <option value="Social Media">Social Media</option>
-              <option value="Job Board">Job Board</option>
-              <option value="Google Search">Google Search</option>
-              <option value="Referral">Referral</option>
-              <option value="Word of Mouth">Word of Mouth</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
+            <div class="form-group form-check mt-2">
+              <input type="checkbox" class="form-check-input" id="vol-consent" name="consent" required>
+              <label class="form-check-label" for="vol-consent" style="font-size:0.85rem;">
+                I agree to undergo any necessary background checks and to follow Joybringers' policies, safeguarding guidelines, and GDPR data protection requirements. <span class="text-danger">*</span>
+              </label>
+            </div>
 
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="consent" name="consent" required>
-            <label class="form-check-label" for="consent">
-              I agree to undergo necessary background checks and follow Joybringers' policies and guidelines.
-            </label>
-          </div>
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+              <button type="button" class="btn btn-outline-secondary" onclick="showDetailView()">
+                <i class="fas fa-arrow-left mr-1"></i> Back
+              </button>
+              <button type="submit" class="btn btn-success btn-lg px-5" id="vol-submit-btn">
+                <span id="vol-btn-text"><i class="fas fa-paper-plane mr-2"></i>Submit Application</span>
+                <span id="vol-btn-loading" style="display:none;"><i class="fas fa-spinner fa-spin mr-2"></i>Submitting...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
 
-          <button type="submit" class="btn btn-warning">Submit Application</button>
+    </div>
+  </div>
+</div>
 
-        <!-- ✅ CV Upload Button -->
-          <div class="mt-3">
-            <p class="mb-1">After submitting, please upload your CV:</p>
-            <a href="https://joybringersc-my.sharepoint.com/:f:/g/personal/admin_joybringer_org_uk/EvjxOpH6pRlDvCskyL2zSxQBNfssgRtt8sI7JrdNL8xDQA" 
-               class="btn btn-success">
-               Upload Your CV Here
-            </a>
-          </div>
-        </form>
+<!-- THANK YOU MODAL -->
+<div class="modal fade" id="volThanksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="vol-thanks">
+        <i class="fas fa-check-circle"></i>
+        <h4>Application Received!</h4>
+        <p id="thanks-msg">Thank you! We'll review your application and be in touch within 5 working days.</p>
+        <button type="button" class="btn btn-success px-4 mt-2" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ✅ Footer -->
-  <footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
-    <div class="container">
-      <div class="row align-items-center">
-        <!-- Left Column -->
-        <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
-          <p>
-            Email us: <a href="mailto:info@joybringerscharity.org" style="color:#fff;">info@joybringerscharity.org</a><br>
-            Call us: <a href="tel:+447500010317" style="color:#fff;">+447500010317</a>
-          </p>
-          <p>
-            <strong>JOYBRINGERS LTD</strong><br>
-            (Company No. 15400265)<br>
-            Registered Charity Number 1212606
-          </p>
-        </div>
-        <!-- Middle Column -->
-        <div class="col-md-4 mb-4 mb-md-0 text-center">
-          <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:80px;">
-        </div>
-        <!-- Right Column -->
-        <div class="col-md-4 mb-4 mb-md-0 text-center text-md-centre">
-          <p>Follow us | <a href="/contact" style="color:#fff;">Contact Us</a></p>
-          <div class="footer-social">
-  <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-  <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram">
-    <i class="fab fa-instagram"></i>
-  </a>
-  <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin">
-    <i class="fab fa-linkedin-in"></i>
-  </a>
-  <a href="https://x.com/JoybringersC" target="_blank" class="twitter">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok">
-    <i class="fab fa-tiktok"></i>
-  </a>
-</div>
-
-          <p class="mt-2">
-            <a href="/terms" style="color:#fff;">Terms of use</a> /
-            <a href="/cookies" style="color:#fff;">Cookies</a> /
-            <a href="/privacy" style="color:#fff;">Privacy</a><br>
-
-  <button 
-    type="button"
-    onclick="window.showCmpBanner()" 
-    style="margin-top:10px; background:#fff; color:#006526; border:none; padding:8px 14px; border-radius:5px; font-weight:600; cursor:pointer;">
-    Cookie Settings
-  </button>
-          </p>
-        </div>
+<footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
+        <p>
+          Email us: <a href="mailto:info@joybringerscharity.org" style="color:#fff;">info@joybringerscharity.org</a><br>
+          Call us: <a href="tel:07780105816" style="color:#fff;">07780105816</a>
+        </p>
+        <p>
+          <strong>JOYBRINGERS LTD</strong><br>
+          (Company No. 15400265)<br>
+          Registered Charity Number 1212606
+        </p>
       </div>
-      <!-- Bottom -->
-      <div class="row mt-4">
-        <div class="col text-center">
-          <p style="margin:0;">©2026 Joybringers. All Rights Reserved.</p>
+      <div class="col-md-4 mb-4 mb-md-0 text-center">
+        <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:80px;">
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0 text-center">
+        <p>Follow us | <a href="/contact" style="color:#fff;">Contact Us</a></p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://x.com/JoybringersC" target="_blank" class="twitter"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok"><i class="fab fa-tiktok"></i></a>
         </div>
+        <p class="mt-2">
+          <a href="/terms" style="color:#fff;">Terms of use</a> /
+          <a href="/cookies" style="color:#fff;">Cookies</a> /
+          <a href="/privacy" style="color:#fff;">Privacy</a><br>
+          <button type="button" onclick="window.showCmpBanner()"
+            style="margin-top:10px;background:#fff;color:#006526;border:none;padding:8px 14px;border-radius:5px;font-weight:600;cursor:pointer;">
+            Cookie Settings
+          </button>
+        </p>
       </div>
     </div>
-  </footer>
-
-  <!-- ✅ Social Icons Styling -->
-  <style>
-    .footer-social a {
-  display: inline-flex;        /* centers child icon */
-  align-items: center;
-  justify-content: center;
-  margin: 0 5px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  text-align: center;
-  color: #fff;
-  font-size: 18px;
-  transition: 0.3s;
-}
-
-.footer-social a:hover {
-  opacity: 0.8;
-}
-
-.footer-social a.facebook { background: #1877F2; }
-.footer-social a.instagram { background: #E4405F; }
-.footer-social a.linkedin { background: #0A66C2; }
-.footer-social a.twitter  { background: #1DA1F2; }
-.footer-social a.tiktok   { background: #000000; }
-  </style>
-
-<!-- Loader -->
-  <div id="ftco-loader" class="show fullscreen">
-    <svg class="circular" width="48px" height="48px">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#007A4D"/>
-    </svg>
+    <div class="row mt-4">
+      <div class="col text-center"><p style="margin:0;">©2026 Joybringers. All Rights Reserved.</p></div>
+    </div>
   </div>
+</footer>
 
-  <!-- ✅ JS Files -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="js/main.js"></script>
+<style>
+  .footer-social a { display:inline-flex;align-items:center;justify-content:center;margin:0 5px;width:40px;height:40px;border-radius:50%;color:#fff;font-size:18px;transition:0.3s; }
+  .footer-social a:hover { opacity:0.8; }
+  .footer-social a.facebook  { background:#1877F2; }
+  .footer-social a.instagram { background:#E4405F; }
+  .footer-social a.linkedin  { background:#0A66C2; }
+  .footer-social a.twitter   { background:#1DA1F2; }
+  .footer-social a.tiktok    { background:#000000; }
+</style>
 
-<!-- ✅ Supabase -->
+<div id="ftco-loader" class="show fullscreen">
+  <svg class="circular" width="48px" height="48px">
+    <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+    <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#007A4D"/>
+  </svg>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate-3.0.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/jquery.animateNumber.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/jquery.timepicker.min.js"></script>
+<script src="js/scrollax.min.js"></script>
+<script src="js/main.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
+  const SUPABASE_URL      = "https://roofompdejyndlpqfrjl.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
-  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.supabaseClient   = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
-<script>
-  document.addEventListener("click", function (e) {
-    const btn = e.target.closest('[data-target="#volunteerFormModal"]');
-    if (!btn) return;
-
-    const role = btn.getAttribute("data-role") || "";
-    const roleInput = document.getElementById("roleApplied");
-    if (roleInput) roleInput.value = role;
-
-    console.log("✅ Role captured:", role);
-  });
-</script>
-
-
-<!-- ✅ EmailJS Integration -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  (function(){
-    // Initialize EmailJS with your public key
-    emailjs.init("_TGXKABP5E9-_Sxzn");
-  })();
-</script>
+<script>(function(){ emailjs.init("_TGXKABP5E9-_Sxzn"); })();</script>
 
 <script>
-document.getElementById("volunteerForm").addEventListener("submit", async function(e) {
+/* ═══════════════════════════════════════════════════════
+   VOLUNTEER ROLES DATA
+═══════════════════════════════════════════════════════ */
+const ROLES = [
+  {
+    id: 'director-comms',
+    title: 'Director of Communications',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-bullhorn', location: 'Newcastle / Hybrid', commitment: '4–6 hrs/week', urgent: true,
+    summary: 'Shape and lead Joybringers\' voice across social media, press, and community channels.',
+    about: 'As Director of Communications you will be the strategic voice of Joybringers, ensuring our message reaches the right people at the right time. You will work closely with the charity director to build brand awareness, manage our media presence, and inspire our community.',
+    responsibilities: ['Develop and oversee the overall communications strategy', 'Manage and grow all social media platforms', 'Write and distribute press releases and newsletters', 'Liaise with media outlets and community partners', 'Oversee brand identity and tone of voice', 'Support event promotion and fundraising campaigns'],
+    requirements: ['Experience in communications, PR, or marketing', 'Strong written and verbal communication skills', 'Confidence with social media platforms', 'Ability to work independently and lead a small team'],
+    gains: ['Senior leadership experience in a registered charity', 'Portfolio of real campaign work', 'Reference letter from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'accountant',
+    title: 'Accountant Volunteer',
+    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
+    icon: 'fa-calculator', location: 'Remote / Newcastle', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Keep our books accurate and support financial reporting for trustees and funders.',
+    about: 'Our Accountant Volunteer will play a vital role in maintaining the financial integrity of Joybringers. You will assist with bookkeeping, help prepare financial statements, and ensure our accounts comply with charity regulations.',
+    responsibilities: ['Process income and expenditure transactions', 'Maintain accurate financial records using accounting software', 'Prepare monthly/quarterly financial summaries for trustees', 'Assist with annual accounts and Charity Commission submissions', 'Support grant reporting with financial data', 'Flag financial risks to leadership'],
+    requirements: ['AAT qualified or working towards ACCA/CIMA', 'Experience with bookkeeping or accounting software (Xero/QuickBooks)', 'Good attention to detail and numerical accuracy', 'Understanding of charity finance regulations is a bonus'],
+    gains: ['Practical charity accounting experience', 'Exposure to charity governance and trustee reporting', 'Professional reference for accounting roles', 'Certificate of volunteering']
+  },
+  {
+    id: 'digital-analyst',
+    title: 'Digital Analyst',
+    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
+    icon: 'fa-chart-line', location: 'Remote', commitment: '3–4 hrs/week', urgent: false,
+    summary: 'Turn website and social data into actionable insights that drive our digital growth.',
+    about: 'As our Digital Analyst, you will transform raw data from Google Analytics, social media, and fundraising platforms into clear reports and strategic recommendations that help Joybringers reach more people.',
+    responsibilities: ['Monitor and report on website traffic using Google Analytics', 'Track social media engagement and growth metrics', 'Identify trends and make data-led recommendations', 'Create monthly performance dashboards', 'Support A/B testing on website and email campaigns', 'Evaluate ROI of fundraising and awareness campaigns'],
+    requirements: ['Proficiency in Google Analytics or similar tools', 'Strong data analysis and visualisation skills', 'Ability to communicate insights to non-technical staff', 'Experience with Excel, Power BI, or Google Data Studio is a plus'],
+    gains: ['Real-world portfolio with measurable impact data', 'Experience reporting to charity leadership', 'Opportunity to shape digital strategy', 'Certificate of volunteering']
+  },
+  {
+    id: 'hr-assistant',
+    title: 'HR Assistant',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-users-cog', location: 'Remote / Newcastle', commitment: '3–4 hrs/week', urgent: false,
+    summary: 'Support our people operations — from volunteer recruitment to onboarding and records.',
+    about: 'Our HR Assistant will help ensure that volunteers and staff at Joybringers are well-supported from day one. You will work with our HR lead to manage recruitment, onboarding, and volunteer welfare.',
+    responsibilities: ['Support recruitment process for new volunteers and staff', 'Coordinate induction and onboarding procedures', 'Maintain volunteer and staff records', 'Assist with drafting HR policies and guidelines', 'Handle routine HR enquiries and correspondence', 'Help organise volunteer appreciation events'],
+    requirements: ['Interest in or experience of HR, people management, or recruitment', 'Excellent organisational skills', 'Discretion and ability to handle confidential information', 'CIPD qualification or studying towards it is advantageous'],
+    gains: ['Hands-on HR experience in a diverse charity environment', 'Exposure to recruitment, onboarding, and HR policy', 'Professional reference from HR leadership', 'Certificate of volunteering']
+  },
+  {
+    id: 'admin-assistant',
+    title: 'Administrative Assistant',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-clipboard-list', location: 'Newcastle / Hybrid', commitment: '4–6 hrs/week', urgent: false,
+    summary: 'Keep day-to-day operations running smoothly with strong organisational and admin support.',
+    about: 'As our Administrative Assistant, you will be the backbone of Joybringers\' daily operations — supporting the team with scheduling, correspondence, document management, and general enquiries.',
+    responsibilities: ['Manage emails, calendar bookings, and meetings', 'Prepare and format documents, reports, and presentations', 'Maintain filing systems and digital records', 'Liaise with external partners and community contacts', 'Support event coordination and logistics', 'Handle general enquiries from the public and volunteers'],
+    requirements: ['Strong organisational and time management skills', 'Proficiency in Microsoft Office (Word, Excel, Outlook)', 'Excellent written and verbal communication', 'Ability to multitask and meet deadlines'],
+    gains: ['Broad office administration experience', 'Understanding of charity operations', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'secretary',
+    title: 'Secretary Volunteer',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-file-alt', location: 'Newcastle / Hybrid', commitment: '2–4 hrs/week', urgent: false,
+    summary: 'Support board meetings, take minutes, and manage official correspondence for the charity.',
+    about: 'Our Secretary Volunteer plays a key governance role, supporting the board of trustees with meeting administration, minute-taking, and correspondence. An excellent opportunity for someone interested in charity governance.',
+    responsibilities: ['Organise and schedule trustee board meetings', 'Prepare and distribute agendas and supporting papers', 'Take accurate minutes and circulate promptly', 'Maintain register of trustees and statutory documents', 'Handle official correspondence on behalf of the charity', 'Support compliance with Charity Commission requirements'],
+    requirements: ['Experience in administration, PA, or executive support', 'Excellent written English and minute-taking skills', 'High level of discretion and professionalism', 'Knowledge of charity governance is beneficial but not essential'],
+    gains: ['Experience in charity board governance', 'Exposure to trustee-level decision making', 'Professional reference from the Chair or Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'compliance-manager',
+    title: 'Compliance Manager',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-shield-alt', location: 'Remote / Newcastle', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Ensure Joybringers meets all safeguarding, legal, and governance standards.',
+    about: 'Our Compliance Manager Volunteer will ensure Joybringers operates within all relevant legal, regulatory, and ethical frameworks — including safeguarding, GDPR, and Charity Commission obligations.',
+    responsibilities: ['Review and maintain all charity policies (safeguarding, GDPR, H&S)', 'Monitor compliance with Charity Commission requirements', 'Conduct internal compliance reviews and risk assessments', 'Train staff and volunteers on key compliance topics', 'Keep up to date with changes in charity law and regulation', 'Escalate safeguarding concerns appropriately'],
+    requirements: ['Background in compliance, law, HR, or governance', 'Knowledge of GDPR and charity safeguarding regulations', 'Strong analytical and report-writing skills', 'Systematic, thorough approach with attention to detail'],
+    gains: ['Senior compliance experience in the charity sector', 'Portfolio of real policy and governance work', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'digital-media-analyst',
+    title: 'Digital Media Analyst',
+    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
+    icon: 'fa-photo-video', location: 'Remote', commitment: '3–4 hrs/week', urgent: false,
+    summary: 'Monitor our social media performance and turn insights into actionable growth strategies.',
+    about: 'As our Digital Media Analyst, you will track performance across our social channels, analyse audience engagement, and report on what content works best — directly shaping our content strategy.',
+    responsibilities: ['Track and analyse performance across Facebook, Instagram, LinkedIn, and TikTok', 'Produce weekly/monthly social media reports', 'Identify high-performing content and recommend improvements', 'Monitor competitor and peer charity channels for benchmarking', 'Support paid social media campaign analysis', 'Advise on content optimisation'],
+    requirements: ['Experience with social media analytics (Meta Insights, LinkedIn Analytics, etc.)', 'Ability to interpret data and present findings clearly', 'Understanding of social media trends and best practices', 'Good written communication skills'],
+    gains: ['Real social media analytics experience', 'Portfolio of analytical reports and recommendations', 'Reference for digital marketing or analytics roles', 'Certificate of volunteering']
+  },
+  {
+    id: 'project-manager',
+    title: 'Project Manager',
+    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
+    icon: 'fa-tasks', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: true,
+    summary: 'Lead charity projects from planning to delivery, keeping teams on track and on time.',
+    about: 'Our Project Manager Volunteer will oversee the planning, execution, and evaluation of key Joybringers programmes and events — coordinating across teams, managing timelines, and ensuring successful delivery.',
+    responsibilities: ['Define project scope, goals, and deliverables with stakeholders', 'Create and manage detailed project plans and timelines', 'Coordinate resources across volunteer teams', 'Monitor progress, manage risks and issues', 'Prepare project status reports for leadership', 'Evaluate project outcomes and write end-of-project reports'],
+    requirements: ['Proven project management experience (PMP, PRINCE2 or equivalent is a bonus)', 'Strong leadership and communication skills', 'Ability to manage multiple projects simultaneously', 'Proficiency with project tools (Asana, Trello, MS Project, etc.)'],
+    gains: ['Real-world project delivery experience in the charity sector', 'Leadership of cross-functional volunteer teams', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'food-bank',
+    title: 'Food Bank Volunteer',
+    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
+    icon: 'fa-shopping-basket', location: 'Newcastle / Gateshead', commitment: 'Flexible — weekend shifts', urgent: true,
+    summary: 'Help collect surplus food from ASDA, Tesco, KFC, and Nando\'s to feed families in need.',
+    about: 'Our Food Bank Volunteers are at the heart of our community impact — collecting surplus food donations from retail partners, sorting food parcels, and helping ensure families across the North East have access to nutritious food.',
+    responsibilities: ['Collect food donations from partner stores (ASDA, Tesco, KFC, Nando\'s)', 'Sort, check, and pack food parcels', 'Assist with food distribution days', 'Help maintain the food bank storage area', 'Record and log donations accurately', 'Represent Joybringers professionally with retail partners'],
+    requirements: ['A valid driving licence (for collection shifts) is helpful but not essential', 'Physical ability to carry boxes and stand for periods', 'Friendly, approachable manner', 'Commitment to safeguarding and food safety guidelines'],
+    gains: ['Hands-on community impact experience', 'Food safety and handling knowledge', 'Warm, supportive team environment', 'Certificate of volunteering']
+  },
+  {
+    id: 'business-analyst',
+    title: 'Business Analyst',
+    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
+    icon: 'fa-chart-bar', location: 'Remote / Newcastle', commitment: '4–6 hrs/week', urgent: false,
+    summary: 'Analyse our operations and data to identify improvements and support strategic decisions.',
+    about: 'As our Business Analyst, you will help Joybringers understand how we operate and where we can improve — gathering and analysing data on programmes, financials, and operations, then presenting clear recommendations to leadership.',
+    responsibilities: ['Gather and document business requirements from stakeholders', 'Analyse operational data to identify inefficiencies or opportunities', 'Develop process maps and improvement recommendations', 'Support strategic planning with data-driven insights', 'Assist with grant applications by providing impact evidence', 'Present findings in clear reports and visualisations'],
+    requirements: ['Experience in business analysis, strategy, or consulting', 'Strong analytical thinking and problem-solving skills', 'Proficiency in Excel, Power BI, or similar tools', 'Excellent written and verbal communication'],
+    gains: ['Impact-focused analytical experience in the charity sector', 'Portfolio of real business improvement work', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'website-designer',
+    title: 'Website Designer / Manager',
+    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
+    icon: 'fa-laptop-code', location: 'Remote', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Design, update, and maintain the Joybringers website to keep it accessible and effective.',
+    about: 'Our Website Designer / Manager Volunteer will own the look and feel of joybringerscharity.org, working with the communications team to ensure the website reflects our brand, is easy to use, and serves our beneficiaries well.',
+    responsibilities: ['Design and implement website updates and new pages', 'Ensure the site is mobile-responsive and accessible (WCAG AA)', 'Optimise website performance and SEO', 'Manage the events and volunteer sections', 'Collaborate with the comms team on campaigns', 'Monitor analytics and make data-driven improvements'],
+    requirements: ['Proficiency in HTML, CSS, and JavaScript', 'Experience with Bootstrap or similar CSS frameworks', 'Understanding of web accessibility standards', 'Eye for design and attention to detail — Git/GitHub a bonus'],
+    gains: ['Live website portfolio work for a registered charity', 'Cross-functional collaboration experience', 'Professional reference for web development roles', 'Certificate of volunteering']
+  },
+  {
+    id: 'fundraising-coordinator',
+    title: 'Fundraising Coordinator',
+    category: 'marketing', catLabel: 'Marketing & Fundraising', catColor: '#be185d',
+    icon: 'fa-hand-holding-heart', location: 'Newcastle / Hybrid', commitment: '4–6 hrs/week', urgent: true,
+    summary: 'Plan and run fundraising campaigns to raise income and awareness for Joybringers.',
+    about: 'Our Fundraising Coordinator Volunteer will help us grow our income by planning, organising, and running fundraising activities — from community events to online campaigns — directly funding our programmes for young people and families.',
+    responsibilities: ['Research and develop new fundraising opportunities', 'Plan and coordinate fundraising events and campaigns', 'Manage relationships with individual donors and corporate supporters', 'Write compelling fundraising appeals and thank-you letters', 'Report on fundraising performance against targets', 'Work with the marketing team to promote campaigns'],
+    requirements: ['Experience in fundraising, sales, events, or similar', 'Strong written communication and persuasion skills', 'Self-motivated with the ability to work to targets', 'Knowledge of charity fundraising regulations is helpful'],
+    gains: ['Proven fundraising track record for your CV', 'Experience working to income targets in the charity sector', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'it-workshop-assistant',
+    title: 'IT Workshop Assistant',
+    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
+    icon: 'fa-chalkboard-teacher', location: 'Newcastle', commitment: 'Saturday mornings', urgent: false,
+    summary: 'Support our coding workshops, helping young people build confidence with technology.',
+    about: 'IT Workshop Assistants support delivery of Joybringers\' digital skills programmes for children and young people aged 7–25, providing hands-on support as participants learn coding, data skills, and digital literacy.',
+    responsibilities: ['Support the lead facilitator during coding and IT workshops', 'Provide one-to-one assistance to participants who need extra help', 'Help set up equipment and resources before sessions', 'Encourage and motivate young people during activities', 'Support safeguarding by maintaining appropriate supervision', 'Provide feedback to help improve future delivery'],
+    requirements: ['Basic coding knowledge (Scratch, Python, HTML or similar)', 'Patience and a genuine interest in supporting young people', 'Enhanced DBS check required (we will support this)', 'Punctual, reliable, and committed to scheduled sessions'],
+    gains: ['Teaching and facilitation experience with young people', 'Enhanced DBS certificate', 'Training in safeguarding and youth work', 'Certificate of volunteering']
+  },
+  {
+    id: 'community-outreach',
+    title: 'Community Outreach Volunteer',
+    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
+    icon: 'fa-hands-helping', location: 'Newcastle & surrounding areas', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Be the face of Joybringers — build connections, raise awareness, and bring people in.',
+    about: 'As our Community Outreach Volunteer, you will help grow Joybringers\' reach by engaging with local communities, attending events, and building relationships with schools, community centres, and partner organisations.',
+    responsibilities: ['Attend local community events and represent Joybringers', 'Visit schools, libraries, and community centres to share information', 'Distribute leaflets, posters, and promotional materials', 'Build relationships with local organisations and community leaders', 'Recruit new participants to our programmes and events', 'Report back on community needs and feedback'],
+    requirements: ['Friendly, outgoing, and confident speaking to new people', 'Passion for community development and social inclusion', 'Reliable transport or willingness to travel locally', 'Enhanced DBS check required for work near young people'],
+    gains: ['Real community engagement experience', 'Understanding of community development in the charity sector', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'counselling-support',
+    title: 'Counselling Support Manager',
+    category: 'support', catLabel: 'Support Services', catColor: '#0e7490',
+    icon: 'fa-heart', location: 'Newcastle / Hybrid', commitment: '4–6 hrs/week', urgent: false,
+    summary: 'Provide emotional support and coordinate counselling for children and young people.',
+    about: 'Our Counselling Support Manager Volunteer will help develop and coordinate Joybringers\' mental health and emotional wellbeing support — a sensitive, important role that directly improves lives.',
+    responsibilities: ['Coordinate referrals to internal and external counselling services', 'Provide first-line emotional support (within your qualifications)', 'Develop relationships with external counselling and CAMHS services', 'Maintain accurate, confidential case records', 'Deliver or coordinate wellbeing workshops for young people', 'Ensure all work aligns with safeguarding policies'],
+    requirements: ['Qualified or trainee counsellor (BACP or equivalent)', 'Experience working with children and young people', 'Enhanced DBS check required', 'Strong empathy, active listening, and professional boundaries'],
+    gains: ['Supervised practice hours towards counselling qualification', 'Experience in community mental health settings', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'marketing-manager',
+    title: 'Marketing Manager',
+    category: 'marketing', catLabel: 'Marketing & Fundraising', catColor: '#be185d',
+    icon: 'fa-megaphone', location: 'Remote / Hybrid', commitment: '5–8 hrs/week', urgent: false,
+    summary: 'Lead our marketing strategy to grow Joybringers\' audience, impact, and community engagement.',
+    about: 'As Marketing Manager Volunteer, you will develop and implement Joybringers\' overall marketing strategy — overseeing campaigns across digital, print, and social channels to inspire more people to engage with our mission.',
+    responsibilities: ['Develop and implement the annual marketing strategy', 'Manage and grow social media presence', 'Plan and oversee email marketing campaigns', 'Coordinate content creation with design and comms teams', 'Monitor marketing KPIs and report on performance', 'Identify partnership opportunities to grow our reach'],
+    requirements: ['Proven marketing experience (CIM qualified or similar is advantageous)', 'Strong knowledge of digital marketing channels', 'Experience managing campaigns end-to-end', 'Creative thinking with a data-driven approach'],
+    gains: ['Leadership of a real charity marketing function', 'Portfolio of campaign work across multiple channels', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'graphic-designer',
+    title: 'Graphic Designer',
+    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
+    icon: 'fa-paint-brush', location: 'Remote', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Create stunning visuals for events, campaigns, and social media that reflect our brand.',
+    about: 'Our Graphic Designer Volunteer will bring the Joybringers brand to life — designing social media graphics, event flyers, reports, and campaign visuals that help us stand out and communicate our impact.',
+    responsibilities: ['Create social media graphics, event flyers, and promotional materials', 'Design branded templates for internal and external communications', 'Develop visual assets for fundraising campaigns', 'Maintain and evolve the Joybringers brand identity guidelines', 'Collaborate with marketing and comms teams on creative briefs', 'Ensure designs are accessible and brand-consistent'],
+    requirements: ['Proficiency in Adobe Creative Suite or Canva Pro', 'Strong portfolio demonstrating creative range', 'Understanding of brand consistency and visual identity', 'Ability to work to creative briefs and deadlines'],
+    gains: ['Real charity design portfolio with purpose', 'Collaboration with marketing and communications teams', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'parenting-facilitator',
+    title: 'Parenting Workshop Facilitator',
+    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
+    icon: 'fa-child', location: 'Newcastle', commitment: 'Workshop days (varies)', urgent: false,
+    summary: 'Lead engaging parenting workshops that build confidence and community among local families.',
+    about: 'Our Parenting Workshop Facilitator Volunteer will plan and deliver supportive workshops for parents and carers — covering positive parenting, child development, wellbeing, and family communication.',
+    responsibilities: ['Plan and facilitate regular parenting workshops', 'Develop session plans and supporting resources', 'Create a safe, inclusive, and supportive learning environment', 'Gather participant feedback and adapt content accordingly', 'Signpost families to additional support services', 'Maintain safeguarding standards throughout all sessions'],
+    requirements: ['Experience in parenting support, family work, or community education', 'Strong facilitation and group management skills', 'Enhanced DBS check required', 'Empathy, patience, and a non-judgmental approach'],
+    gains: ['Facilitation and adult education experience', 'Knowledge of evidence-based parenting approaches', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'language-tutor',
+    title: 'Language Tutor',
+    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
+    icon: 'fa-book-open', location: 'Newcastle / Online', commitment: '2–4 hrs/week', urgent: false,
+    summary: 'Support children and young people to improve reading, writing, and communication.',
+    about: 'Our Language Tutor Volunteers work directly with children and young people to build literacy and communication skills, in person in Newcastle or online — tailored to individual learner needs.',
+    responsibilities: ['Deliver one-to-one or small group literacy support sessions', 'Assess learner needs and set achievable goals', 'Plan engaging and age-appropriate session activities', 'Track learner progress and share updates with the team', 'Encourage confidence and a love of reading and writing', 'Follow safeguarding policies throughout all sessions'],
+    requirements: ['Strong literacy skills and a passion for education', 'Experience tutoring, teaching, or mentoring young people', 'Enhanced DBS check required', 'Patience, encouragement, and a positive approach'],
+    gains: ['Teaching and mentoring experience with young people', 'Enhanced DBS certificate', 'Training in literacy support approaches', 'Certificate of volunteering']
+  },
+  {
+    id: 'data-research-analyst',
+    title: 'Data & Research Analyst',
+    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
+    icon: 'fa-database', location: 'Remote', commitment: '3–5 hrs/week', urgent: false,
+    summary: 'Measure our programme impact through data collection, analysis, and clear reporting.',
+    about: 'Our Data & Research Analyst Volunteer will design data collection tools, analyse programme data, and produce clear impact reports that support funding applications and strategic planning.',
+    responsibilities: ['Design surveys and data collection tools for programmes', 'Analyse participant data and programme outcomes', 'Produce clear impact reports and infographics', 'Support grant applications with robust evidence', 'Monitor relevant trends in the charity sector', 'Present findings to leadership in accessible formats'],
+    requirements: ['Strong data analysis skills (Excel, SPSS, R, Python, or similar)', 'Experience with survey design and impact measurement', 'Ability to communicate complex data simply', 'Interest in social impact and the charity sector'],
+    gains: ['Real impact measurement experience in the charity sector', 'Published impact reports for your portfolio', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  },
+  {
+    id: 'volunteer-recruitment',
+    title: 'Volunteer Recruitment Specialist',
+    category: 'support', catLabel: 'Support Services', catColor: '#0e7490',
+    icon: 'fa-user-plus', location: 'Remote / Newcastle', commitment: '4–5 hrs/week', urgent: true,
+    summary: 'Lead our volunteer recruitment — attracting, selecting, and onboarding the right people.',
+    about: 'As our Volunteer Recruitment Specialist, you will own the end-to-end volunteer recruitment process — from writing role descriptions and advertising on Do-it and Reach Volunteering, to interviewing and onboarding new volunteers.',
+    responsibilities: ['Write and update volunteer role descriptions', 'Advertise vacancies on Do-it, Reach, and LinkedIn', 'Screen applications and conduct volunteer interviews', 'Manage the onboarding and DBS check process', 'Maintain the volunteer database and communications', 'Develop retention initiatives to keep volunteers engaged'],
+    requirements: ['Experience in recruitment, HR, or volunteer management', 'Strong interviewing and assessment skills', 'Knowledge of volunteer management platforms is helpful', 'Excellent communication and relationship-building skills'],
+    gains: ['Full-cycle recruitment experience in the charity sector', 'Exposure to volunteer management best practices', 'Professional reference from the Charity Director', 'Certificate of volunteering']
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   RENDER CARDS
+═══════════════════════════════════════════════════════ */
+function renderCards(filter) {
+  const filtered = (filter === 'all') ? ROLES : ROLES.filter(r => r.category === filter);
+  const grid = document.getElementById('roles-grid');
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="col-12 text-center py-5 text-muted">No roles found in this category.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(r => `
+    <div class="col-md-6 col-lg-4 d-flex">
+      <div class="vol-card w-100" style="--cc:${r.catColor}">
+        <div class="vol-card-top">
+          <span class="vol-cat-badge" style="background:${r.catColor}18;color:${r.catColor};border:1px solid ${r.catColor}35;">${r.catLabel}</span>
+          ${r.urgent ? '<span class="vol-urgent"><i class="fas fa-fire-alt mr-1"></i>Urgent</span>' : ''}
+        </div>
+        <h5>${r.title}</h5>
+        <div class="vol-chips">
+          <span class="vol-chip"><i class="fas fa-map-marker-alt" style="font-size:0.7rem;"></i>${r.location}</span>
+          <span class="vol-chip"><i class="fas fa-clock" style="font-size:0.7rem;"></i>${r.commitment}</span>
+        </div>
+        <p class="vol-summary">${r.summary}</p>
+        <button class="btn btn-outline-success btn-sm vol-card .btn-view font-weight-bold" onclick="openRole('${r.id}')">
+          View Full Role &nbsp;<i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   OPEN ROLE MODAL
+═══════════════════════════════════════════════════════ */
+let currentRole = null;
+
+function openRole(id) {
+  const r = ROLES.find(x => x.id === id);
+  if (!r) return;
+  currentRole = r;
+
+  document.getElementById('d-title').textContent = r.title;
+  const badge = document.getElementById('d-cat-badge');
+  badge.textContent = r.catLabel;
+  badge.style.cssText = `background:${r.catColor}18;color:${r.catColor};border:1px solid ${r.catColor}35;`;
+
+  document.getElementById('d-about').textContent = r.about;
+  document.getElementById('d-location').textContent = r.location;
+  document.getElementById('d-commitment').textContent = r.commitment;
+  document.getElementById('d-category').textContent = r.catLabel;
+
+  document.getElementById('d-responsibilities').innerHTML = r.responsibilities.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('d-requirements').innerHTML   = r.requirements.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('d-gains').innerHTML          = r.gains.map(x => `<li>${x}</li>`).join('');
+
+  document.getElementById('roleApplied').value    = r.title;
+  document.getElementById('a-role-title').textContent = r.title;
+
+  showDetailView();
+  $('#volModal').modal('show');
+}
+
+function showDetailView() {
+  document.getElementById('view-detail').style.display = 'block';
+  document.getElementById('view-apply').style.display  = 'none';
+}
+function showApplyView() {
+  document.getElementById('view-detail').style.display = 'none';
+  document.getElementById('view-apply').style.display  = 'block';
+}
+
+/* ═══════════════════════════════════════════════════════
+   FILTER PILLS
+═══════════════════════════════════════════════════════ */
+document.querySelectorAll('.vol-filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.vol-filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    renderCards(this.dataset.filter);
+  });
+});
+
+// Initial render
+renderCards('all');
+
+/* ═══════════════════════════════════════════════════════
+   CV DRAG & DROP
+═══════════════════════════════════════════════════════ */
+const dropArea = document.getElementById('cv-drop-area');
+const cvInput  = document.getElementById('cv-upload');
+
+dropArea.addEventListener('click', function(e) {
+  if (e.target.tagName !== 'BUTTON') cvInput.click();
+});
+dropArea.addEventListener('dragover',  e => { e.preventDefault(); dropArea.classList.add('dragover'); });
+dropArea.addEventListener('dragleave', ()  => dropArea.classList.remove('dragover'));
+dropArea.addEventListener('drop', e => {
   e.preventDefault();
-  const form = this;
+  dropArea.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f) handleCV(f);
+});
+cvInput.addEventListener('change', e => { if (e.target.files[0]) handleCV(e.target.files[0]); });
 
-  const formData = new FormData(form);
+function handleCV(file) {
+  const ok = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  if (!ok.includes(file.type)) { alert('Please upload a PDF, DOC or DOCX file.'); return; }
+  if (file.size > 5 * 1024 * 1024) { alert('File must be under 5MB.'); return; }
+  document.getElementById('cv-filename').textContent = file.name;
+  document.getElementById('cv-info').style.display = 'block';
+}
+function clearCV() {
+  cvInput.value = '';
+  document.getElementById('cv-info').style.display = 'none';
+}
 
+/* ═══════════════════════════════════════════════════════
+   FORM SUBMIT
+═══════════════════════════════════════════════════════ */
+document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn     = document.getElementById('vol-submit-btn');
+  const btnText = document.getElementById('vol-btn-text');
+  const btnLoad = document.getElementById('vol-btn-loading');
+  btnText.style.display = 'none';
+  btnLoad.style.display = 'inline';
+  btn.disabled = true;
+
+  const fd = new FormData(this);
   const payload = {
-    role: formData.get("role"),
-    name: formData.get("name"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    dob: formData.get("dob"),
-    address: formData.get("address"),
-    city: formData.get("city"),
-    postcode: formData.get("postcode"),
-    country: formData.get("country"),
-    referral: formData.get("referral"),
-    consent: formData.get("consent") === "on",
-    source: "joybringerscharity.org/volunteer"
+    role:       fd.get('role'),
+    name:       fd.get('name'),
+    email:      fd.get('email'),
+    phone:      fd.get('phone'),
+    dob:        fd.get('dob'),
+    address:    fd.get('address'),
+    city:       fd.get('city'),
+    postcode:   fd.get('postcode'),
+    country:    fd.get('country'),
+    motivation: fd.get('motivation'),
+    referral:   fd.get('referral'),
+    consent:    fd.get('consent') === 'on',
+    source:     'joybringerscharity.org/volunteer'
   };
 
-  if (!payload.role) {
-    alert("❌ Please click 'Apply Now' on a role again (role not captured).");
+  // 1) Upload CV to Supabase Storage (optional — graceful if bucket not set up)
+  const cvFile = cvInput.files[0];
+  if (cvFile) {
+    try {
+      const safeName = `${Date.now()}-${cvFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const { data: up, error: upErr } = await window.supabaseClient
+        .storage.from('volunteer-cvs')
+        .upload(safeName, cvFile, { cacheControl: '3600', upsert: false });
+      if (!upErr) {
+        const { data: urlData } = window.supabaseClient.storage
+          .from('volunteer-cvs').getPublicUrl(safeName);
+        payload.cv_url = urlData?.publicUrl || null;
+      } else {
+        console.warn('CV upload skipped:', upErr.message);
+      }
+    } catch (cvErr) { console.warn('CV upload error:', cvErr); }
+  }
+
+  // 2) Save to Supabase
+  const { error: dbErr } = await window.supabaseClient
+    .from('volunteer_applications').insert([payload]);
+
+  if (dbErr) {
+    alert('Error saving application: ' + dbErr.message);
+    btnText.style.display = 'inline'; btnLoad.style.display = 'none'; btn.disabled = false;
     return;
   }
 
+  // 3) Send confirmation email
   try {
-    // 1) Save to Supabase
-    const { error } = await window.supabaseClient
-      .from("volunteer_applications")
-      .insert([payload]);
+    await emailjs.send('service_m8qsdzk', 'template_56p9ftd', {
+      name:  payload.name,
+      email: payload.email,
+      role:  payload.role,
+      phone: payload.phone
+    });
+  } catch (emailErr) { console.error('EmailJS:', emailErr); }
 
-    if (error) {
-      console.error("Supabase error:", error);
-      alert("❌ Supabase error: " + error.message);
-      return;
-    }
+  // 4) Success
+  $('#volModal').modal('hide');
+  const firstName = (payload.name || '').split(' ')[0];
+  document.getElementById('thanks-msg').textContent =
+    `Thank you, ${firstName}! We've received your application for ${payload.role}. We'll review it and be in touch within 5 working days.`;
 
-    // 2) Send confirmation email via EmailJS
-    await emailjs.sendForm("service_m8qsdzk", "template_56p9ftd", form);
+  setTimeout(() => $('#volThanksModal').modal('show'), 350);
 
-    alert("✅ Thank you for applying! A confirmation email has been sent.");
-    $("#volunteerFormModal").modal("hide");
-    form.reset();
-
-    setTimeout(function() {
-      window.location.href = "https://joybringer.org.uk/thank-you";
-    }, 1200);
-
-  } catch (err) {
-    console.error("Submission error:", err);
-    alert("❌ Something went wrong. Please try again later.");
-  }
+  this.reset();
+  clearCV();
+  btnText.style.display = 'inline'; btnLoad.style.display = 'none'; btn.disabled = false;
 });
 </script>
 

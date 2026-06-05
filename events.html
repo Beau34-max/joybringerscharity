@@ -217,9 +217,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </select>
             </div>
 
-             <div class="col-md-6 form-group">
+             <div class="col-md-6 form-group" id="ageRangeGroup">
                 <label>Age Range *</label>
-                <select name="age_range" class="form-control" required>
+                <select name="age_range" id="age_range" class="form-control" required>
                   <option value="">Please Select</option>
                   <option>0 - 6</option>
                   <option>7 - 11</option>
@@ -502,7 +502,8 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
             data-location="${e.venue}"
             data-description="${e.description}"
             data-joining-link="${e.joiningLink || ''}"
-            data-paid="${e.paidEvent === true}">
+            data-paid="${e.paidEvent === true}"
+            data-hide-age-range="${e.hideAgeRange === true}">
             Register Now
           </button>
 
@@ -606,6 +607,20 @@ $(document).ready(() => {
     $('#allergyDetailsGroup').addClass('d-none');
     $('#allergy_details').removeAttr('required');
     toggleAllergyQuestionForEvent(location);
+
+    // Hide age range for events that don't need it (e.g. Banquet & Awards)
+    const hideAgeRange = b.data('hide-age-range') === true;
+    const ageRangeGroup  = document.getElementById('ageRangeGroup');
+    const ageRangeSelect = document.getElementById('age_range');
+    if (hideAgeRange) {
+      ageRangeGroup.classList.add('d-none');
+      ageRangeSelect.removeAttribute('required');
+      ageRangeSelect.value = '';
+    } else {
+      ageRangeGroup.classList.remove('d-none');
+      ageRangeSelect.setAttribute('required', 'required');
+    }
+
     $('#thankYouMessage').hide();
   });
   

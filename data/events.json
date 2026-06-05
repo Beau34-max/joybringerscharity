@@ -9,7 +9,8 @@
       "image": "images/Award.jpg",
       "featured": true,
       "paidEvent": true,
-      "regOverrideOpen": true
+      "regOverrideOpen": true,
+      "hideAgeRange": true
     },
     {
       "title": "6-Week R-Programming coding Bootcamp (Every Saturday)",
