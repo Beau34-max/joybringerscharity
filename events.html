@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html l11ng="en">
 <head>
   <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -154,6 +154,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <input type="hidden" name="event_date" id="event_date">
   <input type="hidden" name="event_time" id="event_time">
   <input type="hidden" name="event_location" id="event_location">
+  <input type="hidden" name="event_joining_link" id="event_joining_link">
   <input type="hidden" name="is_paid_event" id="is_paid_event" value="false">
 
 
@@ -262,11 +263,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <input type="text" name="other_location" class="form-control">
               </div>
                         <!-- Marketing Information -->
-              <div class="row">
-
-                <div class="col-md-6 form-group">
+              <div class="col-md-6 form-group d-flex flex-column">
                   <label>How did you hear about us? *</label>
-                  <select name="hear_about_us" class="form-control" required>
+                  <select name="hear_about_us" class="form-control mt-auto" required>
                     <option value="">Please Select</option>
                     <option>Facebook</option>
                     <option>Instagram</option>
@@ -282,16 +281,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   </select>
                 </div>
 
-                <div class="col-md-6 form-group">
-                  <label>Keep me updated about future events *</label>
-                  <select name="future_updates" class="form-control" required>
+                <div class="col-md-6 form-group d-flex flex-column">
+                  <label>Keep me updated about future events? *</label>
+                  <select name="future_updates" class="form-control mt-auto" required>
                     <option value="">Please Select</option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                   </select>
                 </div>
-
-              </div>
 
             </div>
           </div>
@@ -504,6 +501,7 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // mid
             data-time="${e.time}"
             data-location="${e.venue}"
             data-description="${e.description}"
+            data-joining-link="${e.joiningLink || ''}"
             data-paid="${e.paidEvent === true}">
             Register Now
           </button>
@@ -577,6 +575,7 @@ $(document).ready(() => {
     const time = b.data('time');
     const location = b.data('location');
     const description = b.data('description') || "";
+    const joiningLink = b.data('joining-link') || "";
 
     $('#registerModalLabel').text(`Register for: ${title}`);
     $('#modalEventTitle').text(title);
@@ -589,6 +588,7 @@ $(document).ready(() => {
     $('#event_date').val(b.data('date'));
     $('#event_time').val(b.data('time'));
     $('#event_location').val(b.data('location'));
+    $('#event_joining_link').val(joiningLink);
       const isPaid = b.data('paid') === true;
 
   $('#is_paid_event').val(isPaid ? "true" : "false");
@@ -797,9 +797,30 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
       return;
     }
 
-    // ✅ CHANGE HERE: 2) Send EmailJS confirmation
+    // 2) Send EmailJS confirmation — built dynamically so each event gets the right email
     try {
-      await emailjs.sendForm("service_m8qsdzk", "template_l0gb2le", form); // ✅ CHANGE HERE if yours differs
+      const venue       = formData.get("event_location") || "";
+      const rawLink     = formData.get("event_joining_link") || "";
+      const online      = isOnlineEvent(venue);
+
+      // For in-person: show the physical address.
+      // For online: show "Online" as venue + a separate joining-link line.
+      const venueLine = online ? "Online" : venue;
+      const joiningLinkLine = online
+        ? (rawLink ? rawLink : "A joining link will be emailed to you before the event.")
+        : "";   // empty = hidden in the email template
+
+      await emailjs.send("service_m8qsdzk", "template_l0gb2le", {
+        email:             formData.get("email"),
+        first_name:        formData.get("first_name"),
+        last_name:         formData.get("last_name"),
+        event_name:        formData.get("event_name"),
+        event_date:        formData.get("event_date"),
+        event_time:        formData.get("event_time"),
+        event_location:    venueLine,
+        joining_link_line: joiningLinkLine,
+        number_of_persons: formData.get("number_of_persons"),
+      });
     } catch (err) {
       console.error("EmailJS error:", err);
       // We still proceed because Supabase already saved it
