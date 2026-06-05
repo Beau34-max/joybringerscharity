@@ -209,8 +209,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <label>Ticket Type *</label>
               <select name="ticket_type" id="ticket_type" class="form-control">
                 <option value="">Please Select</option>
-                <option value="single">£10 - Single (per person)</option>
-                <option value="family">£30 - Family (max 5)</option>
+                <option value="free_single">Single - Free</option>
+                <option value="free_family">Family - Free</option>
+                <option value="paid_single">£10 - Single (per person)</option>
+                <option value="paid_family">£30 - Family (max 5)</option>
               </select>
             </div>
 
@@ -255,47 +257,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>Other</option>
                 </select>
               </div>
-              
               <div class="col-md-6 form-group d-none" id="otherLocationGroup">
                 <label>Specify Location</label>
                 <input type="text" name="other_location" class="form-control">
               </div>
-        
-        <div class="row">
+                        <!-- Marketing Information -->
+              <div class="row">
 
-        <div class="col-md-6 form-group">
-          <label>How did you hear about us? *</label>
-          <select name="hear_about_us" class="form-control" required>
-            <option value="">Please Select</option>
-            <option>Facebook</option>
-            <option>Instagram</option>
-            <option>LinkedIn</option>
-            <option>TikTok</option>
-            <option>Joybringers Website</option>
-            <option>Email</option>
-            <option>School / College</option>
-            <option>Friend or Family</option>
-            <option>Community Organisation</option>
-            <option>Flyer / Poster</option>
-            <option>Previous Joybringers Event</option>
-          </select>
-        </div>
+                <div class="col-md-6 form-group">
+                  <label>How did you hear about us? *</label>
+                  <select name="hear_about_us" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <option>Facebook</option>
+                    <option>Instagram</option>
+                    <option>LinkedIn</option>
+                    <option>TikTok</option>
+                    <option>Joybringers Website</option>
+                    <option>Email</option>
+                    <option>School / College</option>
+                    <option>Friend or Family</option>
+                    <option>Community Organisation</option>
+                    <option>Flyer / Poster</option>
+                    <option>Previous Joybringers Event</option>
+                  </select>
+                </div>
 
-        <div class="col-md-6 form-group">
-          <label>Would you like to hear about future events? *</label>
-          <select name="future_updates" class="form-control" required>
-            <option value="">Please Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+                <div class="col-md-6 form-group">
+                  <label>Keep me updated about future events *</label>
+                  <select name="future_updates" class="form-control" required>
+                    <option value="">Please Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
 
-      </div>
+              </div>
+
+            </div>
+          </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Submit Registration</button>
         </div>
         <div class="thank-you-message" id="thankYouMessage">
-          Thank you for registering! Check your email for event details.
+          ✅ Thank you for registering! Check your email for event details.
         </div>
       </form>
     </div>
@@ -807,15 +811,15 @@ $('#thankYouMessage').text("✅ Registration saved! Redirecting...").fadeIn();
 let payUrl = "";
 if (isPaidEvent) {
   const ticketType = formData.get("ticket_type");
-    if (ticketType === "single") payUrl = STRIPE_SINGLE_LINK;
-if (ticketType === "family") payUrl = STRIPE_FAMILY_LINK;
+    if (ticketType === "paid_single") payUrl = STRIPE_SINGLE_LINK;
+if (ticketType === "paid_family") payUrl = STRIPE_FAMILY_LINK;
     
-    if (!payUrl) {
-    alert("❌ Please select a ticket type.");
-    btn.disabled = false;
-    btn.innerText = "Submit Registration";
-    return;
-  }
+    if (!payUrl && (ticketType === "paid_single" || ticketType === "paid_family")) {
+  alert("❌ Please select a valid paid ticket type.");
+  btn.disabled = false;
+  btn.innerText = "Submit Registration";
+  return;
+}
 }
 
 setTimeout(() => {
@@ -826,11 +830,11 @@ setTimeout(() => {
   btn.disabled = false;
   btn.innerText = "Submit Registration";
 
-  if (isPaidEvent) {
-    window.location.href = payUrl;
-  } else {
-    window.location.href = "/thankyou";
-  }
+  if (isPaidEvent && payUrl) {
+  window.location.href = payUrl;
+} else {
+  window.location.href = "/thankyou";
+}
 }, 1200);
 
   } catch (err) {
