@@ -126,9 +126,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .vol-card .btn-view { font-size: 0.82rem; font-weight: 600; align-self: flex-start; }
 
     /* ── Modal ── */
-    .vol-modal-header-detail { padding: 20px 24px 16px; border-bottom: 1px solid #e9ecef; }
-    .vol-modal-header-apply  { background: #006526; color: white; padding: 20px 24px; }
-    .vol-modal-header-apply .close { color: white; opacity: 1; }
+    .vol-modal-header-detail { background: #006526; color: white; padding: 20px 24px; }
+    .vol-modal-header-detail .close { color: white; opacity: 1; text-shadow: none; }
+    .vol-modal-header-detail #d-title { color: white !important; }
+    .vol-modal-header-detail #d-cat-badge { background: rgba(255,255,255,0.2) !important; color: white !important; border-color: rgba(255,255,255,0.35) !important; }
+    .vol-modal-header-apply  { background: #004d1a; color: white; padding: 20px 24px; }
+    .vol-modal-header-apply .close { color: white; opacity: 1; text-shadow: none; }
     .vol-detail-left  { padding: 28px; }
     .vol-detail-right { background: #f8fafc; border-left: 1px solid #e9ecef; padding: 28px; }
     .vol-section-label {
@@ -151,8 +154,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .vol-list li::before { content: '✓'; position: absolute; left: 0; color: #006526; font-weight: 700; }
     .vol-gains-list li::before { content: '★'; color: #f59e0b; }
-    .vol-meta-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #e9ecef; font-size: 0.85rem; color: #4a5568; }
-    .vol-meta-item i { color: #006526; width: 14px; text-align: center; }
+    .vol-meta-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #e9ecef; font-size: 0.875rem; color: #1a1a2e; font-weight: 500; }
+    .vol-meta-item i { color: #006526; width: 16px; text-align: center; flex-shrink: 0; }
     .vol-meta-item:last-child { border-bottom: none; }
     .vol-form-heading { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #006526; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; margin: 20px 0 14px; }
     .vol-form-heading:first-child { margin-top: 0; }
@@ -321,7 +324,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <!-- Right: sidebar -->
             <div class="col-md-4 vol-detail-right">
-              <p class="text-muted mb-3" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Role Summary</p>
+              <p class="mb-3" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;color:#006526;">Role Summary</p>
               <div class="vol-meta-item"><i class="fas fa-map-marker-alt"></i><span id="d-location"></span></div>
               <div class="vol-meta-item"><i class="fas fa-clock"></i><span id="d-commitment"></span></div>
               <div class="vol-meta-item"><i class="fas fa-tag"></i><span id="d-category"></span></div>
@@ -332,7 +335,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <p class="text-center text-muted mt-2" style="font-size:0.78rem;">Takes about 5 minutes</p>
               <hr>
               <p class="text-muted text-center mb-2" style="font-size:0.82rem;">Questions about this role?</p>
-              <a href="mailto:info@joybringerscharity.org" class="btn btn-outline-secondary btn-block btn-sm">
+              <a href="mailto:info@joybringerscharity.org" class="btn btn-outline-success btn-block btn-sm" style="white-space:normal;word-break:break-all;font-size:0.78rem;">
                 <i class="fas fa-envelope mr-1"></i> info@joybringerscharity.org
               </a>
             </div>
