@@ -37,6 +37,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <style>
       /* ══ Joybringers Homepage Styles ══════════════════════════ */
 
+      /* ── Carousel — dark green base so transitions never flash white ── */
+      .owl-carousel-wrapper,
+      .owl-1,
+      .owl-carousel,
+      .ftco-cover-1 { background: #004d1a !important; }
+
+      /* ── Scrolled navbar — keep green on homepage so brand stays white ── */
+      .ftco-navbar-light.scrolled { background: #006526 !important; }
+      .ftco-navbar-light.scrolled .navbar-brand { color: #ffffff !important; }
+      .ftco-navbar-light.scrolled .nav-link { color: rgba(255,255,255,0.88) !important; }
+      .ftco-navbar-light.scrolled .nav-item.active > a,
+      .ftco-navbar-light.scrolled .nav-link.active { color: #fbbf24 !important; }
+
       /* ── Trust strip ── */
       .jb-trust-strip {
         background: #004d1a;
@@ -164,11 +177,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h1 class="text-white mb-3">Helping Young People<br>Believe, Belong,<br>and Become</h1>
       <p class="text-white mb-4">Registered Charity Number 1212606 &nbsp;|&nbsp; Newcastle &amp; the North East</p>
       <div class="hero-buttons">
-        <a href="/donate" class="btn btn-warning py-3 px-5" style="border-radius:8px;font-weight:700;font-size:1rem;">
+        <a href="/donate" class="btn btn-warning py-3 px-4" style="border-radius:8px;font-weight:700;font-size:1rem;">
           <i class="fas fa-heart mr-2"></i>Donate Now
         </a>
-        <a href="/volunteer" class="btn btn-outline-light py-3 px-5" style="border-radius:8px;font-weight:700;font-size:1rem;">
+        <a href="/volunteer" class="btn btn-success py-3 px-4" style="border-radius:8px;font-weight:700;font-size:1rem;border:2px solid #fff;">
           <i class="fas fa-hands-helping mr-2"></i>Volunteer With Us
+        </a>
+        <a href="/contact" class="btn btn-outline-light py-3 px-4" style="border-radius:8px;font-weight:700;font-size:1rem;">
+          <i class="fas fa-handshake mr-2"></i>Partner With Us
         </a>
       </div>
     </div>
