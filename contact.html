@@ -2,235 +2,389 @@
 <html lang="en">
 <head>
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P6327VK4');</script>
-<!-- End Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-P6327VK4');</script>
+  <!-- End Google Tag Manager -->
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joybringers - Contact Us</title>
+  <meta name="description" content="Contact Joybringers Charity — get in touch with our team in Newcastle upon Tyne. We'd love to hear from you.">
+  <title>Contact Us — Joybringers Charity</title>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
-
-  <!-- Your main template CSS -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Your brand overrides -->
   <link rel="stylesheet" href="css/custom.css">
-
-  <style>
-    /* Sticky Footer Layout */
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    nav.navbar {
-      flex-shrink: 0;
-    }
-    main {
-      flex: 1; /* Pushes footer down */
-    }
-    footer {
-      flex-shrink: 0;
-    }
-  </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+  <style>
+    body { background:#f4f7f4; font-family:'Open Sans',sans-serif; }
+
+    /* ── Hero ── */
+    .con-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:58px 0 36px; position:relative; }
+    .con-hero-eyebrow { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,.75) !important; margin-bottom:.5rem; display:block; }
+    .con-hero h1 { font-size:2.4rem; font-weight:800; line-height:1.2; margin-bottom:.85rem; color:#fff !important; text-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .con-hero p.lead { font-size:1rem; color:rgba(255,255,255,.88) !important; max-width:540px; margin-bottom:0; }
+    .con-hero-wave { position:absolute; bottom:-1px; left:0; width:100%; overflow:hidden; line-height:0; }
+    .con-hero-wave svg { display:block; }
+    @media(max-width:576px){ .con-hero { padding:48px 0 28px; } .con-hero h1 { font-size:1.9rem; } }
+
+    /* ── Scrolled navbar ── */
+    .ftco-navbar-light.scrolled .nav-item.active > a,
+    .ftco-navbar-light.scrolled .nav-link.active { color:#006526 !important; }
+    .ftco-navbar-light.scrolled .navbar-brand     { color:#006526 !important; }
+
+    /* ── Main section ── */
+    .con-section { padding:60px 0 72px; }
+
+    /* ── Info cards ── */
+    .con-info-card { background:#fff; border-radius:14px; padding:24px 22px; box-shadow:0 2px 12px rgba(0,0,0,.07); margin-bottom:18px; display:flex; align-items:flex-start; gap:16px; }
+    .con-info-icon { width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,#006526,#00883a); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .con-info-icon i { color:#fff; font-size:1.05rem; }
+    .con-info-text h6 { font-size:.9rem; font-weight:700; color:#003d14; margin:0 0 4px; }
+    .con-info-text p, .con-info-text a { font-size:.88rem; color:#555; margin:0; line-height:1.6; text-decoration:none; }
+    .con-info-text a:hover { color:#006526; text-decoration:underline; }
+
+    /* ── Opening hours ── */
+    .con-hours { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:20px 22px; margin-bottom:18px; }
+    .con-hours h6 { font-size:.9rem; font-weight:700; color:#003d14; margin-bottom:12px; }
+    .con-hours-row { display:flex; justify-content:space-between; font-size:.85rem; color:#444; padding:4px 0; border-bottom:1px solid #d1fae5; }
+    .con-hours-row:last-child { border-bottom:none; }
+    .con-hours-row .day { font-weight:600; }
+    .con-hours-row .time { color:#006526; font-weight:600; }
+
+    /* ── Map image ── */
+    .con-map-img { border-radius:12px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,.1); }
+    .con-map-img img { width:100%; height:200px; object-fit:cover; display:block; transition:opacity .2s; }
+    .con-map-img:hover img { opacity:.88; }
+    .con-map-caption { font-size:.78rem; color:#888; text-align:center; margin-top:6px; }
+
+    /* ── Form card ── */
+    .con-form-card { background:#fff; border-radius:16px; box-shadow:0 4px 28px rgba(0,0,0,.09); padding:36px 32px; }
+    .con-form-card h3 { font-size:1.4rem; font-weight:800; color:#003d14; margin-bottom:6px; }
+    .con-form-card .sub { font-size:.88rem; color:#666; margin-bottom:28px; }
+    .con-label { font-size:.8rem; font-weight:700; color:#374151; margin-bottom:5px; display:block; }
+    .con-input { border:1.5px solid #dee2e6; border-radius:8px; padding:10px 14px; font-size:.88rem; width:100%; outline:none; transition:border-color .15s; background:#fff; color:#1a1a1a; }
+    .con-input:focus { border-color:#006526; box-shadow:0 0 0 3px rgba(0,101,38,.08); }
+    .con-input.error { border-color:#dc3545; }
+    .con-form-group { margin-bottom:18px; }
+
+    /* ── Submit button ── */
+    .con-submit { background:linear-gradient(135deg,#006526,#00883a); border:none; color:#fff; font-weight:700; font-size:.95rem; padding:13px 36px; border-radius:8px; cursor:pointer; width:100%; transition:opacity .2s,transform .15s; }
+    .con-submit:hover { opacity:.9; transform:translateY(-1px); }
+    .con-submit:disabled { opacity:.65; transform:none; cursor:not-allowed; }
+
+    /* ── Feedback ── */
+    .con-feedback { border-radius:10px; padding:16px 20px; display:none; margin-top:18px; font-size:.88rem; font-weight:600; }
+    .con-feedback.success { background:#f0fdf4; border:1px solid #a7f3d0; color:#065f46; }
+    .con-feedback.error   { background:#fff5f5; border:1px solid #fca5a5; color:#7f1d1d; }
+
+    /* ── Social strip ── */
+    .con-social-strip { background:#fff; border-radius:14px; padding:24px 22px; box-shadow:0 2px 12px rgba(0,0,0,.07); text-align:center; margin-top:18px; }
+    .con-social-strip h6 { font-size:.88rem; font-weight:700; color:#003d14; margin-bottom:14px; }
+    .con-social-strip a { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; color:#fff; font-size:.9rem; margin:0 4px; transition:.2s; text-decoration:none; }
+    .con-social-strip a:hover { transform:translateY(-2px); opacity:.88; }
+    .con-social-strip a.fb { background:#1877F2; }
+    .con-social-strip a.ig { background:#E4405F; }
+    .con-social-strip a.li { background:#0A66C2; }
+    .con-social-strip a.tw { background:#1DA1F2; }
+    .con-social-strip a.tk { background:#000; }
+
+    /* ── CTA strip ── */
+    .con-cta { background:linear-gradient(135deg,#e8f5ee 0%,#d0eddb 55%,#c4e8d2 100%); padding:52px 0; text-align:center; border-top:1px solid #b6ddc5; }
+    .con-cta h2 { font-size:1.7rem; font-weight:700; color:#003d14 !important; margin-bottom:8px; }
+    .con-cta p  { color:rgba(0,61,20,.72); font-size:.95rem; max-width:480px; margin:0 auto 24px; }
+  </style>
 </head>
 <body>
-   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<div class="page-wrapper">
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/"><img src="images/logo.png" alt="Joybringers Charity" style="height:46px;width:auto;"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
-      <span class="oi oi-menu"></span> Menu
-    </button>
-    <div class="collapse navbar-collapse" id="ftco-nav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="/what-we-do" class="nav-link">What We Do</a></li>
-        <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
-        <li class="nav-item"><a href="/volunteer" class="nav-link">Volunteer</a></li>
-<!-- <li class="nav-item"><a href="partner" class="nav-link">Partnerships</a></li>-->
-         <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
-        <li class="nav-item active"><a href="/contact" class="nav-link">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<!-- END nav -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
+  <div class="page-wrapper">
 
-<!-- Contact Info and Form -->
-<section class="ftco-section contact-section">
-  <div class="container">
-    <div class="text-center mb-5">
+    <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="/"><img src="images/logo.png" alt="Joybringers Charity" style="height:46px;width:auto;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/what-we-do" class="nav-link">What We Do</a></li>
+            <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
+            <li class="nav-item"><a href="/volunteer" class="nav-link">Volunteer</a></li>
+            <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
+            <li class="nav-item active"><a href="/contact" class="nav-link">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-    </div>
+    <!-- ══ HERO ════════════════════════════════════════════════ -->
+    <section class="con-hero">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-7">
+            <p class="con-hero-eyebrow"><i class="fas fa-envelope mr-1"></i> Contact Us</p>
+            <h1>We'd Love to Hear From You</h1>
+            <p class="lead">Whether you have a question, want to get involved, or just want to say hello — our team is here for you.</p>
+          </div>
+        </div>
+      </div>
+      <div class="con-hero-wave">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none" height="60" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 C300,80 900,-20 1200,30 L1200,60 L0,60 Z" fill="#f4f7f4"/>
+        </svg>
+      </div>
+    </section>
 
-    <div class="row mb-5 align-items-start">
-  <div class="col-md-6">
-    <h5>Address</h5>
-        <p>
-          <a href="https://maps.app.goo.gl/3Cc9aWR9fKX3ZrU27?g_st=aw" target="_blank">
-            Neon, Quorum Business Park, Newcastle upon Tyne, NE12 8BU
+    <!-- ══ MAIN CONTENT ════════════════════════════════════════ -->
+    <section class="con-section">
+      <div class="container">
+        <div class="row">
+
+          <!-- ── LEFT: Info ── -->
+          <div class="col-lg-4 mb-5 mb-lg-0">
+
+            <div class="con-info-card">
+              <div class="con-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="con-info-text">
+                <h6>Our Address</h6>
+                <a href="https://maps.app.goo.gl/3Cc9aWR9fKX3ZrU27?g_st=aw" target="_blank" rel="noopener">
+                  Suite 3, Neon, Quorum Business Park,<br>Newcastle upon Tyne, NE12 8BU
+                </a>
+              </div>
+            </div>
+
+            <div class="con-info-card">
+              <div class="con-info-icon"><i class="fas fa-phone"></i></div>
+              <div class="con-info-text">
+                <h6>Phone</h6>
+                <a href="tel:+447500010317">+44 7500 010317</a>
+              </div>
+            </div>
+
+            <div class="con-info-card">
+              <div class="con-info-icon"><i class="fas fa-envelope"></i></div>
+              <div class="con-info-text">
+                <h6>Email</h6>
+                <a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a>
+              </div>
+            </div>
+
+            <div class="con-hours">
+              <h6><i class="fas fa-clock mr-2" style="color:#006526;"></i>Opening Times</h6>
+              <div class="con-hours-row"><span class="day">Tuesday</span><span class="time">10:00 AM – 3:00 PM</span></div>
+              <div class="con-hours-row"><span class="day">Friday</span><span class="time">10:00 AM – 3:00 PM</span></div>
+              <div class="con-hours-row"><span class="day">Saturday</span><span class="time">10:00 AM – 3:00 PM</span></div>
+              <div class="con-hours-row"><span class="day">Mon / Wed / Thu / Sun</span><span class="time" style="color:#888;">Closed</span></div>
+            </div>
+
+            <a href="https://maps.app.goo.gl/3Cc9aWR9fKX3ZrU27?g_st=aw" target="_blank" rel="noopener" class="con-map-img d-block">
+              <img src="images/neon-building.jpg" alt="Neon Building, Quorum Business Park">
+            </a>
+            <p class="con-map-caption"><i class="fas fa-directions mr-1"></i>Click for directions on Google Maps</p>
+
+            <div class="con-social-strip">
+              <h6>Follow Us</h6>
+              <a href="https://www.facebook.com/Joybringero/" target="_blank" class="fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="li" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://x.com/JoybringersC" target="_blank" class="tw" aria-label="Twitter / X"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tk" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+
+          </div>
+
+          <!-- ── RIGHT: Form ── -->
+          <div class="col-lg-8 pl-lg-5">
+            <div class="con-form-card">
+              <h3>Send Us a Message</h3>
+              <p class="sub">Fill in the form below and we'll get back to you as soon as possible — usually within 2 working days.</p>
+
+              <form id="contact-form" novalidate>
+
+                <div class="row">
+                  <div class="col-sm-6 con-form-group">
+                    <label class="con-label" for="con-name">Your Name <span style="color:#dc3545;">*</span></label>
+                    <input type="text" id="con-name" name="name" class="con-input" placeholder="e.g. Jane Smith" required>
+                  </div>
+                  <div class="col-sm-6 con-form-group">
+                    <label class="con-label" for="con-email">Email Address <span style="color:#dc3545;">*</span></label>
+                    <input type="email" id="con-email" name="email" class="con-input" placeholder="name@example.com" required>
+                  </div>
+                </div>
+
+                <div class="con-form-group">
+                  <label class="con-label" for="con-phone">Phone Number <span style="color:#aaa;font-weight:400;">(optional)</span></label>
+                  <input type="tel" id="con-phone" name="phone" class="con-input" placeholder="+44 7XXX XXXXXX">
+                </div>
+
+                <div class="con-form-group">
+                  <label class="con-label" for="con-subject">Reason for Contact <span style="color:#dc3545;">*</span></label>
+                  <select id="con-subject" name="subject" class="con-input" required style="appearance:auto;">
+                    <option value="">— Please select —</option>
+                    <option value="General Enquiry">General Enquiry</option>
+                    <option value="Volunteering">Volunteering</option>
+                    <option value="Donations or Support">Donations or Support</option>
+                    <option value="Partnership or Collaboration">Partnership or Collaboration</option>
+                    <option value="Event Information">Event Information</option>
+                    <option value="Media or Photography Request">Media or Photography Request</option>
+                    <option value="Foodbank">Foodbank</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="con-form-group">
+                  <label class="con-label" for="con-heard">Where did you hear about us? <span style="color:#aaa;font-weight:400;">(optional)</span></label>
+                  <select id="con-heard" name="heard_from" class="con-input" style="appearance:auto;">
+                    <option value="">— Please select —</option>
+                    <option value="Google / Search Engine">Google / Search Engine</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Twitter / X">Twitter / X</option>
+                    <option value="Word of Mouth / Friend or Family">Word of Mouth / Friend or Family</option>
+                    <option value="Attended a Joybringers Event">Attended a Joybringers Event</option>
+                    <option value="Newsletter or Email">Newsletter or Email</option>
+                    <option value="Local Community / Flyer / Poster">Local Community / Flyer / Poster</option>
+                    <option value="School or College">School or College</option>
+                    <option value="Another Organisation">Another Organisation</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="con-form-group">
+                  <label class="con-label" for="con-message">Message <span style="color:#dc3545;">*</span></label>
+                  <textarea id="con-message" name="message" class="con-input" rows="6" placeholder="How can we help you?" required style="resize:vertical;"></textarea>
+                </div>
+
+                <div class="form-check mb-4">
+                  <input type="checkbox" class="form-check-input" id="con-gdpr" required>
+                  <label class="form-check-label" for="con-gdpr" style="font-size:.82rem; color:#555;">
+                    I agree that Joybringers may store and use this information to respond to my enquiry, in line with the <a href="/privacy" style="color:#006526;">Privacy Policy</a>. <span style="color:#dc3545;">*</span>
+                  </label>
+                </div>
+
+                <button type="submit" class="con-submit" id="con-submit-btn">
+                  <i class="fas fa-paper-plane mr-2"></i>Send Message
+                </button>
+
+                <div class="con-feedback success" id="con-success">
+                  <i class="fas fa-check-circle mr-2"></i>Thank you! Your message has been received. We'll be in touch within 2 working days.
+                </div>
+                <div class="con-feedback error" id="con-error">
+                  <i class="fas fa-exclamation-circle mr-2"></i><span id="con-error-text">Something went wrong. Please try again or email us directly at info@joybringerscharity.org</span>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CTA STRIP ═══════════════════════════════════════════ -->
+    <section class="con-cta">
+      <div class="container">
+        <h2>Get Involved</h2>
+        <p>Want to volunteer, donate, or partner with us? Explore how you can make a difference.</p>
+        <div class="d-flex flex-wrap justify-content-center" style="gap:12px;">
+          <a href="/volunteer" class="btn btn-success btn-lg font-weight-bold" style="border-radius:8px;">
+            <i class="fas fa-hands-helping mr-2"></i>Volunteer
           </a>
-        </p>
-    <h5>Phone</h5>
-        <p><a href="tel:+447500010317">+44 7500 010317</a></p>
-    
-    <h5>Email</h5>
-        <p><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></p>
-    <h4>Opening Times</h4>
-    <p><strong>Tuesday:</strong> 10:00 AM - 3:00 PM</p>
-    <p><strong>Friday:</strong> 10:00 AM - 3:00 PM</p>
-    <p><strong>Saturday:</strong> 10:00 AM - 3:00 PM</p>
+          <a href="/donate" class="btn btn-warning btn-lg font-weight-bold" style="border-radius:8px;color:#1a1a1a;">
+            <i class="fas fa-heart mr-2"></i>Donate
+          </a>
+          <a href="/events" class="btn btn-light btn-lg font-weight-bold" style="border-radius:8px;color:#006526;">
+            <i class="fas fa-calendar-alt mr-2"></i>See Events
+          </a>
+        </div>
+      </div>
+    </section>
 
-    <div class="col-md-8 text-center">
-    <a href="https://maps.app.goo.gl/3Cc9aWR9fKX3ZrU27?g_st=aw" target="_blank">
-      <img src="images/neon-building.jpg" alt="Neon Building" class="img-fluid" style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-    </a>
-    <small class="d-block mt-2">Click image for map direction</small>
-  </div>
-</div>
-
-<div class="col-md-6 text-center">
-    <h4 class="mt-4 mb-6">Get In Touch</h4>
-    <form id="contact-form">
-
-  <!-- Name Field -->
-  <div class="form-group">
-    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
-  </div>
-
-  <!-- Email Field -->
-  <div class="form-group">
-    <input type="email" name="email" class="form-control" placeholder="Your Email" required>
-  </div>
-
-  <!-- Subject Dropdown -->
-<div class="form-group">
-  <label for="subject">Reason for Contact</label>
-  <select name="subject" id="subject" class="form-control" required>
-    <option value="">-- Please Select --</option>
-    <option value="General Enquiry">General Enquiry</option>
-    <option value="Volunteering">Volunteering</option>
-    <option value="Donations or Support">Donations or Support</option>
-    <option value="Partnership or Collaboration">Partnership or Collaboration</option>
-    <option value="Event Information">Event Information</option>
-    <option value="Media or Photography Request">Media or Photography Request</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
-
-
-  <!-- Message Field -->
-  <div class="form-group">
-    <textarea name="message" class="form-control" rows="6" placeholder="Message" required></textarea>
-  </div>
-
-  <!-- Submit Button -->
-  <div class="form-group">
-    <button type="submit" class="btn btn-success py-3 px-5">Send Message</button>
-  </div>
-</form>
-  </div>
-</div>
-</section>
-
-
-  <!-- ═══ FOOTER ════════════════════════════════════════════ -->
-  <footer class="jb-footer">
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-lg-4 col-md-6 mb-5 mb-lg-0 pr-lg-5">
-          <div class="jb-footer-brand">JOYBRINGERS</div>
-          <p class="jb-footer-tagline">Helping Young People Believe, Belong, and Become.</p>
-          <p class="jb-footer-sub">A registered charity empowering children and young people aged 7–25 across Newcastle and the North East through skills, education, and community.</p>
-          <div class="footer-social mt-4">
-            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/JoybringersC" target="_blank" class="twitter" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+    <!-- ══ FOOTER ════════════════════════════════════════════════ -->
+    <footer class="jb-footer">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-lg-4 col-md-6 mb-5 mb-lg-0 pr-lg-5">
+            <div class="jb-footer-brand">JOYBRINGERS</div>
+            <p class="jb-footer-tagline">Helping Young People Believe, Belong, and Become.</p>
+            <p class="jb-footer-sub">A registered charity empowering children and young people aged 7–25 across Newcastle and the North East through skills, education, and community.</p>
+            <div class="footer-social mt-4">
+              <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://x.com/JoybringersC" target="_blank" class="twitter" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Quick Links</h6>
+            <ul class="jb-footer-links">
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/what-we-do">What We Do</a></li>
+              <li><a href="/events">Events</a></li>
+              <li><a href="/volunteer">Volunteer</a></li>
+              <li><a href="/donate">Donate</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Get Involved</h6>
+            <ul class="jb-footer-links">
+              <li><a href="/volunteer">Volunteer With Us</a></li>
+              <li><a href="/donate">Make a Donation</a></li>
+              <li><a href="/contact">Corporate Partnership</a></li>
+              <li><a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" target="_blank">Join Our Food Bank</a></li>
+              <li><a href="/events">Upcoming Events</a></li>
+            </ul>
+            <div class="mt-3">
+              <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:52px;border-radius:6px;background:#fff;padding:4px 8px;">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Contact Us</h6>
+            <ul class="jb-footer-contact">
+              <li><i class="fas fa-envelope"></i><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></li>
+              <li><i class="fas fa-phone"></i><a href="tel:+447500010317">+44 7500 010317</a></li>
+              <li><i class="fas fa-map-marker-alt"></i>Suite 3, Neon, Quorum Business Park, Newcastle upon Tyne</li>
+            </ul>
+            <div class="mt-4 p-3" style="background:rgba(255,255,255,0.06);border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
+              <p style="font-size:0.75rem;margin:0;opacity:0.7;line-height:1.6;">
+                <strong style="color:#a7f3c5;">JOYBRINGERS LTD</strong><br>
+                Company No. 15400265<br>
+                Registered Charity No. 1212606
+              </p>
+            </div>
           </div>
         </div>
-        <div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Quick Links</h6>
-          <ul class="jb-footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/what-we-do">What We Do</a></li>
-            <li><a href="/events">Events</a></li>
-            <li><a href="/volunteer">Volunteer</a></li>
-            <li><a href="/donate">Donate</a></li>
-            <li><a href="/contact">Contact</a></li>
-          </ul>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Get Involved</h6>
-          <ul class="jb-footer-links">
-            <li><a href="/volunteer">Volunteer With Us</a></li>
-            <li><a href="/donate">Make a Donation</a></li>
-            <li><a href="/contact">Corporate Partnership</a></li>
-            <li><a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" target="_blank">Join Our Food Bank</a></li>
-            <li><a href="/events">Upcoming Events</a></li>
-          </ul>
-          <div class="mt-3">
-            <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:52px;border-radius:6px;background:#fff;padding:4px 8px;">
+        <hr style="border-color:rgba(255,255,255,0.12);margin-bottom:24px;">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+            <p style="margin:0;font-size:0.8rem;color:rgba(255,255,255,0.65);">&copy;2026 Joybringers Ltd. All Rights Reserved. Registered in England &amp; Wales.</p>
           </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Contact Us</h6>
-          <ul class="jb-footer-contact">
-            <li><i class="fas fa-envelope"></i><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></li>
-            <li><i class="fas fa-phone"></i><a href="tel:+447500010317">+44 7500 010317</a></li>
-            <li><i class="fas fa-map-marker-alt"></i>Suite 3, Neon, Quorum Business Park, Newcastle upon Tyne</li>
-          </ul>
-          <div class="mt-4 p-3" style="background:rgba(255,255,255,0.06);border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
-            <p style="font-size:0.75rem;margin:0;opacity:0.7;line-height:1.6;">
-              <strong style="color:#a7f3c5;">JOYBRINGERS LTD</strong><br>
-              Company No. 15400265<br>
-              Registered Charity No. 1212606
-            </p>
+          <div class="col-md-6 text-center text-md-right">
+            <a href="/terms" class="jb-footer-legal">Terms of Use</a>
+            <a href="/privacy" class="jb-footer-legal">Privacy Policy</a>
+            <a href="/cookies" class="jb-footer-legal">Cookies</a>
+            <button type="button" onclick="window.showCmpBanner()" class="jb-footer-cookie-btn">
+              <i class="fas fa-cookie-bite mr-1"></i>Cookie Settings
+            </button>
           </div>
         </div>
       </div>
-      <hr style="border-color:rgba(255,255,255,0.12);margin-bottom:24px;">
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
-          <p style="margin:0;font-size:0.8rem;color:rgba(255,255,255,0.65);">&copy;2026 Joybringers Ltd. All Rights Reserved. Registered in England &amp; Wales.</p>
-        </div>
-        <div class="col-md-6 text-center text-md-right">
-          <a href="/terms" class="jb-footer-legal">Terms of Use</a>
-          <a href="/privacy" class="jb-footer-legal">Privacy Policy</a>
-          <a href="/cookies" class="jb-footer-legal">Cookies</a>
-          <button type="button" onclick="window.showCmpBanner()" class="jb-footer-cookie-btn">
-            <i class="fas fa-cookie-bite mr-1"></i>Cookie Settings
-          </button>
-        </div>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
+  </div><!-- end page-wrapper -->
 
-<!-- Loader -->
+  <!-- Loader -->
   <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
       <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
@@ -238,7 +392,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </svg>
   </div>
 
-  <!-- ✅ JS Files -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -250,70 +403,111 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/aos.js"></script>
   <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-<script src="js/cookie-consent.js"></script>
+  <script src="js/cookie-consent.js"></script>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://roofompdejyndlpqfrjl.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL      = "https://roofompdejyndlpqfrjl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
+    window.supabaseClient   = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
 
-  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const supabaseClient = window.supabaseClient;
-</script>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>(function(){ emailjs.init("6xlIRBT96J-bKz7s3"); })();</script>
 
+  <script>
+  $(document).ready(function () {
+    // Sticky navbar
+    var $nav = $('.ftco_navbar');
+    $nav.addClass('scrolled awake');
+    $(window).on('scroll', function () {
+      if (!$nav.hasClass('scrolled')) $nav.addClass('scrolled awake');
+      if (!$nav.hasClass('awake'))    $nav.addClass('awake');
+    });
+  });
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-(function() {
-  emailjs.init("6xlIRBT96J-bKz7s3");
-})();
-</script>
+  document.getElementById('contact-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-<!-- Form submit -->
-<script>
-document.getElementById("contact-form").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const form = this;
+    const btn       = document.getElementById('con-submit-btn');
+    const successEl = document.getElementById('con-success');
+    const errorEl   = document.getElementById('con-error');
+    const errorText = document.getElementById('con-error-text');
 
-  const formData = new FormData(form);
-  const payload = {
-    name: formData.get("name"),
-    email: formData.get("email"),
-    subject: formData.get("subject"),
-    message: formData.get("message"),
-    source: "joybringerscharity.org/contact"
-  };
+    // Hide previous feedback
+    successEl.style.display = 'none';
+    errorEl.style.display   = 'none';
 
-  try {
-    // Save to Supabase
-    const { error } = await window.supabaseClient
-  .from("contact_submissions")
-  .insert([payload]);
+    // Basic validation
+    const name    = document.getElementById('con-name').value.trim();
+    const email   = document.getElementById('con-email').value.trim();
+    const subject = document.getElementById('con-subject').value;
+    const message = document.getElementById('con-message').value.trim();
+    const gdpr    = document.getElementById('con-gdpr').checked;
 
-    if (error) {
-      console.error("Supabase error:", error);
-      alert("❌ Supabase error: " + error.message);
+    if (!name || !email || !subject || !message) {
+      errorText.textContent = 'Please fill in all required fields (marked with *).';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (!gdpr) {
+      errorText.textContent = 'Please accept the privacy consent to submit your message.';
+      errorEl.style.display = 'block';
       return;
     }
 
-    // Send confirmation email
-    await emailjs.sendForm("service_jqpd0af", "template_i9qyhxi", form);
+    btn.disabled   = true;
+    btn.innerHTML  = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending…';
 
-    alert("✅ Thank you! Your message has been received.");
-    form.reset();
+    const payload = {
+      name:       name,
+      email:      email,
+      phone:      document.getElementById('con-phone').value.trim() || null,
+      subject:    subject,
+      heard_from: document.getElementById('con-heard').value || null,
+      message:    message,
+      source:     'joybringerscharity.org/contact'
+    };
 
-  } 
-  catch (err) {
-  console.error("Submission error:", err);
-  alert("❌ Submission failed: " + (err.text || err.message || "Unknown error"));
-}
-});
-</script>
+    try {
+      // Save to Supabase
+      const { error: dbError } = await window.supabaseClient
+        .from('contact_submissions')
+        .insert([payload]);
+
+      if (dbError) {
+        console.error('Supabase error:', dbError);
+        // Don't block — still try EmailJS
+      }
+
+      // Send email via EmailJS
+      await emailjs.send('service_jqpd0af', 'template_i9qyhxi', {
+        name:       payload.name,
+        email:      payload.email,
+        phone:      payload.phone || 'Not provided',
+        subject:    payload.subject,
+        heard_from: payload.heard_from || 'Not specified',
+        message:    payload.message
+      });
+
+      // Success
+      successEl.style.display = 'block';
+      this.reset();
+
+    } catch (err) {
+      console.error('Submission error:', err);
+      errorText.textContent = 'Something went wrong. Please try again or email us directly at info@joybringerscharity.org';
+      errorEl.style.display = 'block';
+    } finally {
+      btn.disabled  = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Send Message';
+    }
+  });
+  </script>
 
 </body>
 </html>
