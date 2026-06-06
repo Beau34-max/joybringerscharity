@@ -1065,3 +1065,18 @@ img.shadow-sm {
 /* ensure logo stays crisp on all navbar states */
 .ftco_navbar .navbar-brand img,
 .ftco_navbar.scrolled .navbar-brand img { height:46px; width:auto; }
+
+/* ── Inner page heroes: clear fixed navbar (≈62px) + breathing room ──
+   The navbar becomes position:fixed when scrolled/awake. Without compensation
+   the first ~62px of hero content hides behind it. These rules override the
+   per-page padding using !important so one rule fixes all inner page heroes. */
+.abt-hero, .con-hero, .ev-hero, .wwd-hero, .vol-hero, .don-hero {
+  padding-top:    66px !important;
+  padding-bottom: 24px !important;
+}
+@media (max-width: 576px) {
+  .abt-hero, .con-hero, .ev-hero, .wwd-hero, .vol-hero, .don-hero {
+    padding-top:    56px !important;
+    padding-bottom: 16px !important;
+  }
+}
