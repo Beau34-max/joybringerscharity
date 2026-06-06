@@ -197,6 +197,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .vol-detail-right { border-left: none; border-top: 1px solid #e9ecef; }
       #volModal .modal-body .form-group[class*="col-"] { flex: 0 0 100%; max-width: 100%; }
     }
+
+    /* ── Remuneration notices ── */
+    .vol-rem-notice { border-radius: 8px; padding: 12px 14px; margin-top: 2px; font-size: 0.76rem; line-height: 1.55; }
+    .vol-rem-title  { font-weight: 700; margin-bottom: 4px; font-size: 0.76rem; display: block; }
+    .vol-rem-text   { margin: 0; opacity: 0.92; }
+    .vol-rem-trustee { background: #fef3c7; border: 1px solid #d97706; color: #78350f; }
+    .vol-rem-senior  { background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a8a; }
+    .vol-rem-general { background: #f0fdf4; border: 1px solid #86efac; color: #14532d; }
   </style>
 </head>
 <body>
@@ -351,6 +359,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <a href="mailto:info@joybringerscharity.org" class="btn btn-outline-success btn-block btn-sm" style="white-space:normal;word-break:break-all;font-size:0.78rem;">
                 <i class="fas fa-envelope mr-1"></i> info@joybringerscharity.org
               </a>
+              <div id="d-remuneration" class="mt-3"></div>
             </div>
           </div>
         </div>
@@ -614,8 +623,8 @@ const ROLES = [
     category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
     icon: 'fa-chart-line', location: 'Remote', commitment: '3–4 hrs/week', urgent: false,
     summary: 'Turn website and social data into actionable insights that drive our digital growth.',
-    about: 'As our Digital Analyst, you will transform raw data from Google Analytics, social media, and fundraising platforms into clear reports and strategic recommendations that help Joybringers reach more people.',
-    responsibilities: ['Monitor and report on website traffic using Google Analytics', 'Track social media engagement and growth metrics', 'Identify trends and make data-led recommendations', 'Create monthly performance dashboards', 'Support A/B testing on website and email campaigns', 'Evaluate ROI of fundraising and awareness campaigns'],
+    about: 'As our Digital Analyst, you will transform raw data from Google Analytics, social media platforms, and fundraising tools into clear reports and strategic recommendations that help Joybringers reach more people and measure our digital impact.',
+    responsibilities: ['Monitor and report on website traffic using Google Analytics', 'Track and analyse performance across Facebook, Instagram, LinkedIn, and TikTok', 'Identify trends and make data-led recommendations', 'Create monthly performance dashboards', 'Support A/B testing on website and email campaigns', 'Evaluate ROI of fundraising and awareness campaigns'],
     requirements: ['Proficiency in Google Analytics or similar tools', 'Strong data analysis and visualisation skills', 'Ability to communicate insights to non-technical staff', 'Experience with Excel, Power BI, or Google Data Studio is a plus'],
     gains: ['Real-world portfolio with measurable impact data', 'Experience reporting to charity leadership', 'Opportunity to shape digital strategy', 'Certificate of volunteering']
   },
@@ -662,17 +671,6 @@ const ROLES = [
     responsibilities: ['Review and maintain all charity policies (safeguarding, GDPR, H&S)', 'Monitor compliance with Charity Commission requirements', 'Conduct internal compliance reviews and risk assessments', 'Train staff and volunteers on key compliance topics', 'Keep up to date with changes in charity law and regulation', 'Escalate safeguarding concerns appropriately'],
     requirements: ['Background in compliance, law, HR, or governance', 'Knowledge of GDPR and charity safeguarding regulations', 'Strong analytical and report-writing skills', 'Systematic, thorough approach with attention to detail'],
     gains: ['Senior compliance experience in the charity sector', 'Portfolio of real policy and governance work', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'digital-media-analyst',
-    title: 'Digital Media Analyst',
-    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
-    icon: 'fa-photo-video', location: 'Remote', commitment: '3–4 hrs/week', urgent: false,
-    summary: 'Monitor our social media performance and turn insights into actionable growth strategies.',
-    about: 'As our Digital Media Analyst, you will track performance across our social channels, analyse audience engagement, and report on what content works best — directly shaping our content strategy.',
-    responsibilities: ['Track and analyse performance across Facebook, Instagram, LinkedIn, and TikTok', 'Produce weekly/monthly social media reports', 'Identify high-performing content and recommend improvements', 'Monitor competitor and peer charity channels for benchmarking', 'Support paid social media campaign analysis', 'Advise on content optimisation'],
-    requirements: ['Experience with social media analytics (Meta Insights, LinkedIn Analytics, etc.)', 'Ability to interpret data and present findings clearly', 'Understanding of social media trends and best practices', 'Good written communication skills'],
-    gains: ['Real social media analytics experience', 'Portfolio of analytical reports and recommendations', 'Reference for digital marketing or analytics roles', 'Certificate of volunteering']
   },
   {
     id: 'project-manager',
@@ -830,6 +828,54 @@ const ROLES = [
   }
 ];
 
+/* ── Role tier: trustee | senior | volunteer ─────────────
+   trustee  = board/director level — full expenses policy
+   senior   = specialist/manager/coordinator/analyst
+   volunteer = frontline/assistant/facilitator/tutor
+───────────────────────────────────────────────────── */
+const ROLE_TIERS = {
+  'director-comms':          'trustee',
+  'secretary':               'trustee',
+  'accountant':              'senior',
+  'digital-analyst':         'senior',
+  'hr-assistant':            'senior',
+  'compliance-manager':      'senior',
+  'project-manager':         'senior',
+  'business-analyst':        'senior',
+  'website-designer':        'senior',
+  'fundraising-coordinator': 'senior',
+  'counselling-support':     'senior',
+  'marketing-manager':       'senior',
+  'data-research-analyst':   'senior',
+  'volunteer-recruitment':   'senior',
+  'admin-assistant':         'volunteer',
+  'graphic-designer':        'volunteer',
+  'food-bank':               'volunteer',
+  'it-workshop-assistant':   'volunteer',
+  'community-outreach':      'volunteer',
+  'parenting-facilitator':   'volunteer',
+  'language-tutor':          'volunteer'
+};
+
+function remunerationHTML(tier) {
+  if (tier === 'trustee') {
+    return `<div class="vol-rem-notice vol-rem-trustee">
+      <span class="vol-rem-title"><i class="fas fa-gavel mr-1"></i> Voluntary Role &mdash; Trustee / Director</span>
+      <p class="vol-rem-text">This is a voluntary role. Trustees and directors of Joybringers receive no remuneration. Trustees can claim expenses in line with Joybringers&rsquo; expenses policy. Expenses can be claimed to cover the costs of attending Board and committee meetings and other Joybringers events if they are necessary for the fulfilment of the trustee&rsquo;s duties.</p>
+    </div>`;
+  } else if (tier === 'senior') {
+    return `<div class="vol-rem-notice vol-rem-senior">
+      <span class="vol-rem-title"><i class="fas fa-info-circle mr-1"></i> Voluntary Role &mdash; No Remuneration</span>
+      <p class="vol-rem-text">This is a voluntary role. Volunteers in this role receive no remuneration for their time and expertise. Reasonable out-of-pocket expenses directly related to Joybringers activities may be claimed in line with Joybringers&rsquo; expenses policy.</p>
+    </div>`;
+  } else {
+    return `<div class="vol-rem-notice vol-rem-general">
+      <span class="vol-rem-title"><i class="fas fa-hands-helping mr-1"></i> Voluntary Role &mdash; No Remuneration</span>
+      <p class="vol-rem-text">This is a voluntary role. Volunteers receive no remuneration for their time and commitment to the community.</p>
+    </div>`;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    RENDER CARDS
 ═══════════════════════════════════════════════════════ */
@@ -884,6 +930,7 @@ function openRole(id) {
   document.getElementById('d-responsibilities').innerHTML = r.responsibilities.map(x => `<li>${x}</li>`).join('');
   document.getElementById('d-requirements').innerHTML   = r.requirements.map(x => `<li>${x}</li>`).join('');
   document.getElementById('d-gains').innerHTML          = r.gains.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('d-remuneration').innerHTML   = remunerationHTML(ROLE_TIERS[r.id] || 'volunteer');
 
   document.getElementById('roleApplied').value    = r.title;
   document.getElementById('a-role-title').textContent = r.title;
