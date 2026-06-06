@@ -1030,3 +1030,34 @@ img.shadow-sm {
   width: 100%;
   border-radius: 8px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED FOOTER STYLES  (used on every page)
+   ═══════════════════════════════════════════════════════════ */
+.jb-footer { background:#003d14; color:#fff; padding:60px 0 32px; font-size:14px; }
+.jb-footer-brand { font-size:1.5rem; font-weight:800; letter-spacing:.04em; color:#fff; margin-bottom:8px; }
+.jb-footer-tagline { font-size:.9rem; color:#a7f3c5; font-style:italic; margin-bottom:10px; }
+.jb-footer-sub { font-size:.82rem; color:rgba(255,255,255,.85); line-height:1.7; }
+.jb-footer-heading { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#a7f3c5; margin-bottom:18px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.18); }
+.jb-footer-links { list-style:none; padding:0; margin:0; }
+.jb-footer-links li { margin-bottom:10px; }
+.jb-footer-links a { color:rgba(255,255,255,.9); font-size:.875rem; text-decoration:none; transition:color .18s; }
+.jb-footer-links a:hover { color:#a7f3c5; text-decoration:none; }
+.jb-footer-contact { list-style:none; padding:0; margin:0; }
+.jb-footer-contact li { display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; font-size:.875rem; color:rgba(255,255,255,.9); line-height:1.55; }
+.jb-footer-contact i { color:#a7f3c5; margin-top:3px; flex-shrink:0; width:14px; text-align:center; }
+.jb-footer-contact a { color:rgba(255,255,255,.9); text-decoration:none; }
+.jb-footer-contact a:hover { color:#a7f3c5; }
+.jb-footer-legal { color:rgba(255,255,255,.78); font-size:.78rem; text-decoration:none; margin-left:14px; transition:color .18s; }
+.jb-footer-legal:hover { color:#a7f3c5; }
+.jb-footer-cookie-btn { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3); color:rgba(255,255,255,.9); padding:5px 14px; border-radius:20px; font-size:.75rem; font-weight:600; cursor:pointer; margin-left:14px; transition:all .18s; }
+.jb-footer-cookie-btn:hover { background:rgba(255,255,255,.22); color:#fff; }
+
+/* Social icon circles (footer) */
+.footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:38px; height:38px; border-radius:50%; color:#fff; font-size:16px; transition:.3s; }
+.footer-social a:hover { opacity:.82; transform:translateY(-2px); }
+.footer-social a.facebook  { background:#1877F2; }
+.footer-social a.instagram { background:#E4405F; }
+.footer-social a.linkedin  { background:#0A66C2; }
+.footer-social a.twitter   { background:#1DA1F2; }
+.footer-social a.tiktok    { background:#000; }
