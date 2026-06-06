@@ -43,11 +43,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .owl-carousel,
       .ftco-cover-1 { background: #004d1a !important; }
 
-      /* ── Hero height — full-screen carousel, trust strip scrolls into view ── */
-      .owl-carousel-wrapper { position: relative; overflow: hidden; }
-      .owl-1 .ftco-cover-1  { height: 100vh !important; min-height: 100vh !important; }
-      /* Bring buttons lower on the slide so they clear the navbar */
-      .box-92819 { padding-top: 80px; }
+      /* ── Hero height — reduced so trust strip + mission peek above the fold ── */
+      .owl-carousel-wrapper { position: relative; overflow: hidden !important;
+                              height: 72vh !important; min-height: 0 !important; max-height: 72vh !important; }
+      .owl-1 .ftco-cover-1  { height: 72vh !important; min-height: 0 !important; max-height: 72vh !important; }
+      .owl-1, .owl-carousel  { height: 72vh !important; min-height: 0 !important; }
+      /* Vertically centre the overlay text within the shorter slide */
+      .box-92819 { padding-top: 0; }
 
       /* ── Scrolled navbar — keep green on homepage so brand stays white ── */
       .ftco-navbar-light.scrolled { background: #006526 !important; }

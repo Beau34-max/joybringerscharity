@@ -30,12 +30,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     /* ── Base ── */
     body { background-color:#f4f7f4; font-family:'Open Sans',sans-serif; }
 
-    /* ── Hero ── */
-    .ev-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:110px 0 70px; text-align:center; }
-    .ev-hero-eyebrow { display:inline-block; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; padding:6px 18px; border-radius:20px; margin-bottom:18px; }
-    .ev-hero h1 { font-size:2.8rem; font-weight:800; color:#fff !important; text-shadow:0 1px 4px rgba(0,0,0,.3); margin-bottom:14px; line-height:1.15; }
-    .ev-hero p.lead { color:rgba(255,255,255,.88) !important; font-size:1.05rem; max-width:560px; margin:0 auto; }
-    @media(max-width:576px){ .ev-hero { padding:95px 0 55px; } .ev-hero h1 { font-size:2rem; } }
+    /* ── Hero — matches volunteer page exactly ── */
+    .ev-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:90px 0 52px; }
+    .ev-hero-eyebrow { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,0.75) !important; margin-bottom:.5rem; display:block; }
+    .ev-hero h1 { font-size:2.2rem; font-weight:700; line-height:1.25; margin-bottom:.85rem; color:#ffffff !important; text-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .ev-hero p.lead { font-size:1rem; color:rgba(255,255,255,.88) !important; max-width:520px; margin-bottom:1.4rem; }
+    @media(max-width:576px){ .ev-hero { padding:80px 0 40px; } .ev-hero h1 { font-size:1.8rem; } }
+    .ev-hero-wave { position:absolute; bottom:-1px; left:0; width:100%; overflow:hidden; line-height:0; }
+    .ev-hero-wave svg { display:block; }
+    .ev-hero { position:relative; }
 
     /* ── Scrolled navbar overrides (inner page) ── */
     .ftco-navbar-light.scrolled .nav-item.active > a,
@@ -125,14 +128,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ══ HERO ════════════════════════════════════════════════ -->
 <section class="ev-hero">
   <div class="container">
-    <span class="ev-hero-eyebrow"><i class="fas fa-calendar-alt mr-1"></i> What's On</span>
-    <h1>Events &amp; Activities</h1>
-    <p class="lead">Join us at our next event — from workshops and skills sessions to community celebrations across Newcastle and the North East.</p>
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <p class="ev-hero-eyebrow"><i class="fas fa-calendar-alt mr-1"></i> What's On</p>
+        <h1>Events &amp; Activities</h1>
+        <p class="lead">From workshops and skills sessions to community celebrations — find out what's happening across Newcastle and the North East and book your free place.</p>
+        <a href="#upcoming" class="btn btn-light btn-lg px-4 font-weight-bold" style="color:#006526;">
+          See Upcoming Events &nbsp;<i class="fas fa-arrow-down"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="ev-hero-wave">
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" height="60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C300,80 900,-20 1200,30 L1200,60 L0,60 Z" fill="#f4f7f4"/>
+    </svg>
   </div>
 </section>
 
 <!-- ══ UPCOMING EVENTS ═════════════════════════════════════ -->
-<section class="ev-section">
+<section class="ev-section" id="upcoming">
   <div class="container">
     <div class="ev-divider"></div>
     <h2 class="ev-section-title">Upcoming Events</h2>
