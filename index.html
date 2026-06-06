@@ -43,9 +43,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .owl-carousel,
       .ftco-cover-1 { background: #004d1a !important; }
 
-      /* ── Hero height — shorter slide (overrides 100vh in custom.css) ── */
-      .owl-1 .ftco-cover-1 { height: 62vh !important; min-height: 62vh !important; max-height: 62vh !important; }
-      .owl-carousel-wrapper { overflow: hidden; }
+      /* ── Hero height — lock wrapper + slide so no green bleeds below ── */
+      .owl-carousel-wrapper { height: 56vh !important; max-height: 56vh !important; overflow: hidden !important; }
+      .owl-1 .ftco-cover-1  { height: 56vh !important; min-height: 56vh !important; max-height: 56vh !important; }
+      .owl-1, .owl-carousel  { height: 56vh !important; }
 
       /* ── Scrolled navbar — keep green on homepage so brand stays white ── */
       .ftco-navbar-light.scrolled { background: #006526 !important; }
