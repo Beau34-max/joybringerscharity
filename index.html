@@ -11,12 +11,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <title>Joybringers - Helping Young People Believe, Belong, and Become</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Joybringers is a registered charity (No. 1212606) based in Newcastle empowering children and young people aged 7–25 through skills, education, and community programmes.">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
@@ -32,17 +32,112 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/custom.css">
-
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+    <style>
+      /* ══ Joybringers Homepage Styles ══════════════════════════ */
+
+      /* ── Trust strip ── */
+      .jb-trust-strip {
+        background: #004d1a;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .jb-trust-strip .container { display:flex; flex-wrap:wrap; justify-content:center; gap:28px; }
+      .jb-trust-item { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.88); font-size:0.8rem; font-weight:600; letter-spacing:0.02em; }
+      .jb-trust-item i { color:#86efac; font-size:0.95rem; }
+
+      /* ── Section base ── */
+      .jb-section { padding:72px 0; }
+      .jb-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:#006526; margin-bottom:10px; }
+      .jb-section-title { font-size:2rem; font-weight:700; color:#1a1a2e; line-height:1.25; margin-bottom:1rem; }
+      .jb-divider { width:48px; height:4px; background:#006526; border-radius:2px; margin-bottom:20px; }
+      .jb-lead { color:#5a6370; font-size:0.97rem; line-height:1.75; }
+
+      /* ── Mission section ── */
+      .jb-mission-wrap { background:#fff; }
+      .jb-mission-img { border-radius:14px; box-shadow:0 16px 48px rgba(0,0,0,0.11); width:100%; height:400px; object-fit:cover; }
+
+      /* ── Stat cards ── */
+      .jb-stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+      .jb-stat-card { background:#f8fdf9; border-radius:12px; padding:24px 18px; text-align:center; border:1px solid #d1fae5; border-bottom:4px solid #006526; }
+      .jb-stat-num { font-size:2.2rem; font-weight:700; color:#006526; line-height:1; margin-bottom:4px; }
+      .jb-stat-label { font-size:0.75rem; color:#6c757d; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+
+      /* ── What We Do cards ── */
+      .jb-prog-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.06); height:100%; transition:transform 0.22s, box-shadow 0.22s; border:1px solid #f0f4f8; }
+      .jb-prog-card:hover { transform:translateY(-5px); box-shadow:0 14px 36px rgba(0,0,0,0.10); }
+      .jb-prog-img { height:170px; background-size:cover; background-position:center; }
+      .jb-prog-body { padding:20px; }
+      .jb-prog-body h5 { font-weight:700; color:#1a1a2e; font-size:1rem; margin-bottom:6px; }
+      .jb-prog-body p { color:#6c757d; font-size:0.875rem; margin:0; line-height:1.55; }
+      .jb-prog-icon { width:44px; height:44px; border-radius:10px; background:#f0fdf4; display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
+      .jb-prog-icon i { color:#006526; font-size:1.1rem; }
+
+      /* ── Event cards ── */
+      .jb-event-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.06); height:100%; display:flex; flex-direction:column; transition:transform 0.22s; border:1px solid #f0f4f8; }
+      .jb-event-card:hover { transform:translateY(-4px); }
+      .jb-event-img { height:175px; background-size:cover; background-position:center; flex-shrink:0; position:relative; }
+      .jb-event-type-badge { position:absolute; top:12px; left:12px; background:rgba(0,101,38,0.88); color:white; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 10px; border-radius:20px; }
+      .jb-event-date-pin { position:absolute; bottom:-18px; right:16px; background:#006526; color:white; border-radius:10px; padding:8px 12px; text-align:center; line-height:1.1; box-shadow:0 4px 12px rgba(0,0,0,0.18); }
+      .jb-event-date-pin .day { font-size:1.3rem; font-weight:700; display:block; }
+      .jb-event-date-pin .mon { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.05em; opacity:0.88; }
+      .jb-event-body { padding:28px 20px 20px; flex:1; display:flex; flex-direction:column; }
+      .jb-event-body h5 { font-weight:700; color:#1a1a2e; font-size:0.97rem; margin-bottom:10px; flex:1; line-height:1.4; }
+      .jb-event-meta { font-size:0.78rem; color:#6c757d; margin-top:auto; padding-top:12px; border-top:1px solid #f0f4f8; }
+      .jb-event-meta span { display:inline-flex; align-items:center; gap:5px; margin-right:12px; }
+      .jb-event-meta i { color:#006526; }
+      .jb-event-card-placeholder { text-align:center; padding:40px 20px; color:#6c757d; }
+
+      /* ── Get Involved cards ── */
+      .jb-involve-card { background:#fff; border-radius:14px; box-shadow:0 4px 24px rgba(0,0,0,0.07); padding:36px 28px; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; border:1px solid #f0f4f8; transition:transform 0.22s; }
+      .jb-involve-card:hover { transform:translateY(-4px); }
+      .jb-involve-icon { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 20px; flex-shrink:0; }
+      .jb-involve-card h4 { font-weight:700; color:#1a1a2e; font-size:1.15rem; margin-bottom:10px; }
+      .jb-involve-card p { color:#6c757d; font-size:0.88rem; line-height:1.65; flex:1; margin-bottom:24px; }
+
+      /* ── CTA strip ── */
+      .jb-cta-strip { background:linear-gradient(135deg, #003d14 0%, #006526 55%, #00883a 100%); padding:70px 0; text-align:center; position:relative; overflow:hidden; }
+      .jb-cta-strip::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+      .jb-cta-strip h2 { font-size:2.1rem; font-weight:700; color:#fff !important; margin-bottom:12px; position:relative; }
+      .jb-cta-strip p { color:rgba(255,255,255,0.88); font-size:1rem; max-width:520px; margin:0 auto 32px; position:relative; }
+      .jb-cta-strip .btn { position:relative; font-weight:700; border-radius:8px; padding:14px 32px; font-size:1rem; }
+
+      /* ── Partners ── */
+      .jb-partner-logo { max-height:56px; width:auto; filter:grayscale(35%); opacity:0.8; transition:all 0.22s; }
+      .jb-partner-logo:hover { filter:grayscale(0%); opacity:1; }
+      .jb-partner-item { display:flex; align-items:center; justify-content:center; padding:12px; }
+
+      /* ── Footer social ── */
+      .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:40px; height:40px; border-radius:50%; color:#fff; font-size:18px; transition:0.3s; }
+      .footer-social a:hover { opacity:0.8; }
+      .footer-social a.facebook { background:#1877F2; }
+      .footer-social a.instagram { background:#E4405F; }
+      .footer-social a.linkedin { background:#0A66C2; }
+      .footer-social a.twitter  { background:#1DA1F2; }
+      .footer-social a.tiktok   { background:#000; }
+
+      @media (max-width:767px) {
+        .jb-section { padding:52px 0; }
+        .jb-section-title { font-size:1.65rem; }
+        .jb-stats-grid { grid-template-columns:1fr 1fr; gap:12px; }
+        .jb-stat-num { font-size:1.8rem; }
+        .jb-mission-img { height:240px; margin-top:32px; }
+        .jb-cta-strip h2 { font-size:1.65rem; }
+        .jb-trust-strip .container { gap:16px; }
+      }
+    </style>
   </head>
+
   <body>
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
 <div class="page-wrapper">
-  <!-- Navbar -->
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand" href="/">Joybringers</a>
@@ -56,77 +151,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li class="nav-item"><a href="/what-we-do" class="nav-link">What We Do</a></li>
           <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
           <li class="nav-item"><a href="/volunteer" class="nav-link">Volunteer</a></li>
-<!-- <li class="nav-item"><a href="partner" class="nav-link">Partnerships</a></li>-->
-           <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
+          <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
           <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
-  <!-- END nav -->
 
-  <!-- ✅ Hero Carousel -->
-<div class="owl-carousel-wrapper">
-  <!-- ✅ Hero Content -->
-  <div class="box-92819 text-center">
-    <h1 class="text-white mb-3">Helping Young People<br>Believe, Belong,<br>and Become</h1>
-    <p class="text-white">Registered Charity Number 1212606</p>
-
-    <div class="hero-buttons">
-      <a href="/donate" class="btn btn-warning py-3 px-4 rounded-0">Donate Now</a>
-      <a href="/volunteer" class="btn btn-success py-3 px-4 rounded-0">Become a Volunteer</a>
-      <a href="/contact" class="btn btn-success py-3 px-4 rounded-0">Partner With Us</a>
+  <!-- ══ HERO — Video Carousel ════════════════════════════════ -->
+  <div class="owl-carousel-wrapper">
+    <div class="box-92819 text-center">
+      <h1 class="text-white mb-3">Helping Young People<br>Believe, Belong,<br>and Become</h1>
+      <p class="text-white mb-4">Registered Charity Number 1212606 &nbsp;|&nbsp; Newcastle &amp; the North East</p>
+      <div class="hero-buttons">
+        <a href="/donate" class="btn btn-warning py-3 px-5" style="border-radius:8px;font-weight:700;font-size:1rem;">
+          <i class="fas fa-heart mr-2"></i>Donate Now
+        </a>
+        <a href="/volunteer" class="btn btn-outline-light py-3 px-5" style="border-radius:8px;font-weight:700;font-size:1rem;">
+          <i class="fas fa-hands-helping mr-2"></i>Volunteer With Us
+        </a>
+      </div>
+    </div>
+    <div class="owl-carousel owl-1">
+      <div class="ftco-cover-1 overlay">
+        <video autoplay muted loop playsinline preload="metadata" class="hero-video" poster="images/ff.JPG">
+          <source src="videos/Ffb.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="ftco-cover-1 overlay">
+        <video autoplay muted loop playsinline preload="metadata" class="hero-video" poster="images/code.jpg">
+          <source src="videos/IT3.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
   </div>
 
-  <!-- ✅ Background Slides -->
-  <div class="owl-carousel owl-1">
-    <div class="ftco-cover-1 overlay">
-          <video autoplay muted loop playsinline preload="metadata" class="hero-video" poster="images/ff.JPG">
-        <source src="videos/Ffb.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-
-    <div class="ftco-cover-1 overlay">
-         <video autoplay muted loop playsinline preload="metadata" class="hero-video" poster="images/code.jpg">
-        <source src="videos/IT3.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </div>
-</div>
-
-<!-- ✅ SPACER to clear hero overlay -->
-  
-  <!-- ✅ Impact Counter -->
-  <section class="ftco-counter ftco-intro" id="section-counter">
+  <!-- ══ TRUST STRIP ════════════════════════════════════════ -->
+  <div class="jb-trust-strip">
     <div class="container">
-      <div class="row no-gutters">
-        <div class="col-md-5 d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-1 align-items-stretch">
-            <div class="text">
-              <span>Since Launch Over</span>
-              <strong class="number" data-number="578">0</strong>
-              <span>young people supported</span>
-            </div>
-          </div>
+      <div class="jb-trust-item"><i class="fas fa-certificate"></i> Registered Charity No. 1212606</div>
+      <div class="jb-trust-item"><i class="fas fa-shield-alt"></i> NCVO Member</div>
+      <div class="jb-trust-item"><i class="fas fa-map-marker-alt"></i> Newcastle &amp; the North East</div>
+      <div class="jb-trust-item"><i class="fas fa-users"></i> Supporting Ages 7–25</div>
+      <div class="jb-trust-item"><i class="fas fa-calendar-check"></i> Est. 2021</div>
+    </div>
+  </div>
+
+  <!-- ══ MISSION + STATS ════════════════════════════════════ -->
+  <section class="jb-section jb-mission-wrap">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Text -->
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <p class="jb-eyebrow"><i class="fas fa-seedling mr-1"></i> Who We Are</p>
+          <div class="jb-divider"></div>
+          <h2 class="jb-section-title">Transforming Lives Across the North East</h2>
+          <p class="jb-lead mb-4">
+            Joybringers is a community-led charity based in Newcastle dedicated to empowering children and young people aged 7–25. Through skills training, digital education, community events, and holistic wellbeing support, we help young people discover their potential and build bright futures.
+          </p>
+          <p class="jb-lead mb-4">
+            We believe every young person — regardless of background — deserves access to opportunities, mentorship, and a community where they truly belong.
+          </p>
+          <a href="/about" class="btn btn-success px-4 py-2" style="border-radius:8px;font-weight:700;">
+            Our Story <i class="fas fa-arrow-right ml-2"></i>
+          </a>
         </div>
-        <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-2 align-items-stretch">
-            <div class="text">
-              <h3 class="mb-4">Donate Today</h3>
-              <p>£10 funds a workshop. £50 supports a skills session for a group.</p>
-              <p><a href="/donate" class="btn btn-white px-3 py-2 mt-2">Donate Now</a></p>
+        <!-- Stats -->
+        <div class="col-lg-5 offset-lg-1">
+          <div class="jb-stats-grid">
+            <div class="jb-stat-card">
+              <div class="jb-stat-num">578+</div>
+              <div class="jb-stat-label">Young People Supported</div>
             </div>
-          </div>
-        </div>
-        <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-3 align-items-stretch">
-            <div class="text">
-              <h3 class="mb-4">Volunteer With Us</h3>
-              <p>Your time and skills can make a real difference for young people.</p>
-              <p><a href="/volunteer" class="btn btn-white px-3 py-2 mt-2">Join Us</a></p>
+            <div class="jb-stat-card">
+              <div class="jb-stat-num">40+</div>
+              <div class="jb-stat-label">Events &amp; Workshops</div>
+            </div>
+            <div class="jb-stat-card">
+              <div class="jb-stat-num">8</div>
+              <div class="jb-stat-label">Partner Organisations</div>
+            </div>
+            <div class="jb-stat-card">
+              <div class="jb-stat-num">30+</div>
+              <div class="jb-stat-label">Active Volunteers</div>
             </div>
           </div>
         </div>
@@ -134,393 +241,408 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ✅ What We Do -->
-  <section class="ftco-section bg-light">
-    <div class="container-fluid">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-6 text-center ftco-animate">
-          <h2 class="mb-4">What We Do</h2>
-          <p>Our programmes empower children and young people through skills, creativity, and community connection.</p>
+  <!-- ══ WHAT WE DO ════════════════════════════════════════ -->
+  <section class="jb-section" style="background:#f8f9fa;">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-6 text-center">
+          <p class="jb-eyebrow"><i class="fas fa-star mr-1"></i> Our Programmes</p>
+          <div class="jb-divider mx-auto"></div>
+          <h2 class="jb-section-title">What We Do</h2>
+          <p class="jb-lead">Hands-on programmes designed to build skills, confidence, and community for young people across the North East.</p>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12 ftco-animate">
-          <div class="carousel-cause owl-carousel">
-            <!-- Item 1 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/digital_skills.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Digital Skills Workshops</h3>
-                  <p>Learn coding, game design, and website building.</p>
-                </div>
-              </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/digital_skills.jpg);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-laptop-code"></i></div>
+              <h5>Digital Skills &amp; Coding</h5>
+              <p>Coding bootcamps, data analytics, game design, and web development for ages 7–25.</p>
             </div>
-            <!-- Item 2 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/co11.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Creative Arts Training</h3>
-                  <p>Dance, music, and visual arts to inspire creativity.</p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/co11.jpg);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-palette"></i></div>
+              <h5>Creative Arts Training</h5>
+              <p>Dance, music, visual arts, and crafts to inspire creativity and self-expression.</p>
             </div>
-            <!-- Item 3 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/life_skills.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Skills for Life</h3>
-                  <p>CV writing, career guidance, and personal branding.</p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/life_skills.jpg);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-briefcase"></i></div>
+              <h5>Skills for Life</h5>
+              <p>CV writing, mock interviews, career guidance, and personal branding workshops.</p>
             </div>
-            <!-- Item 4 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/wellbeing.jpg);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Well-being & Financial Literacy</h3>
-                  <p>Mental health, budgeting, and self-care workshops.</p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/wellbeing.jpg);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-heart"></i></div>
+              <h5>Wellbeing &amp; Financial Literacy</h5>
+              <p>Mental health support, budgeting workshops, and self-care sessions.</p>
             </div>
-            <!-- Item 5 -->
-            <div class="item">
-              <div class="cause-entry">
-                <a class="img" style="background-image: url(images/ff3.JPG);"></a>
-                <div class="text p-3 p-md-4">
-                  <h3>Community Trips</h3>
-                  <p>Visits to museums, gardens, and nature reserves.</p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/ff3.JPG);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-tree"></i></div>
+              <h5>Community Trips &amp; Events</h5>
+              <p>Visits to museums, parks, nature reserves, and fun community days out.</p>
             </div>
-          </div><!-- END carousel -->
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex">
+          <div class="jb-prog-card w-100">
+            <div class="jb-prog-img" style="background-image:url(images/foodbank.jpg);"></div>
+            <div class="jb-prog-body">
+              <div class="jb-prog-icon"><i class="fas fa-shopping-basket"></i></div>
+              <h5>Food Bank &amp; Family Support</h5>
+              <p>Free surplus food collections and family support services across Newcastle and Gateshead.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-2">
+        <a href="/what-we-do" class="btn btn-outline-success px-5 py-2" style="border-radius:8px;font-weight:700;">
+          See All Our Work <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ UPCOMING EVENTS (DYNAMIC) ════════════════════════ -->
+  <section class="jb-section jb-mission-wrap">
+    <div class="container">
+      <div class="row justify-content-between align-items-end mb-5">
+        <div class="col-lg-6">
+          <p class="jb-eyebrow"><i class="fas fa-calendar-alt mr-1"></i> What's On</p>
+          <div class="jb-divider"></div>
+          <h2 class="jb-section-title mb-0">Upcoming Events</h2>
+        </div>
+        <div class="col-lg-auto mt-3 mt-lg-0">
+          <a href="/events" class="btn btn-outline-success px-4 py-2" style="border-radius:8px;font-weight:700;">
+            View All Events <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+      <div class="row" id="home-events-grid">
+        <!-- Populated by JS -->
+        <div class="col-12 text-center py-4 text-muted" id="events-loading">
+          <i class="fas fa-spinner fa-spin mr-2"></i>Loading events…
         </div>
       </div>
     </div>
   </section>
 
-  <section class="ftco-section bg-light">
-  <div class="container">
-    <div class="row justify-content-center mb-5 pb-3">
-      <div class="col-md-7 heading-section text-center">
-        <h2 class="mb-4" style="color:#006526; font-weight:700;">
-          SEE WHAT'S NEW WITH JOYBRINGERS
-        </h2>
-      </div>
-    </div>
-    <div class="row">
-
-      <!-- Foodbank -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/foodbank.jpg" alt="Foodbank" class="img-fluid mb-3">
-          <h3>Join our Food Bank</h3>
-          <p>Feel free to join our Foodbank group and request any food you want when it is made available. All food items are 100% free.</p>
-          <a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" 
-             class="btn btn-success">Join our Food Bank</a>
-        </div>
-      </div>
-
-      <!-- Success Stories -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/success.jpg" alt="Success Stories" class="img-fluid mb-3">
-          <h3>Our Success Stories</h3>
-          <p>Explore how our programs have made a difference in the lives of individuals and communities.</p>
-          <a href="/what-we-do" class="btn btn-success">Our Success Stories</a>
-        </div>
-      </div>
-
-      <!-- Donate -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/donate.jpg" alt="Donate" class="img-fluid mb-3">
-          <h3>Donate Today</h3>
-          <p>Every child, adolescent and youth is worth fighting for. With your help, we can create a lasting impact on their lives.</p>
-          <a href="/donate" class="btn btn-success">Donate Now</a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row mt-4">
-
-      <!-- Learn More -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/ff9.jpg" alt="Learn More" class="img-fluid mb-3">
-          <h3>Learn More</h3>
-          <p>We are passionately committed to fostering the holistic well-being and development of children and young people.</p>
-          <a href="/about" class="btn btn-success">Learn More</a>
-        </div>
-      </div>
-
-      <!-- What We Do -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/whatwedo.jpg" alt="What We Do" class="img-fluid mb-3">
-          <h3>What We Do</h3>
-          <p>Explore our work in empowering young people through skills, education, conferences, and events.</p>
-          <a href="/what-we-do" class="btn btn-success">What We Do</a>
-        </div>
-      </div>
-
-      <!-- Get Involved -->
-      <div class="col-md-4 d-flex">
-        <div class="services text-center p-4 bg-white">
-          <img src="images/v2.JPG" alt="Get Involved" class="img-fluid mb-3">
-          <h3>Get Involved</h3>
-          <p>Explore volunteer opportunities, participate in events, or join our advocacy campaigns to actively support children and young people.</p>
-          <a href="/volunteer" class="btn btn-success">Get Involved</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-  <!-- ✅ Partners -->
-  <section class="ftco-section bg-light partners">
+  <!-- ══ GET INVOLVED ══════════════════════════════════════ -->
+  <section class="jb-section" style="background:#f8f9fa;">
     <div class="container">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-7 heading-section text-center ftco-animate">
-          <h2 class="mb-4">Our Partners & Supporters</h2>
-          <p>We are grateful to our partners and supporters who share our vision of empowering young people and communities.</p>
-        </div>
-      </div>
-      <div class="row text-center">
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://www.williamleechcharity.org.uk" target="_blank">
-          <img src="images/partners/wl.png" alt="william leech charity" class="img-fluid mb-3">
-        </a>
-      </div>
-      
-       <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://www.newcastle.gov.uk" target="_blank">
-          <img src="images/partners/blakelaw.png" alt="Blakelaw Council" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://www.coseng.co.uk" target="_blank">
-          <img src="images/partners/coseng.png" alt="Coseng Limited UK" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://avire.co.uk" target="_blank">
-          <img src="images/partners/avire.gif" alt="Avire UK" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://asdafoundation.org" target="_blank">
-          <img src="images/partners/asda.png" alt="Asda" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://www.knott-trust.co.uk" target="_blank">
-          <img src="images/partners/sjkt.png" alt="Sir James Knott Trust" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://www.ordafy.com" target="_blank">
-          <img src="images/partners/ordafy.png" alt="Ordafy" class="img-fluid mb-3">
-        </a>
-      </div>
-
-      <div class="col-md-2 col-6 ftco-animate">
-        <a href="https://fareshare.org.uk" target="_blank">
-          <img src="images/partners/fareshare.jpg" alt="FareShare" class="img-fluid mb-3">
-        </a>
-      </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ✅ Events -->
-  <section class="ftco-section bg-light">
-    <div class="container">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-7 text-center ftco-animate">
-          <h2 class="mb-4">Our Latest Events</h2>
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-6 text-center">
+          <p class="jb-eyebrow"><i class="fas fa-hands-helping mr-1"></i> Get Involved</p>
+          <div class="jb-divider mx-auto"></div>
+          <h2 class="jb-section-title">There's a Place for You Here</h2>
+          <p class="jb-lead">Whether you want to give, serve, or simply connect — join the Joybringers community today.</p>
         </div>
       </div>
       <div class="row">
-        <!-- Event 1 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/events/fk.jpeg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Fruit Kebabs Workshop (Healthy Snacks Session)</h3>
-              <p>A fun, hands-on healthy snacks session led by <strong>Donna Robinson</strong></p>
-              <p><a href="/events">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+        <!-- Food Bank -->
+        <div class="col-md-4 mb-4 d-flex">
+          <div class="jb-involve-card w-100">
+            <div class="jb-involve-icon" style="background:#fef9c3;">
+              <i class="fas fa-shopping-basket" style="color:#ca8a04;"></i>
             </div>
+            <h4>Join Our Food Bank</h4>
+            <p>Access our free food bank community. Request surplus food — 100% free — through our WhatsApp group. Open to all families across Newcastle and Gateshead.</p>
+            <a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t"
+               class="btn btn-warning btn-block font-weight-bold mt-auto" style="border-radius:8px;" target="_blank">
+              <i class="fab fa-whatsapp mr-2"></i>Join Food Bank Group
+            </a>
           </div>
         </div>
-        <!-- Event 2 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/event-2.jpg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Outdoor Fun Day</h3>
-              <p>The young people and families enjoying sack races, running, football, swimming, and playing in the park.</p>
-              <p><a href="/events">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+        <!-- Volunteer -->
+        <div class="col-md-4 mb-4 d-flex">
+          <div class="jb-involve-card w-100">
+            <div class="jb-involve-icon" style="background:#d1fae5;">
+              <i class="fas fa-hands-helping" style="color:#006526;"></i>
             </div>
+            <h4>Volunteer With Us</h4>
+            <p>Share your skills and time to change lives. We have 21 volunteer roles across digital, community, finance, and more — flexible hours, real impact.</p>
+            <a href="/volunteer" class="btn btn-success btn-block font-weight-bold mt-auto" style="border-radius:8px;">
+              <i class="fas fa-arrow-right mr-2"></i>See Open Roles
+            </a>
           </div>
         </div>
-        <!-- Event 3 -->
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a class="block-20" style="background-image: url('images/event-3.jpg');"></a>
-            <div class="text p-4 d-block">
-              <h3 class="heading mb-4">Community Funfair</h3>
-              <p>Young people having fun and networking together in a safe environment.</p>
-              <p><a href="/events">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+        <!-- Donate -->
+        <div class="col-md-4 mb-4 d-flex">
+          <div class="jb-involve-card w-100">
+            <div class="jb-involve-icon" style="background:#fee2e2;">
+              <i class="fas fa-heart" style="color:#dc2626;"></i>
             </div>
+            <h4>Donate Today</h4>
+            <p>£10 funds a workshop. £20 supports a month of skills training. £50 helps run a full community event reaching 30+ families. Every pound matters.</p>
+            <a href="/donate" class="btn btn-danger btn-block font-weight-bold mt-auto" style="border-radius:8px;">
+              <i class="fas fa-heart mr-2"></i>Make a Donation
+            </a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  
-  <!-- ✅ Footer -->
+  <!-- ══ PARTNERS ══════════════════════════════════════════ -->
+  <section class="jb-section jb-mission-wrap" style="padding-bottom:60px;">
+    <div class="container">
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-7 text-center">
+          <p class="jb-eyebrow"><i class="fas fa-handshake mr-1"></i> Our Community</p>
+          <div class="jb-divider mx-auto"></div>
+          <h2 class="jb-section-title">Partners &amp; Supporters</h2>
+          <p class="jb-lead">We are grateful to our partners who share our vision of empowering young people across the North East.</p>
+        </div>
+      </div>
+      <div class="row align-items-center justify-content-center">
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://www.williamleechcharity.org.uk" target="_blank">
+            <img src="images/partners/wl.png" alt="William Leech Charity" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://www.newcastle.gov.uk" target="_blank">
+            <img src="images/partners/blakelaw.png" alt="Blakelaw Council" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://www.coseng.co.uk" target="_blank">
+            <img src="images/partners/coseng.png" alt="Coseng Limited" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://avire.co.uk" target="_blank">
+            <img src="images/partners/avire.gif" alt="Avire UK" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://asdafoundation.org" target="_blank">
+            <img src="images/partners/asda.png" alt="ASDA Foundation" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://www.knott-trust.co.uk" target="_blank">
+            <img src="images/partners/sjkt.png" alt="Sir James Knott Trust" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://www.ordafy.com" target="_blank">
+            <img src="images/partners/ordafy.png" alt="Ordafy" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+        <div class="col-6 col-md-2 jb-partner-item">
+          <a href="https://fareshare.org.uk" target="_blank">
+            <img src="images/partners/fareshare.jpg" alt="FareShare" class="jb-partner-logo img-fluid">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA STRIP ════════════════════════════════════════ -->
+  <section class="jb-cta-strip">
+    <div class="container">
+      <h2>Ready to Make a Difference?</h2>
+      <p>Every contribution — your time, your skills, or a donation — directly changes a young person's life in our community.</p>
+      <div class="d-flex flex-wrap justify-content-center gap-3" style="gap:16px;">
+        <a href="/donate" class="btn btn-warning btn-lg mr-3" style="border-radius:8px;font-weight:700;">
+          <i class="fas fa-heart mr-2"></i>Donate Now
+        </a>
+        <a href="/volunteer" class="btn btn-outline-light btn-lg mr-3" style="border-radius:8px;font-weight:700;">
+          <i class="fas fa-hands-helping mr-2"></i>Become a Volunteer
+        </a>
+        <a href="/contact" class="btn btn-outline-light btn-lg" style="border-radius:8px;font-weight:700;">
+          <i class="fas fa-envelope mr-2"></i>Partner With Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════ -->
   <footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
     <div class="container">
       <div class="row align-items-center">
-        <!-- Left Column -->
         <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
           <p>
-            Email us: <a href="mailto:info@joybringerscharity.org" style="color:#fff;">info@joybringerscharity.org</a><br>
-            Call us: <a href="tel:+447500010317" style="color:#fff;">+447500010317</a>
+            Email: <a href="mailto:info@joybringerscharity.org" style="color:#fff;">info@joybringerscharity.org</a><br>
+            Call: <a href="tel:+447500010317" style="color:#fff;">+44 7500 010317</a>
           </p>
           <p>
             <strong>JOYBRINGERS LTD</strong><br>
-            (Company No. 15400265)<br>
-            Registered Charity Number 1212606
+            Company No. 15400265<br>
+            Registered Charity No. 1212606
           </p>
         </div>
-        <!-- Middle Column -->
         <div class="col-md-4 mb-4 mb-md-0 text-center">
           <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:80px;">
         </div>
-        <!-- Right Column -->
-        <div class="col-md-4 mb-4 mb-md-0 text-center text-md-centre">
-          <p>Follow us | <a href="/contact" style="color:#fff;">Contact Us</a></p>
+        <div class="col-md-4 text-center">
+          <p>Follow us &nbsp;|&nbsp; <a href="/contact" style="color:#fff;">Contact Us</a></p>
           <div class="footer-social">
-  <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-  <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram">
-    <i class="fab fa-instagram"></i>
-  </a>
-  <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin">
-    <i class="fab fa-linkedin-in"></i>
-  </a>
-  <a href="https://x.com/JoybringersC" target="_blank" class="twitter">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok">
-    <i class="fab fa-tiktok"></i>
-  </a>
-</div>
-          <p class="mt-2">
-            <a href="/terms" style="color:#fff;">Terms of use</a> /
-            <a href="/cookies" style="color:#fff;">Cookies</a> /
-            <a href="/privacy" style="color:#fff;">Privacy</a><br>
-
-  <button 
-    type="button"
-    onclick="window.showCmpBanner()" 
-    style="margin-top:10px; background:#fff; color:#006526; border:none; padding:8px 14px; border-radius:5px; font-weight:600; cursor:pointer;">
-    Cookie Settings
-  </button>
+            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/JoybringersC" target="_blank" class="twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok"><i class="fab fa-tiktok"></i></a>
+          </div>
+          <p class="mt-3">
+            <a href="/terms" style="color:#fff;">Terms</a> &nbsp;/&nbsp;
+            <a href="/cookies" style="color:#fff;">Cookies</a> &nbsp;/&nbsp;
+            <a href="/privacy" style="color:#fff;">Privacy</a>
           </p>
+          <button type="button" onclick="window.showCmpBanner()"
+            style="background:#fff;color:#006526;border:none;padding:7px 16px;border-radius:5px;font-weight:600;cursor:pointer;font-size:0.82rem;">
+            Cookie Settings
+          </button>
         </div>
       </div>
-      <!-- Bottom -->
       <div class="row mt-4">
         <div class="col text-center">
-          <p style="margin:0;">©2026 Joybringers. All Rights Reserved.</p>
+          <p style="margin:0;opacity:0.75;font-size:0.82rem;">©2026 Joybringers Ltd. All Rights Reserved.</p>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- ✅ Social Icons Styling -->
-  <style>
-    .footer-social a {
-  display: inline-flex;        /* centers child icon */
-  align-items: center;
-  justify-content: center;
-  margin: 0 5px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  text-align: center;
-  color: #fff;
-  font-size: 18px;
-  transition: 0.3s;
-}
+</div><!-- end page-wrapper -->
 
-.footer-social a:hover {
-  opacity: 0.8;
-}
+<!-- ══ LOADER ════════════════════════════════════════════ -->
+<div id="ftco-loader" class="show fullscreen">
+  <svg class="circular" width="48px" height="48px">
+    <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+    <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#007A4D"/>
+  </svg>
+</div>
 
-.footer-social a.facebook { background: #1877F2; }
-.footer-social a.instagram { background: #E4405F; }
-.footer-social a.linkedin { background: #0A66C2; }
-.footer-social a.twitter  { background: #1DA1F2; }
-.footer-social a.tiktok   { background: #000000; }
-  </style>
-
-   <!-- Loader -->
-  <div id="ftco-loader" class="show fullscreen">
-    <svg class="circular" width="48px" height="48px">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#007A4D"/>
-    </svg>
-  </div>
-
-  <!-- ✅ JS Files -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="js/main.js"></script>
-
-  <!-- ✅ Carousel Init -->
-  <script>
-    $('.owl-1').owlCarousel({
-      loop:true,
-      autoplay:true,
-      autoplayTimeout:5000,
-      items:1,
-      nav:false,
-      dots:true,
-      animateOut: 'fadeOut',
-      animateIn: 'fadeIn'
-    });
-  </script>
+<!-- ══ JS ════════════════════════════════════════════════ -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate-3.0.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/jquery.animateNumber.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/jquery.timepicker.min.js"></script>
+<script src="js/scrollax.min.js"></script>
+<script src="js/main.js"></script>
 <script src="js/cms-data.js"></script>
+
+<script>
+/* ── Hero carousel ── */
+$('.owl-1').owlCarousel({
+  loop: true, autoplay: true, autoplayTimeout: 5000,
+  items: 1, nav: false, dots: true,
+  animateOut: 'fadeOut', animateIn: 'fadeIn'
+});
+
+/* ── Dynamic upcoming events ── */
+(function() {
+  var MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONTH_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function todayStr() {
+    var d = new Date();
+    return d.toISOString().slice(0,10);
+  }
+
+  function formatDate(dateStr) {
+    var parts = dateStr.split('-');
+    var d = parseInt(parts[2], 10);
+    var m = parseInt(parts[1], 10) - 1;
+    var y = parseInt(parts[0], 10);
+    return { day: d, mon: MONTH_SHORT[m], full: d + ' ' + MONTH_LONG[m] + ' ' + y };
+  }
+
+  function eventTypeLabel(e) {
+    if (e.paidEvent) return 'Ticketed';
+    var v = (e.venue || '').toLowerCase();
+    if (v.indexOf('online') !== -1 || v.indexOf('teams') !== -1 || v.indexOf('zoom') !== -1) return 'Online';
+    return 'Free';
+  }
+
+  function eventImages() {
+    return [
+      'images/Award.jpg','images/co5.jpg','images/events/bg_3.jpg',
+      'images/events/parentconnect.jpeg','images/events/rp.jpg',
+      'images/events/mp.jpg','images/events/fk0.jpeg','images/co12.jpg'
+    ];
+  }
+
+  fetch('data/events.json')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var today = todayStr();
+      var upcoming = (data.items || [])
+        .filter(function(e){ return e.date >= today; })
+        .sort(function(a,b){ return a.date < b.date ? -1 : 1; })
+        .slice(0, 3);
+
+      var grid = document.getElementById('home-events-grid');
+      document.getElementById('events-loading').style.display = 'none';
+
+      if (!upcoming.length) {
+        grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">No upcoming events right now — check back soon!</div>';
+        return;
+      }
+
+      var imgs = eventImages();
+      var html = upcoming.map(function(e, i) {
+        var df = formatDate(e.date);
+        var label = eventTypeLabel(e);
+        var labelColour = label === 'Ticketed' ? '#b45309' : (label === 'Online' ? '#1e40af' : '#006526');
+        var img = e.image ? e.image : imgs[i % imgs.length];
+        var shortDesc = (e.description || '').length > 90 ? e.description.slice(0,90) + '…' : (e.description || '');
+        return '<div class="col-md-4 mb-4 d-flex">' +
+          '<div class="jb-event-card w-100">' +
+            '<div class="jb-event-img" style="background-image:url(\'' + img + '\');">' +
+              '<span class="jb-event-type-badge" style="background:' + labelColour + 'dd;">' + label + '</span>' +
+              '<div class="jb-event-date-pin"><span class="day">' + df.day + '</span><span class="mon">' + df.mon + '</span></div>' +
+            '</div>' +
+            '<div class="jb-event-body">' +
+              '<h5>' + e.title + '</h5>' +
+              '<p style="font-size:0.82rem;color:#6c757d;margin-bottom:10px;flex:none;">' + shortDesc + '</p>' +
+              '<div class="jb-event-meta">' +
+                '<span><i class="fas fa-clock"></i>' + e.time + '</span>' +
+                '<span><i class="fas fa-map-marker-alt"></i>' + (e.venue || 'TBC') + '</span>' +
+              '</div>' +
+              '<a href="/events" class="btn btn-outline-success btn-sm btn-block mt-3 font-weight-bold" style="border-radius:6px;">Register / Find Out More</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      grid.innerHTML = html;
+    })
+    .catch(function() {
+      document.getElementById('events-loading').innerHTML =
+        '<i class="fas fa-calendar-alt mr-2 text-muted"></i>Visit our <a href="/events">events page</a> to see what\'s coming up.';
+    });
+})();
+</script>
+
   </body>
 </html>
-
-
