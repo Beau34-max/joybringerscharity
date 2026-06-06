@@ -20,9 +20,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="css/custom.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AWhztww01sTTQ3t6C3dLu2DRxIACPGIOvt6uj3RifSXZ2scFnep5uyaVRD0kUu_MjE-gCr8gDFR3GpPh&currency=GBP&components=buttons"></script>
-
   <style>
     html, body { height:100%; margin:0; display:flex; flex-direction:column; background:#f7f8fa; font-family:'Open Sans',sans-serif; }
     nav.navbar { flex-shrink:0; }
@@ -522,6 +519,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/scrollax.min.js"></script>
 <script src="js/main.js"></script>
 
+<!-- PayPal SDK — loaded here (not in <head>) so it never blocks page render -->
+<script src="https://www.paypal.com/sdk/js?client-id=AWhztww01sTTQ3t6C3dLu2DRxIACPGIOvt6uj3RifSXZ2scFnep5uyaVRD0kUu_MjE-gCr8gDFR3GpPh&currency=GBP&components=buttons"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL      = "https://roofompdejyndlpqfrjl.supabase.co";
@@ -604,6 +604,7 @@ document.getElementById('giftAidCheck').addEventListener('change', updateSummary
 
 /* ── PayPal ── */
 function renderPayPal() {
+  if (typeof paypal === 'undefined') return; // SDK not loaded yet — skip silently
   const container = document.getElementById('paypal-button-container');
   container.innerHTML = '';
   paypal.Buttons({
@@ -653,9 +654,12 @@ function renderPayPal() {
   }).render('#paypal-button-container');
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', function() {
-  updateSummary();
+// Init — script is at bottom of body so DOM is already ready; call directly
+updateSummary();
+
+// Safety net: ensure the loader is always hidden even if main.js has any issue
+$(document).ready(function() {
+  $('#ftco-loader').delay(200).fadeOut('slow');
 });
 </script>
 
