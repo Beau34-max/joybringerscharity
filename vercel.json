@@ -6,6 +6,7 @@
     { "source": "/donate", "destination": "/donate.html" },
     { "source": "/volunteer", "destination": "/volunteer.html" },
     { "source": "/what-we-do", "destination": "/what-we-do.html" },
+    { "source": "/partner", "destination": "/partner.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/cookies", "destination": "/cookies.html" },
     { "source": "/thank-you", "destination": "/thank-you.html" },
