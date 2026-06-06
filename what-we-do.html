@@ -1,548 +1,608 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P6327VK4');</script>
-<!-- End Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-P6327VK4');</script>
+  <!-- End Google Tag Manager -->
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joybringers - What we do</title>
+  <title>What We Do — Joybringers</title>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
-
-  <!-- Your main template CSS -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Your brand overrides -->
   <link rel="stylesheet" href="css/custom.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <style>
-    /* Sticky Footer Layout */
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    nav.navbar {
-      flex-shrink: 0;
-    }
-    main {
-      flex: 1; /* Pushes footer down */
-    }
-    footer {
-      flex-shrink: 0;
-    }
+    body { background-color:#f4f7f4; font-family:'Open Sans',sans-serif; }
+
+    /* ── Hero ── */
+    .wwd-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:90px 0 52px; position:relative; }
+    .wwd-hero-eyebrow { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,.75) !important; margin-bottom:.5rem; display:block; }
+    .wwd-hero h1 { font-size:2.2rem; font-weight:700; line-height:1.25; margin-bottom:.85rem; color:#fff !important; text-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .wwd-hero p.lead { font-size:1rem; color:rgba(255,255,255,.88) !important; max-width:520px; margin-bottom:1.4rem; }
+    .wwd-hero-wave { position:absolute; bottom:-1px; left:0; width:100%; overflow:hidden; line-height:0; }
+    .wwd-hero-wave svg { display:block; }
+    @media(max-width:576px){ .wwd-hero { padding:80px 0 40px; } .wwd-hero h1 { font-size:1.8rem; } }
+
+    /* ── Scrolled navbar ── */
+    .ftco-navbar-light.scrolled .nav-item.active > a,
+    .ftco-navbar-light.scrolled .nav-link.active { color:#006526 !important; }
+    .ftco-navbar-light.scrolled .navbar-brand     { color:#006526 !important; }
+
+    /* ── Programmes strip ── */
+    .wwd-programmes { padding:60px 0 50px; background:#fff; }
+    .wwd-prog-card { text-align:center; padding:28px 18px; border-radius:12px; border:1px solid #e4edea; background:#f9fdf9; transition:transform .2s,box-shadow .2s; height:100%; }
+    .wwd-prog-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,77,26,.1); }
+    .wwd-prog-icon { width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#006526,#00883a); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+    .wwd-prog-icon i { color:#fff; font-size:1.3rem; }
+    .wwd-prog-title { font-size:.95rem; font-weight:700; color:#003d14; margin-bottom:6px; }
+    .wwd-prog-desc { font-size:.82rem; color:#666; line-height:1.5; margin:0; }
+
+    /* ── Section headers ── */
+    .wwd-section { padding:60px 0; }
+    .wwd-section.alt { background:#edf5ef; }
+    .wwd-divider { width:48px; height:4px; background:#006526; border-radius:2px; margin:0 0 12px; }
+    .wwd-section-title { font-size:1.65rem; font-weight:800; color:#003d14; margin-bottom:6px; }
+    .wwd-section-sub { font-size:.9rem; color:#555; margin-bottom:40px; }
+
+    /* ── Story cards ── */
+    .wwd-story { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.07); margin-bottom:40px; }
+    .wwd-story-img { height:340px; }
+    .wwd-story-img .carousel,
+    .wwd-story-img .carousel-inner,
+    .wwd-story-img .carousel-item { height:100%; }
+    .wwd-story-img img { height:340px; object-fit:cover; width:100%; border-radius:0; }
+    .wwd-story-body { padding:32px 36px; display:flex; flex-direction:column; justify-content:center; }
+    .wwd-story-badges { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+    .wwd-badge { font-size:.7rem; font-weight:700; padding:4px 12px; border-radius:20px; }
+    .wwd-badge.digital   { background:#dbeafe; color:#1e40af; }
+    .wwd-badge.community { background:#dcfce7; color:#166534; }
+    .wwd-badge.career    { background:#e0e7ff; color:#3730a3; }
+    .wwd-badge.outdoor   { background:#ccfbf1; color:#065f46; }
+    .wwd-badge.wellbeing { background:#ffedd5; color:#9a3412; }
+    .wwd-badge.milestone { background:#fef9c3; color:#854d0e; }
+    .wwd-badge.date { background:#f1f5f9; color:#475569; }
+    .wwd-story-title { font-size:1.15rem; font-weight:700; color:#003d14; margin-bottom:10px; line-height:1.3; }
+    .wwd-story-text { font-size:.87rem; color:#444; line-height:1.7; margin-bottom:14px; }
+    .wwd-story-quote { background:#f0fdf4; border-left:3px solid #006526; padding:12px 16px; border-radius:0 8px 8px 0; font-size:.85rem; font-style:italic; color:#336645; margin-top:4px; }
+    .wwd-story-quote i { color:#006526; margin-right:6px; }
+    @media(max-width:767px){ .wwd-story-body { padding:24px 20px; } .wwd-story-img, .wwd-story-img img { height:240px; } }
+
+    /* ── Video section ── */
+    .wwd-videos { padding:60px 0; background:#fff; }
+    .wwd-video-frame { border-radius:12px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,.1); margin-bottom:24px; }
+    .wwd-video-frame iframe { width:100%; height:210px; border:none; display:block; }
+
+    /* ── CTA strip ── */
+    .wwd-cta { background:linear-gradient(135deg,#e8f5ee 0%,#d0eddb 55%,#c4e8d2 100%); padding:60px 0; text-align:center; border-top:1px solid #b6ddc5; }
+    .wwd-cta h2 { font-size:1.9rem; font-weight:700; color:#003d14 !important; margin-bottom:10px; }
+    .wwd-cta p  { color:rgba(0,61,20,.72); font-size:1rem; max-width:500px; margin:0 auto 28px; }
   </style>
-  <style>
-    body { background-color: #f9f9f9; font-family: 'Open Sans', sans-serif; }
-    .event-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 30px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .event-card img { width: 100%; height: 220px; object-fit: cover; }
-    .modal-dialog { max-width: 700px; }
-    .modal-body label { font-weight: 600; margin-bottom: 5px; }
-    .modal-body .form-group { margin-bottom: 15px; }
-    .thank-you-message { display: none; text-align: center; padding: 20px; font-weight: bold; color: green; }
-    footer { background:#006526; color:#fff; padding:30px 0; font-size:14px; }
-    .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:36px; height:36px; border-radius:50%; color:#fff; font-size:16px; transition:0.3s; }
-    .footer-social a:hover { opacity:0.8; }
-    .footer-social a.facebook { background:#1877F2; }
-    .footer-social a.instagram { background:#E4405F; }
-    .footer-social a.linkedin { background:#0A66C2; }
-    .footer-social a.twitter { background:#1DA1F2; }
-    .footer-social a.tiktok { background:#000; }
-  </style>
-
-  <style>
-  .section-title {
-    text-align: center;
-    font-size: 2rem;
-    color: #006526;
-    font-weight: 700;
-    margin: 50px 0 30px;
-  }
-
-  .event-carousel img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  .video-section {
-    background-color: #eafff1;
-    padding: 60px 20px;
-  }
-
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding-top: 30px;
-  }
-
-  .video-grid iframe {
-    width: 100%;
-    height: 220px;
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-</style>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-
 </head>
 <body>
-   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<div class="page-wrapper">
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">Joybringers</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
-      <span class="oi oi-menu"></span> Menu
-    </button>
-    <div class="collapse navbar-collapse" id="ftco-nav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
-        <li class="nav-item active"><a href="/what-we-do" class="nav-link">What We Do</a></li>
-        <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
-        <li class="nav-item"><a href="/volunteer" class="nav-link">Volunteer</a></li>
-        <!-- <li class="nav-item"><a href="partner" class="nav-link">Partnerships</a></li>-->
-        <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
-        <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<!-- END nav -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6327VK4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
+  <div class="page-wrapper">
 
-<section class="ftco-section" style="background-color: #fff;">
-  <div class="container">
-    <h2 class="section-title text-center mb-5">Sucess Stories</h2>
-
-   <!-- 6-Week R-Programming Coding Bootcamp -->
-<div class="row mb-5">
-  <div class="col-md-6">
-    <div id="carouselRProgrammingBootcamp" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="images/events/r-programming-1.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="R-Programming Coding Bootcamp">
-        </div>
-        <div class="carousel-item">
-          <img src="images/events/r-programming-2.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Young People Learning R Programming">
-        </div>
-        <div class="carousel-item">
-          <img src="images/events/r-programming-3.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Hands-on Coding Training Session">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <h5><strong>6-Week R-Programming Coding Bootcamp</strong></h5>
-    <p><strong>Date:</strong> 2nd May - 6th June 2026</p>
-    <p>
-      Joybringers is delivering a <strong>6-week beginner-friendly R-Programming Coding Bootcamp</strong> designed to help participants build confidence and develop practical digital skills in a supportive learning environment. The programme introduces learners to the foundations of <strong>R programming</strong>, helping them understand how coding can be used for problem-solving, data exploration, and future career development.
-    </p>
-    <p>
-      Each Saturday session included <strong>hands-on learning</strong>, guided practice, and fun coding challenges that encourage participants to grow step by step. The bootcamp supports young people and beginners to strengthen their confidence, discover new technology skills, and take another positive step towards Joybringers' mission to help people <strong>Believe, Belong, and Become</strong>.
-    </p>
-  </div>
-</div> 
-
-    <!-- 6-Weeks Data Analytics Bootcamp -->
-<div class="row mb-5">
-  <div class="col-md-6">
-    <div id="carouselDataBootcamp" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="images/events/yb2.jpeg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Data Analytics Bootcamp">
-        </div>
-        <div class="carousel-item">
-          <img src="images/events/yb1.png" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Data Analytics Training Session">
-        </div>
-        <div class="carousel-item">
-          <img src="images/events/yb.jpeg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Young People in Data Analytics Bootcamp">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <h5><strong>6-Weeks Data Analytics Bootcamp</strong></h5>
-    <p><strong>Date:</strong> Saturday, 21st February 2026</p>
-    <p>
-      Joybringers successfully delivered a <strong>hands-on Data Analytics Bootcamp</strong> for young people aged <strong>16–25</strong>, introducing participants to practical digital skills in <strong>Excel</strong>, <strong>data cleaning</strong>, <strong>data analysis</strong>, and <strong>Power BI</strong>. The session gave learners the opportunity to explore real datasets, ask questions, and build confidence in using data tools for decision-making and problem-solving.
-    </p>
-    <p>
-      Throughout the bootcamp, participants developed their understanding of how data can be used to generate insights, present findings clearly, and support future career opportunities in technology and business. The training created a supportive learning environment where young people were encouraged to grow in confidence, think critically, and strengthen their digital skills — reflecting Joybringers’ mission to help young people <strong>Believe, Belong, and Become</strong>.
-    </p>
-  </div>
-</div>
-
-    <!-- 1️⃣ Fruit Kebabs Workshop -->
-<div class="row mb-5">
-  <div class="col-md-6">
-    <div id="carouselFruitKebabs" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-      <div class="carousel-inner">
-        <div class="carousel-item active"><img src="images/events/fk.jpeg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Fruit Kebabs Workshop"></div>
-        <div class="carousel-item"><img src="images/events/fk4.jpeg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Healthy Snacks Session"></div>
-        <div class="carousel-item"><img src="images/events/fk3.jpeg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Donna Robinson"></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <h5><strong>Fruit Kebabs Workshop (Healthy Snacks Session)</strong></h5>
-    <p><strong>Date:</strong> Saturday, 7th February 2026</p>
-    <p>
-      A fun, hands-on healthy snacks session led by <strong>Donna Robinson</strong>. Young people learnt basic food
-      preparation skills and create colourful fruit kebabs while exploring healthy eating tips in a friendly, supportive environment.
-    </p>
-    <p>During the session, young people created colourful and nutritious fruit kebabs, exploring a variety of fresh fruits while building confidence, creativity, and teamwork. The workshop encouraged curiosity around food, promoted wellbeing, and provided a safe space for learning, connection, and enjoyment — perfectly reflecting Joybringers' mission to help young people Believe, Belong, and Become.</p>
-  </div>
-</div>
-
-    <!--  Joybringers coding -->
-    <div class="row mb-5">
-      <div class="col-md-6 order-md-2">
-        <div id="carousel2" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/code.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Office Opening"></div>
-            <div class="carousel-item"><img src="images/code6.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Team Setup"></div>
-            <div class="carousel-item"><img src="images/code11.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Team Setup"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 order-md-1">
-        <h5><strong>6 Weeks Coding & Data Analysis Training</strong></h5>
-        <p><strong>Date:</strong> Nov 1 to Dec 6, 2025</p>
-        <p>
-  Joybringers successfully delivered a <strong>Coding & Data Training Programme</strong> for young people aged <strong>7-15</strong>, offering six weeks of hands-on learning in coding, digital skills, and problem-solving. Hosted at our <strong>NEON Office</strong>, the sessions helped participants build real projects and explore technology with growing confidence.
-</p>
-
-<p>
-  Parents shared how their children gained <strong>creativity</strong>, <strong>self-belief</strong>, and a renewed passion for learning — a true reflection of our mission to help young people <strong>Believe, Belong, and Become</strong>. This programme continues to inspire the next generation of young innovators.
-</p>
-      </div>
-    </div>
-    
-    <!-- 1️⃣ Youth Boat Sailing -->
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <div id="carousel1" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/boat2.JPG" class="d-block w-100 rounded shadow" style="height: 400px;object-fit: cover;" alt="Youth Boat Sailing"></div>
-            <div class="carousel-item"><img src="images/boat.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Boat Fun"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h5><strong>Youth Boat Sailing 2025</strong></h5>
-        <p><strong>Date:</strong> Sunday, 28th September 2025</p>
-        <p>Joybringers Charity hosted an unforgettable <strong>Youth Boat Cruise</strong> for young people aged 14-18. The exclusive cruise was filled with games, friendships, and fun memories.</p>
-        <p>Spaces filled quickly, showing how eager our young people are to connect and create lasting memories together.</p>
-      </div>
-    </div>
-
-    <!-- 2️⃣ Joybringers Charity New Office -->
-    <div class="row mb-5">
-      <div class="col-md-6 order-md-2">
-        <div id="carousel2" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/of.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Office Opening"></div>
-            <div class="carousel-item"><img src="images/of1.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Team Setup"></div>
-            <div class="carousel-item"><img src="images/of2.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Team Setup"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 order-md-1">
-        <h5><strong>Joybringers Charity New Office</strong></h5>
-        <p><strong>Date:</strong> 4th September 2025</p>
-        <p>Joybringers Charity proudly moved into our new office space at <strong>Neon Quorum Business Park, NE12 8BU</strong>. This milestone strengthens our capacity to support young people across Newcastle upon Tyne and beyond.</p>
-        <p>We extend heartfelt thanks to <strong>Avire UK</strong> for making this possible. Your support helps us create brighter futures.</p>
-      </div>
-    </div>
-
-    <!-- 3️⃣ Blakelaw Family Fun Day -->
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <div id="carousel3" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/ff.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Fun Day"></div>
-            <div class="carousel-item"><img src="images/ff2.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Games"></div>
-           <div class="carousel-item"><img src="images/ff3.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Games"></div>
-          <div class="carousel-item"><img src="images/ff4.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Games"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h5><strong>Blakelaw Family Fun Day - 16th August 2025</strong></h5>
-        <p>Joybringers Charity, with support from Blakelaw Council, hosted a vibrant Family Fun Day at Blakelaw Park. Families enjoyed dancing, barbecue, bouncy castles, and face painting.</p>
-        <p>The event was filled with joy, connection, and community spirit — a true reflection of our mission to bring happiness. One attendee shared, <em>“Please, bring this joy back to us again!”</em></p>
-      </div>
-    </div>
-
-    <!-- 4️⃣ Outdoor Fun Day -->
-    <div class="row mb-5">
-      <div class="col-md-6 order-md-2">
-        <div id="carousel4" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/mp.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Outdoor Fun Day"></div>
-            <div class="carousel-item"><img src="images/mp1.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Family Games"></div>
-             <div class="carousel-item"><img src="images/mp7.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Family Games"></div>
-            <div class="carousel-item"><img src="images/mp3.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Family Games"></div>
-            <div class="carousel-item"><img src="images/mp4.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Family Games"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 order-md-1">
-        <h5><strong>Outdoor Fun Day on 31st May 2025 at Carlisle Park</strong></h5>
-        <p>Families and young people enjoyed sack races, football, and swimming. Over 80 people joined in this day of laughter and connection.</p>
-        <p>These community days foster confidence, friendships, and joy. Thank you to everyone who joined and helped make it special. <a href="http://127.0.0.1:5500/donate">Donate</a></p>
-      </div>
-    </div>
-
-    <!-- 5️⃣ Multi-Skilled Workshop -->
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <div id="carousel5" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/ms.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Workshop"></div>
-            <div class="carousel-item"><img src="images/ms2.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Participants"></div>
-             <div class="carousel-item"><img src="images/ms3.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Participants"></div>
-            <div class="carousel-item"><img src="images/ms5.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Participants"></div>
-         
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h5><strong>Multi-Skilled Workshop - 17th April 2025</strong></h5>
-        <p>The Joybringers Charity hosted a Multi-Skilled Workshop for children and young people in Newcastle upon Tyne. Participants explored web design, coding, dance, and public speaking.</p>
-        <p>One young attendee shared: <em>“I didn't know I could code or dance in front of people — now I feel like I can do anything!”</em></p>
-        <p>This workshop empowered creativity and confidence, helping young people dream big and build practical skills.</p>
-      </div>
-    </div>
-
-    <!-- 6️⃣ Excursion to Alnwick Gardens -->
-    <div class="row mb-5">
-      <div class="col-md-6 order-md-2">
-        <div id="carousel6" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/ag.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Alnwick Gardens"></div>
-            <div class="carousel-item"><img src="images/ag2.JPG" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Excursion"></div>
-             <div class="carousel-item"><img src="images/ag4.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Excursion"></div>        
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 order-md-1">
-        <h5><strong>Excursion to Alnwick Gardens - 27th December 2024</strong></h5>
-        <p>Joybringers Charity took children and young people on a day trip to Alnwick Gardens. It was filled with fun, laughter, and teamwork.</p>
-        <p>One attendee said, <em>“I've never seen anything like this before. It was so much fun, and I learnt so much about plants and teamwork.”</em></p>
-        <p>We're committed to enriching experiences that inspire and empower young people.</p>
-      </div>
-    </div>
-
-    <!-- 7️⃣ Scratch Coding Workshops -->
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <div id="carousel7" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/team.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Scratch Workshop"></div>
-            <div class="carousel-item"><img src="images/code5.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Coding Fun"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h5><strong>Scratch Coding Workshops - August 2024</strong></h5>
-        <p><strong>Dates:</strong> 22nd & 31st August 2024</p>
-        <p>Engaging online and in-person workshops teaching young people the basics of coding using Scratch. Participants created their own games and animations.</p>
-        <p>“By the end of the session, I could build my own simple animation!”</p>
-      </div>
-    </div>
-
-    <!-- 8️⃣ CV Clinic and Career Talk -->
-    <div class="row mb-5">
-      <div class="col-md-6 order-md-2">
-        <div id="carousel8" class="carousel slide carousel-fade" data-ride="carousel" data-interval="2000">
-          <div class="carousel-inner">
-            <div class="carousel-item active"><img src="images/co.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="CV Clinic"></div>
-            <div class="carousel-item"><img src="images/co3.jpg" class="d-block w-100 rounded shadow" style="height: 400px; object-fit: cover;" alt="Career Talk"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 order-md-1">
-        <h5><strong>CV Clinic and Career Talk - July & May 2024</strong></h5>
-        <p>Our Free CV Clinic and Mock Interview Workshop featured expert speakers who shared interview and CV tips. It boosted participant confidence for job readiness.</p>
-        <p>Followed by our Online Career Talk on 25th May 2024 — helping young people prepare for the future.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- Section: Video Highlights with 9 Videos -->
-<section class="video-section py-5" style="background-color: #e6f9ec;">
-  <div class="container">
-    <h2 class="section-title mt-3 mb-4 text-center">Event Highlights</h2>
-    <div class="row">
-      <!-- Video 1 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/Tsp5GV8Z2S4?si=X_dl2M6tllAcYnqH" title="Joybringers Event 1" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 1 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/xxtXMN8kMTc?si=vEtT96d8SnsVI5Ol" title="Joybringers Event 1" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 2 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/3vCKEPvW_Vc?si=NTlT6bnNei80mOXO" title="Joybringers Event 2" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 3 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/Tj_PxqaKKVY?si=3-nJe5yPjGpJCVHc" title="Joybringers Testimonial" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 4 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/xR3qLy_H7Sk?si=68BQ5Yuq7NTK5-R3" title="Event 4" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 5 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/PbI4VBUfcMw?si=jvdPClghMFt-jva4" title="Event 5" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 6 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/Ze--HbmysxA?si=nQMDAbqrj2FRKSSp" title="Event 6" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 7 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/e37kGqHrojw?si=PswMuPYjhdRgZAX1" title="Event 7" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 8 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/MUqXVpub-yI?si=WeRdOENbE2H3kQ9v" title="YouTube video player" title="Event 8" allowfullscreen></iframe>
-        </div>
-      </div>
-      <!-- Video 9 -->
-      <div class="col-md-4 mb-4">
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/qSuTLy_UHZo?si=4CCWQJBfpTWYdRIE" title="Event 9" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-  <!-- ═══ FOOTER ════════════════════════════════════════════ -->
-  <footer class="jb-footer">
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-lg-4 col-md-6 mb-5 mb-lg-0 pr-lg-5">
-          <div class="jb-footer-brand">JOYBRINGERS</div>
-          <p class="jb-footer-tagline">Helping Young People Believe, Belong, and Become.</p>
-          <p class="jb-footer-sub">A registered charity empowering children and young people aged 7–25 across Newcastle and the North East through skills, education, and community.</p>
-          <div class="footer-social mt-4">
-            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/JoybringersC" target="_blank" class="twitter" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Quick Links</h6>
-          <ul class="jb-footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/what-we-do">What We Do</a></li>
-            <li><a href="/events">Events</a></li>
-            <li><a href="/volunteer">Volunteer</a></li>
-            <li><a href="/donate">Donate</a></li>
-            <li><a href="/contact">Contact</a></li>
+    <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="/">Joybringers</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item active"><a href="/what-we-do" class="nav-link">What We Do</a></li>
+            <li class="nav-item"><a href="/events" class="nav-link">Events</a></li>
+            <li class="nav-item"><a href="/volunteer" class="nav-link">Volunteer</a></li>
+            <li class="nav-item"><a href="/donate" class="nav-link">Donate</a></li>
+            <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Get Involved</h6>
-          <ul class="jb-footer-links">
-            <li><a href="/volunteer">Volunteer With Us</a></li>
-            <li><a href="/donate">Make a Donation</a></li>
-            <li><a href="/contact">Corporate Partnership</a></li>
-            <li><a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" target="_blank">Join Our Food Bank</a></li>
-            <li><a href="/events">Upcoming Events</a></li>
-          </ul>
-          <div class="mt-3">
-            <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:52px;border-radius:6px;background:#fff;padding:4px 8px;">
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <h6 class="jb-footer-heading">Contact Us</h6>
-          <ul class="jb-footer-contact">
-            <li><i class="fas fa-envelope"></i><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></li>
-            <li><i class="fas fa-phone"></i><a href="tel:+447500010317">+44 7500 010317</a></li>
-            <li><i class="fas fa-map-marker-alt"></i>Suite 3, Neon, Quorum Business Park, Newcastle upon Tyne</li>
-          </ul>
-          <div class="mt-4 p-3" style="background:rgba(255,255,255,0.06);border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
-            <p style="font-size:0.75rem;margin:0;opacity:0.7;line-height:1.6;">
-              <strong style="color:#a7f3c5;">JOYBRINGERS LTD</strong><br>
-              Company No. 15400265<br>
-              Registered Charity No. 1212606
-            </p>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <!-- ══ HERO ════════════════════════════════════════════════ -->
+    <section class="wwd-hero">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-7">
+            <p class="wwd-hero-eyebrow"><i class="fas fa-seedling mr-1"></i> Our Impact</p>
+            <h1>What We Do</h1>
+            <p class="lead">From coding bootcamps and career workshops to community fun days and a weekly food bank — we're creating real opportunities for young people aged 7–25 across Newcastle and the North East.</p>
+            <a href="#stories" class="btn btn-light btn-lg px-4 font-weight-bold" style="color:#006526;">
+              See Our Stories &nbsp;<i class="fas fa-arrow-down"></i>
+            </a>
           </div>
         </div>
       </div>
-      <hr style="border-color:rgba(255,255,255,0.12);margin-bottom:24px;">
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
-          <p style="margin:0;font-size:0.8rem;color:rgba(255,255,255,0.65);">&copy;2026 Joybringers Ltd. All Rights Reserved. Registered in England &amp; Wales.</p>
+      <div class="wwd-hero-wave">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none" height="60" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 C300,80 900,-20 1200,30 L1200,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ══ OUR PROGRAMMES ═══════════════════════════════════════ -->
+    <section class="wwd-programmes">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="wwd-divider mx-auto"></div>
+          <h2 class="wwd-section-title">Our Programmes</h2>
+          <p class="wwd-section-sub" style="margin-bottom:0;">Six core areas where we make a difference every week.</p>
         </div>
-        <div class="col-md-6 text-center text-md-right">
-          <a href="/terms" class="jb-footer-legal">Terms of Use</a>
-          <a href="/privacy" class="jb-footer-legal">Privacy Policy</a>
-          <a href="/cookies" class="jb-footer-legal">Cookies</a>
-          <button type="button" onclick="window.showCmpBanner()" class="jb-footer-cookie-btn">
-            <i class="fas fa-cookie-bite mr-1"></i>Cookie Settings
-          </button>
+        <div class="row">
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-laptop-code"></i></div>
+              <p class="wwd-prog-title">Digital Skills &amp; Coding</p>
+              <p class="wwd-prog-desc">Bootcamps in Python, R, data analytics, and web design.</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-users"></i></div>
+              <p class="wwd-prog-title">Community Events</p>
+              <p class="wwd-prog-desc">Fun days, sports, excursions, and cultural celebrations.</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-shopping-basket"></i></div>
+              <p class="wwd-prog-title">Weekly Food Bank</p>
+              <p class="wwd-prog-desc">Free weekly food support for families in the North East.</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-briefcase"></i></div>
+              <p class="wwd-prog-title">Career Development</p>
+              <p class="wwd-prog-desc">CV clinics, mock interviews, and career talks.</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-mountain"></i></div>
+              <p class="wwd-prog-title">Outdoor Experiences</p>
+              <p class="wwd-prog-desc">Sailing, excursions, and adventures that build confidence.</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="wwd-prog-card">
+              <div class="wwd-prog-icon"><i class="fas fa-hand-holding-heart"></i></div>
+              <p class="wwd-prog-title">Youth Empowerment</p>
+              <p class="wwd-prog-desc">Well-being, self-expression, and public speaking workshops.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </section>
 
+    <!-- ══ SUCCESS STORIES ══════════════════════════════════════ -->
+    <section class="wwd-section alt" id="stories">
+      <div class="container">
+        <div class="wwd-divider"></div>
+        <h2 class="wwd-section-title">Success Stories</h2>
+        <p class="wwd-section-sub">Real programmes. Real people. Real impact.</p>
 
- <!-- Loader -->
+        <!-- R-Programming Bootcamp -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselRProgrammingBootcamp" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/events/r-programming-1.JPG" alt="R-Programming Coding Bootcamp"></div>
+                  <div class="carousel-item"><img src="images/events/r-programming-2.JPG" alt="Young People Learning R Programming"></div>
+                  <div class="carousel-item"><img src="images/events/r-programming-3.JPG" alt="Hands-on Coding Training Session"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge digital"><i class="fas fa-laptop-code mr-1"></i>Digital Skills</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>May–June 2026</span>
+              </div>
+              <h3 class="wwd-story-title">6-Week R-Programming Coding Bootcamp</h3>
+              <p class="wwd-story-text">A beginner-friendly bootcamp introducing participants to R programming — covering data exploration, coding fundamentals, and problem-solving. Each Saturday session included hands-on challenges in a supportive environment, helping young people build confidence and practical digital skills.</p>
+              <p class="wwd-story-text">The programme supports Joybringers' mission to help people <strong>Believe, Belong, and Become</strong> by equipping learners with tools for future career development.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Analytics Bootcamp -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselDataBootcamp" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/events/yb2.jpeg" alt="Data Analytics Bootcamp"></div>
+                  <div class="carousel-item"><img src="images/events/yb1.png" alt="Data Analytics Training Session"></div>
+                  <div class="carousel-item"><img src="images/events/yb.jpeg" alt="Young People in Data Analytics Bootcamp"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge digital"><i class="fas fa-chart-bar mr-1"></i>Digital Skills</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>February 2026</span>
+              </div>
+              <h3 class="wwd-story-title">6-Week Data Analytics Bootcamp</h3>
+              <p class="wwd-story-text">Hands-on training for young people aged 16–25 in Excel, data cleaning, data analysis, and Power BI. Participants explored real datasets and built confidence in using data tools for decision-making and career development.</p>
+              <p class="wwd-story-text">The bootcamp created a supportive space where young people were encouraged to think critically and strengthen their digital skills.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fruit Kebabs Workshop -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselFruitKebabs" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/events/fk.jpeg" alt="Fruit Kebabs Workshop"></div>
+                  <div class="carousel-item"><img src="images/events/fk4.jpeg" alt="Healthy Snacks Session"></div>
+                  <div class="carousel-item"><img src="images/events/fk3.jpeg" alt="Donna Robinson"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge wellbeing"><i class="fas fa-apple-alt mr-1"></i>Well-being</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>February 2026</span>
+              </div>
+              <h3 class="wwd-story-title">Fruit Kebabs Workshop — Healthy Snacks Session</h3>
+              <p class="wwd-story-text">A fun, hands-on healthy snacks session led by <strong>Donna Robinson</strong>. Young people learnt food preparation skills, created colourful fruit kebabs, and explored healthy eating tips in a friendly, supportive environment promoting wellbeing and teamwork.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>A safe space for learning, connection, and enjoyment — perfectly reflecting our mission to help young people Believe, Belong, and Become.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coding & Data Analysis Training -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselCoding" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/code.jpg" alt="Coding Training"></div>
+                  <div class="carousel-item"><img src="images/code6.jpg" alt="Team Setup"></div>
+                  <div class="carousel-item"><img src="images/code11.jpg" alt="Team Setup"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge digital"><i class="fas fa-laptop-code mr-1"></i>Digital Skills</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>Nov–Dec 2025</span>
+              </div>
+              <h3 class="wwd-story-title">6-Week Coding &amp; Data Analysis Training</h3>
+              <p class="wwd-story-text">A Coding &amp; Data Training Programme for young people aged 7–15, delivered over six weeks at our NEON Office. Participants built real projects and explored technology with growing confidence.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>"My child gained creativity, self-belief, and a renewed passion for learning." — Parent</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Youth Boat Sailing -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselBoat" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/boat2.JPG" alt="Youth Boat Sailing"></div>
+                  <div class="carousel-item"><img src="images/boat.JPG" alt="Boat Fun"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge outdoor"><i class="fas fa-water mr-1"></i>Outdoor Adventures</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>September 2025</span>
+              </div>
+              <h3 class="wwd-story-title">Youth Boat Sailing 2025</h3>
+              <p class="wwd-story-text">An unforgettable Youth Boat Cruise for young people aged 14–18, filled with games, new friendships, and fun memories. Spaces filled quickly — showing how eager our young people are to connect and create lasting memories together.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Office -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselOffice" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/of.jpg" alt="Office Opening"></div>
+                  <div class="carousel-item"><img src="images/of1.jpg" alt="Team Setup"></div>
+                  <div class="carousel-item"><img src="images/of2.jpg" alt="Team Setup"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge milestone"><i class="fas fa-star mr-1"></i>Milestone</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>September 2025</span>
+              </div>
+              <h3 class="wwd-story-title">Joybringers Charity New Office</h3>
+              <p class="wwd-story-text">Joybringers moved into our new office at <strong>Neon Quorum Business Park, NE12 8BU</strong> — strengthening our capacity to support young people across Newcastle and beyond.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>Heartfelt thanks to <strong>Avire UK</strong> for making this milestone possible. Your support helps us create brighter futures.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blakelaw Family Fun Day -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselBlakelaw" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/ff.JPG" alt="Fun Day"></div>
+                  <div class="carousel-item"><img src="images/ff2.JPG" alt="Games"></div>
+                  <div class="carousel-item"><img src="images/ff3.JPG" alt="Games"></div>
+                  <div class="carousel-item"><img src="images/ff4.JPG" alt="Games"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge community"><i class="fas fa-users mr-1"></i>Community</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>August 2025</span>
+              </div>
+              <h3 class="wwd-story-title">Blakelaw Family Fun Day</h3>
+              <p class="wwd-story-text">With support from Blakelaw Council, Joybringers hosted a vibrant Family Fun Day at Blakelaw Park. Families enjoyed dancing, barbecue, bouncy castles, and face painting in a day full of joy, connection, and community spirit.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>"Please, bring this joy back to us again!" — Community Attendee</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outdoor Fun Day -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselOutdoor" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/mp.jpg" alt="Outdoor Fun Day"></div>
+                  <div class="carousel-item"><img src="images/mp1.jpg" alt="Family Games"></div>
+                  <div class="carousel-item"><img src="images/mp7.jpg" alt="Family Games"></div>
+                  <div class="carousel-item"><img src="images/mp3.jpg" alt="Family Games"></div>
+                  <div class="carousel-item"><img src="images/mp4.jpg" alt="Family Games"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge community"><i class="fas fa-sun mr-1"></i>Community</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>May 2025</span>
+              </div>
+              <h3 class="wwd-story-title">Outdoor Fun Day — Carlisle Park</h3>
+              <p class="wwd-story-text">Over 80 people joined for sack races, football, and swimming at Carlisle Park on 31st May 2025. These community days foster confidence, friendships, and joy for families across the North East.</p>
+              <a href="/donate" class="btn btn-outline-success btn-sm mt-2"><i class="fas fa-heart mr-1"></i>Support Events Like This</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-Skilled Workshop -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselMulti" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/ms.JPG" alt="Workshop"></div>
+                  <div class="carousel-item"><img src="images/ms2.JPG" alt="Participants"></div>
+                  <div class="carousel-item"><img src="images/ms3.JPG" alt="Participants"></div>
+                  <div class="carousel-item"><img src="images/ms5.JPG" alt="Participants"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge career"><i class="fas fa-star mr-1"></i>Skills &amp; Empowerment</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>April 2025</span>
+              </div>
+              <h3 class="wwd-story-title">Multi-Skilled Workshop</h3>
+              <p class="wwd-story-text">Participants explored web design, coding, dance, and public speaking in a single day of discovery. The workshop empowered creativity and confidence, helping young people dream big and build practical skills.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>"I didn't know I could code or dance in front of people — now I feel like I can do anything!" — Young Attendee</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alnwick Gardens -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselAlnwick" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/ag.JPG" alt="Alnwick Gardens"></div>
+                  <div class="carousel-item"><img src="images/ag2.JPG" alt="Excursion"></div>
+                  <div class="carousel-item"><img src="images/ag4.jpg" alt="Excursion"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge outdoor"><i class="fas fa-tree mr-1"></i>Outdoor Adventures</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>December 2024</span>
+              </div>
+              <h3 class="wwd-story-title">Excursion to Alnwick Gardens</h3>
+              <p class="wwd-story-text">Joybringers took children and young people on a day trip to Alnwick Gardens — filled with fun, laughter, and teamwork. We're committed to enriching experiences that inspire and empower.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>"I've never seen anything like this before. It was so much fun, and I learnt so much about plants and teamwork." — Attendee</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scratch Coding -->
+        <div class="wwd-story">
+          <div class="row no-gutters">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselScratch" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/team.jpg" alt="Scratch Workshop"></div>
+                  <div class="carousel-item"><img src="images/code5.jpg" alt="Coding Fun"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge digital"><i class="fas fa-code mr-1"></i>Digital Skills</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>August 2024</span>
+              </div>
+              <h3 class="wwd-story-title">Scratch Coding Workshops</h3>
+              <p class="wwd-story-text">Online and in-person workshops teaching young people the basics of coding using Scratch. Participants created their own games and animations across sessions on 22nd and 31st August 2024.</p>
+              <div class="wwd-story-quote"><i class="fas fa-quote-left"></i>"By the end of the session, I could build my own simple animation!"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CV Clinic -->
+        <div class="wwd-story">
+          <div class="row no-gutters flex-md-row-reverse">
+            <div class="col-md-6 wwd-story-img">
+              <div id="carouselCV" class="carousel slide carousel-fade h-100" data-ride="carousel" data-interval="2500">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active"><img src="images/co.jpg" alt="CV Clinic"></div>
+                  <div class="carousel-item"><img src="images/co3.jpg" alt="Career Talk"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wwd-story-body">
+              <div class="wwd-story-badges">
+                <span class="wwd-badge career"><i class="fas fa-briefcase mr-1"></i>Career Development</span>
+                <span class="wwd-badge date"><i class="fas fa-calendar mr-1"></i>May–July 2024</span>
+              </div>
+              <h3 class="wwd-story-title">CV Clinic &amp; Career Talk</h3>
+              <p class="wwd-story-text">Our free CV Clinic and Mock Interview Workshop featured expert speakers sharing interview and CV tips — boosting participant confidence for job readiness. Followed by an Online Career Talk on 25th May 2024.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ VIDEO HIGHLIGHTS ══════════════════════════════════════ -->
+    <section class="wwd-videos">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="wwd-divider mx-auto"></div>
+          <h2 class="wwd-section-title">Event Highlights</h2>
+          <p class="wwd-section-sub" style="margin-bottom:0;">Watch moments from our programmes and events.</p>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/Tsp5GV8Z2S4?si=X_dl2M6tllAcYnqH" title="Joybringers Event 1" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/xxtXMN8kMTc?si=vEtT96d8SnsVI5Ol" title="Joybringers Event 2" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/3vCKEPvW_Vc?si=NTlT6bnNei80mOXO" title="Joybringers Event 3" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/Tj_PxqaKKVY?si=3-nJe5yPjGpJCVHc" title="Joybringers Testimonial" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/xR3qLy_H7Sk?si=68BQ5Yuq7NTK5-R3" title="Event 4" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/PbI4VBUfcMw?si=jvdPClghMFt-jva4" title="Event 5" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/Ze--HbmysxA?si=nQMDAbqrj2FRKSSp" title="Event 6" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/e37kGqHrojw?si=PswMuPYjhdRgZAX1" title="Event 7" allowfullscreen loading="lazy"></iframe></div></div>
+          <div class="col-md-4 mb-4"><div class="wwd-video-frame"><iframe src="https://www.youtube.com/embed/MUqXVpub-yI?si=WeRdOENbE2H3kQ9v" title="Event 8" allowfullscreen loading="lazy"></iframe></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CTA STRIP ════════════════════════════════════════════ -->
+    <section class="wwd-cta">
+      <div class="container">
+        <h2>Be Part of the Story</h2>
+        <p>Whether you donate, volunteer, or attend an event — every action helps a young person believe in themselves.</p>
+        <div class="d-flex flex-wrap justify-content-center" style="gap:12px;">
+          <a href="/donate" class="btn btn-warning btn-lg font-weight-bold" style="border-radius:8px;color:#1a1a1a;">
+            <i class="fas fa-heart mr-2"></i>Donate Now
+          </a>
+          <a href="/volunteer" class="btn btn-success btn-lg font-weight-bold" style="border-radius:8px;">
+            <i class="fas fa-hands-helping mr-2"></i>Volunteer With Us
+          </a>
+          <a href="/events" class="btn btn-light btn-lg font-weight-bold" style="border-radius:8px;color:#006526;">
+            <i class="fas fa-calendar-alt mr-2"></i>See Events
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ════════════════════════════════════════════════ -->
+    <footer class="jb-footer">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-lg-4 col-md-6 mb-5 mb-lg-0 pr-lg-5">
+            <div class="jb-footer-brand">JOYBRINGERS</div>
+            <p class="jb-footer-tagline">Helping Young People Believe, Belong, and Become.</p>
+            <p class="jb-footer-sub">A registered charity empowering children and young people aged 7–25 across Newcastle and the North East through skills, education, and community.</p>
+            <div class="footer-social mt-4">
+              <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://x.com/JoybringersC" target="_blank" class="twitter" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Quick Links</h6>
+            <ul class="jb-footer-links">
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/what-we-do">What We Do</a></li>
+              <li><a href="/events">Events</a></li>
+              <li><a href="/volunteer">Volunteer</a></li>
+              <li><a href="/donate">Donate</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Get Involved</h6>
+            <ul class="jb-footer-links">
+              <li><a href="/volunteer">Volunteer With Us</a></li>
+              <li><a href="/donate">Make a Donation</a></li>
+              <li><a href="/contact">Corporate Partnership</a></li>
+              <li><a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" target="_blank">Join Our Food Bank</a></li>
+              <li><a href="/events">Upcoming Events</a></li>
+            </ul>
+            <div class="mt-3">
+              <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:52px;border-radius:6px;background:#fff;padding:4px 8px;">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <h6 class="jb-footer-heading">Contact Us</h6>
+            <ul class="jb-footer-contact">
+              <li><i class="fas fa-envelope"></i><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></li>
+              <li><i class="fas fa-phone"></i><a href="tel:+447500010317">+44 7500 010317</a></li>
+              <li><i class="fas fa-map-marker-alt"></i>Suite 3, Neon, Quorum Business Park, Newcastle upon Tyne</li>
+            </ul>
+            <div class="mt-4 p-3" style="background:rgba(255,255,255,0.06);border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
+              <p style="font-size:0.75rem;margin:0;opacity:0.7;line-height:1.6;">
+                <strong style="color:#a7f3c5;">JOYBRINGERS LTD</strong><br>
+                Company No. 15400265<br>
+                Registered Charity No. 1212606
+              </p>
+            </div>
+          </div>
+        </div>
+        <hr style="border-color:rgba(255,255,255,0.12);margin-bottom:24px;">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+            <p style="margin:0;font-size:0.8rem;color:rgba(255,255,255,0.65);">&copy;2026 Joybringers Ltd. All Rights Reserved. Registered in England &amp; Wales.</p>
+          </div>
+          <div class="col-md-6 text-center text-md-right">
+            <a href="/terms" class="jb-footer-legal">Terms of Use</a>
+            <a href="/privacy" class="jb-footer-legal">Privacy Policy</a>
+            <a href="/cookies" class="jb-footer-legal">Cookies</a>
+            <button type="button" onclick="window.showCmpBanner()" class="jb-footer-cookie-btn">
+              <i class="fas fa-cookie-bite mr-1"></i>Cookie Settings
+            </button>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- end page-wrapper -->
+
+  <!-- Loader -->
   <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
       <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
@@ -550,7 +610,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </svg>
   </div>
 
-  <!-- ✅ JS Files -->
+  <!-- JS -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -563,12 +623,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="js/aos.js"></script>
   <script src="js/jquery.animateNumber.min.js"></script>
   <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
-<script src="js/cookie-consent.js"></script>
-  
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/cookie-consent.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      /* Sticky navbar */
+      var $nav = $('.ftco_navbar');
+      $nav.addClass('scrolled awake');
+      $(window).on('scroll', function () {
+        if (!$nav.hasClass('scrolled')) $nav.addClass('scrolled awake');
+        if (!$nav.hasClass('awake'))    $nav.addClass('awake');
+      });
+    });
+  </script>
+
 </body>
 </html>
