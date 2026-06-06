@@ -1058,3 +1058,10 @@ img.shadow-sm {
 .footer-social a.linkedin  { background:#0A66C2; }
 .footer-social a.twitter   { background:#1DA1F2; }
 .footer-social a.tiktok    { background:#000; }
+
+/* ── Navbar logo ── */
+.navbar-brand img { height:46px; width:auto; display:block; transition:opacity .2s; }
+.navbar-brand img:hover { opacity:.88; }
+/* ensure logo stays crisp on all navbar states */
+.ftco_navbar .navbar-brand img,
+.ftco_navbar.scrolled .navbar-brand img { height:46px; width:auto; }
