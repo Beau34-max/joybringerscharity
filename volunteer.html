@@ -28,7 +28,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .vol-hero {
       background: linear-gradient(150deg, #0c2218 0%, #14382a 55%, #1a4d38 100%);
       color: white;
-      padding: 36px 0 48px;
+      padding: 55px 0 52px;
       position: relative;
     }
     .vol-hero-eyebrow {
@@ -134,8 +134,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .vol-modal-header-detail #d-cat-badge { background: rgba(255,255,255,0.2) !important; color: white !important; border-color: rgba(255,255,255,0.35) !important; }
     .vol-modal-header-apply  { background: #004d1a; color: white; padding: 20px 24px; }
     .vol-modal-header-apply .close { color: white; opacity: 1; text-shadow: none; }
-    .vol-detail-left  { padding: 28px; }
-    .vol-detail-right { background: #f8fafc; border-left: 1px solid #e9ecef; padding: 28px; }
+    /* no-gutters sets padding:0 !important on columns — override it back */
+    .vol-detail-left  { padding: 28px !important; }
+    .vol-detail-right { background: #f8fafc; border-left: 1px solid #e9ecef; padding: 28px !important; }
     .vol-section-label {
       font-size: 0.72rem;
       font-weight: 700;
@@ -307,7 +308,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      COMBINED MODAL — detail view + apply view
 ═══════════════════════════════════════════════════════ -->
 <div class="modal fade" id="volModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 
       <!-- VIEW A: ROLE DETAIL -->
@@ -324,7 +325,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="modal-body p-0">
           <div class="row no-gutters">
             <!-- Left: description -->
-            <div class="col-md-8 vol-detail-left" style="border-right:1px solid #e9ecef; overflow-y:auto; max-height:75vh;">
+            <div class="col-md-8 vol-detail-left" style="border-right:1px solid #e9ecef; overflow-y:auto; max-height:72vh;">
               <p class="vol-section-label">About This Role</p>
               <p id="d-about" style="font-size:0.9rem;color:#4a5568;line-height:1.65;"></p>
               <p class="vol-section-label">Key Responsibilities</p>
