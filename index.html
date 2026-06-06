@@ -114,25 +114,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .jb-involve-card p { color:#6c757d; font-size:0.88rem; line-height:1.65; flex:1; margin-bottom:24px; }
 
       /* ── CTA strip ── */
-      .jb-cta-strip { background:linear-gradient(135deg, #003d14 0%, #006526 55%, #00883a 100%); padding:70px 0; text-align:center; position:relative; overflow:hidden; }
-      .jb-cta-strip::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
-      .jb-cta-strip h2 { font-size:2.1rem; font-weight:700; color:#fff !important; margin-bottom:12px; position:relative; }
-      .jb-cta-strip p { color:rgba(255,255,255,0.88); font-size:1rem; max-width:520px; margin:0 auto 32px; position:relative; }
-      .jb-cta-strip .btn { position:relative; font-weight:700; border-radius:8px; padding:14px 32px; font-size:1rem; }
+      .jb-cta-strip { background:linear-gradient(135deg, #007d30 0%, #00a040 55%, #00c04e 100%); padding:70px 0; text-align:center; position:relative; overflow:hidden; }
+      .jb-cta-strip h2 { font-size:2.1rem; font-weight:700; color:#fff !important; margin-bottom:12px; }
+      .jb-cta-strip p { color:rgba(255,255,255,0.92); font-size:1rem; max-width:520px; margin:0 auto 32px; }
+      .jb-cta-strip .btn { font-weight:700; border-radius:8px; padding:14px 32px; font-size:1rem; }
 
       /* ── Partners ── */
       .jb-partner-logo { max-height:56px; width:auto; filter:grayscale(35%); opacity:0.8; transition:all 0.22s; }
       .jb-partner-logo:hover { filter:grayscale(0%); opacity:1; }
       .jb-partner-item { display:flex; align-items:center; justify-content:center; padding:12px; }
 
+      /* ── Footer ── */
+      .jb-footer { background:#003d14; color:#fff; padding:60px 0 32px; font-size:14px; }
+      .jb-footer-brand { font-size:1.5rem; font-weight:800; letter-spacing:0.04em; color:#ffffff; margin-bottom:8px; }
+      .jb-footer-tagline { font-size:0.9rem; color:#86efac; font-style:italic; margin-bottom:10px; }
+      .jb-footer-sub { font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.65; }
+      .jb-footer-heading { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#86efac; margin-bottom:18px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.12); }
+      .jb-footer-links { list-style:none; padding:0; margin:0; }
+      .jb-footer-links li { margin-bottom:10px; }
+      .jb-footer-links a { color:rgba(255,255,255,0.7); font-size:0.875rem; text-decoration:none; transition:color 0.18s; }
+      .jb-footer-links a:hover { color:#86efac; text-decoration:none; }
+      .jb-footer-contact { list-style:none; padding:0; margin:0; }
+      .jb-footer-contact li { display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; font-size:0.875rem; color:rgba(255,255,255,0.75); line-height:1.5; }
+      .jb-footer-contact i { color:#86efac; margin-top:3px; flex-shrink:0; width:14px; text-align:center; }
+      .jb-footer-contact a { color:rgba(255,255,255,0.75); text-decoration:none; }
+      .jb-footer-contact a:hover { color:#86efac; }
+      .jb-footer-legal { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; margin-left:14px; transition:color 0.18s; }
+      .jb-footer-legal:hover { color:#86efac; }
+      .jb-footer-cookie-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.75); padding:5px 14px; border-radius:20px; font-size:0.75rem; font-weight:600; cursor:pointer; margin-left:14px; transition:all 0.18s; }
+      .jb-footer-cookie-btn:hover { background:rgba(255,255,255,0.18); color:#fff; }
+
       /* ── Footer social ── */
-      .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:40px; height:40px; border-radius:50%; color:#fff; font-size:18px; transition:0.3s; }
-      .footer-social a:hover { opacity:0.8; }
+      .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 4px; width:38px; height:38px; border-radius:50%; color:#fff; font-size:16px; transition:0.22s; }
+      .footer-social a:hover { transform:translateY(-2px); opacity:0.9; }
       .footer-social a.facebook { background:#1877F2; }
       .footer-social a.instagram { background:#E4405F; }
       .footer-social a.linkedin { background:#0A66C2; }
       .footer-social a.twitter  { background:#1DA1F2; }
-      .footer-social a.tiktok   { background:#000; }
+      .footer-social a.tiktok   { background:#111; }
 
       @media (max-width:767px) {
         .jb-section { padding:52px 0; }
@@ -483,14 +502,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
       <h2>Ready to Make a Difference?</h2>
       <p>Every contribution — your time, your skills, or a donation — directly changes a young person's life in our community.</p>
-      <div class="d-flex flex-wrap justify-content-center gap-3" style="gap:16px;">
-        <a href="/donate" class="btn btn-warning btn-lg mr-3" style="border-radius:8px;font-weight:700;">
+      <div class="d-flex flex-wrap justify-content-center" style="gap:14px;">
+        <a href="/donate" class="btn btn-warning btn-lg" style="border-radius:8px;font-weight:700;color:#1a1a1a;">
           <i class="fas fa-heart mr-2"></i>Donate Now
         </a>
-        <a href="/volunteer" class="btn btn-outline-light btn-lg mr-3" style="border-radius:8px;font-weight:700;">
+        <a href="/volunteer" class="btn btn-light btn-lg" style="border-radius:8px;font-weight:700;color:#006526;">
           <i class="fas fa-hands-helping mr-2"></i>Become a Volunteer
         </a>
-        <a href="/contact" class="btn btn-outline-light btn-lg" style="border-radius:8px;font-weight:700;">
+        <a href="/contact" class="btn btn-light btn-lg" style="border-radius:8px;font-weight:700;color:#006526;">
           <i class="fas fa-envelope mr-2"></i>Partner With Us
         </a>
       </div>
@@ -498,48 +517,92 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ══ FOOTER ════════════════════════════════════════════ -->
-  <footer style="background-color:#006526; color:#fff; padding:40px 0; font-size:14px;">
+  <footer class="jb-footer">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-4 mb-4 mb-md-0 text-center text-md-left">
-          <p>
-            Email: <a href="mailto:info@joybringerscharity.org" style="color:#fff;">info@joybringerscharity.org</a><br>
-            Call: <a href="tel:+447500010317" style="color:#fff;">+44 7500 010317</a>
-          </p>
-          <p>
-            <strong>JOYBRINGERS LTD</strong><br>
-            Company No. 15400265<br>
-            Registered Charity No. 1212606
-          </p>
-        </div>
-        <div class="col-md-4 mb-4 mb-md-0 text-center">
-          <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:80px;">
-        </div>
-        <div class="col-md-4 text-center">
-          <p>Follow us &nbsp;|&nbsp; <a href="/contact" style="color:#fff;">Contact Us</a></p>
-          <div class="footer-social">
-            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/JoybringersC" target="_blank" class="twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok"><i class="fab fa-tiktok"></i></a>
+
+      <!-- Top row: 4 columns -->
+      <div class="row mb-5">
+
+        <!-- Col 1: Brand + social -->
+        <div class="col-lg-4 col-md-6 mb-5 mb-lg-0 pr-lg-5">
+          <div class="jb-footer-brand">JOYBRINGERS</div>
+          <p class="jb-footer-tagline">Helping Young People Believe, Belong, and Become.</p>
+          <p class="jb-footer-sub">A registered charity empowering children and young people aged 7–25 across Newcastle and the North East through skills, education, and community.</p>
+          <div class="footer-social mt-4">
+            <a href="https://www.facebook.com/Joybringero/" target="_blank" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/joybringerscharity/" target="_blank" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/joybringers/?viewAsMember=true" target="_blank" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/JoybringersC" target="_blank" class="twitter" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.tiktok.com/@joybringerscharity" target="_blank" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
           </div>
-          <p class="mt-3">
-            <a href="/terms" style="color:#fff;">Terms</a> &nbsp;/&nbsp;
-            <a href="/cookies" style="color:#fff;">Cookies</a> &nbsp;/&nbsp;
-            <a href="/privacy" style="color:#fff;">Privacy</a>
-          </p>
-          <button type="button" onclick="window.showCmpBanner()"
-            style="background:#fff;color:#006526;border:none;padding:7px 16px;border-radius:5px;font-weight:600;cursor:pointer;font-size:0.82rem;">
-            Cookie Settings
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
+          <h6 class="jb-footer-heading">Quick Links</h6>
+          <ul class="jb-footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/what-we-do">What We Do</a></li>
+            <li><a href="/events">Events</a></li>
+            <li><a href="/volunteer">Volunteer</a></li>
+            <li><a href="/donate">Donate</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Get Involved -->
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <h6 class="jb-footer-heading">Get Involved</h6>
+          <ul class="jb-footer-links">
+            <li><a href="/volunteer">Volunteer With Us</a></li>
+            <li><a href="/donate">Make a Donation</a></li>
+            <li><a href="/contact">Corporate Partnership</a></li>
+            <li><a href="https://chat.whatsapp.com/FPLEq9c3SpE9Mv5GtnZ5RH?mode=ems_copy_t" target="_blank">Join Our Food Bank</a></li>
+            <li><a href="/events">Upcoming Events</a></li>
+          </ul>
+          <div class="mt-3">
+            <img src="images/partners/ncvo-logo.jpg" alt="NCVO Member" style="max-height:52px;border-radius:6px;background:#fff;padding:4px 8px;">
+          </div>
+        </div>
+
+        <!-- Col 4: Contact -->
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <h6 class="jb-footer-heading">Contact Us</h6>
+          <ul class="jb-footer-contact">
+            <li><i class="fas fa-envelope"></i><a href="mailto:info@joybringerscharity.org">info@joybringerscharity.org</a></li>
+            <li><i class="fas fa-phone"></i><a href="tel:+447500010317">+44 7500 010317</a></li>
+            <li><i class="fas fa-map-marker-alt"></i>Suite 3, Neon, Quorum Business Park, Newcastle upon Tyne</li>
+          </ul>
+          <div class="mt-4 p-3" style="background:rgba(255,255,255,0.06);border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
+            <p style="font-size:0.75rem;margin:0;opacity:0.7;line-height:1.6;">
+              <strong style="color:#86efac;">JOYBRINGERS LTD</strong><br>
+              Company No. 15400265<br>
+              Registered Charity No. 1212606
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Divider -->
+      <hr style="border-color:rgba(255,255,255,0.12);margin-bottom:24px;">
+
+      <!-- Bottom bar -->
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+          <p style="margin:0;font-size:0.8rem;opacity:0.6;">©2026 Joybringers Ltd. All Rights Reserved. Registered in England &amp; Wales.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+          <a href="/terms" class="jb-footer-legal">Terms of Use</a>
+          <a href="/privacy" class="jb-footer-legal">Privacy Policy</a>
+          <a href="/cookies" class="jb-footer-legal">Cookies</a>
+          <button type="button" onclick="window.showCmpBanner()" class="jb-footer-cookie-btn">
+            <i class="fas fa-cookie-bite mr-1"></i>Cookie Settings
           </button>
         </div>
       </div>
-      <div class="row mt-4">
-        <div class="col text-center">
-          <p style="margin:0;opacity:0.75;font-size:0.82rem;">©2026 Joybringers Ltd. All Rights Reserved.</p>
-        </div>
-      </div>
+
     </div>
   </footer>
 
