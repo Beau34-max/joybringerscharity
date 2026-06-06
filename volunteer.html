@@ -26,30 +26,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     /* ── Hero ── */
     .vol-hero {
-      background: linear-gradient(135deg, #004d1a 0%, #006526 50%, #008c38 100%);
+      background: linear-gradient(150deg, #0c2218 0%, #14382a 55%, #1a4d38 100%);
       color: white;
-      padding: 70px 0 80px;
+      padding: 36px 0 48px;
       position: relative;
     }
     .vol-hero-eyebrow {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      opacity: 0.8;
+      color: rgba(255,255,255,0.75) !important;
       margin-bottom: 0.5rem;
     }
     .vol-hero h1 {
-      font-size: 2.6rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1rem;
+      line-height: 1.25;
+      margin-bottom: 0.85rem;
+      color: #ffffff !important;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     .vol-hero p.lead {
-      font-size: 1.05rem;
-      opacity: 0.9;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.88) !important;
       max-width: 520px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.4rem;
     }
     .vol-hero-wave {
       position: absolute;
@@ -154,8 +156,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .vol-list li::before { content: '✓'; position: absolute; left: 0; color: #006526; font-weight: 700; }
     .vol-gains-list li::before { content: '★'; color: #f59e0b; }
-    .vol-meta-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #e9ecef; font-size: 0.875rem; color: #1a1a2e; font-weight: 500; }
-    .vol-meta-item i { color: #006526; width: 16px; text-align: center; flex-shrink: 0; }
+    .vol-meta-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #e9ecef; font-size: 0.875rem; color: #1a1a2e !important; font-weight: 600; }
+    .vol-meta-item span, .vol-meta-item > * { color: #1a1a2e !important; }
+    .vol-meta-item i { color: #006526 !important; width: 16px; text-align: center; flex-shrink: 0; }
     .vol-meta-item:last-child { border-bottom: none; }
     .vol-form-heading { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #006526; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; margin: 20px 0 14px; }
     .vol-form-heading:first-child { margin-top: 0; }
@@ -180,9 +183,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .vol-thanks h4 { font-weight: 700; color: #1a1a2e; }
     .vol-thanks p { color: #6c757d; }
 
+    /* force the modal content box to never overflow horizontally */
+    #volModal .modal-content { overflow: hidden; }
+    #volModal .modal-body .form-row { margin-left: 0; margin-right: 0; }
+    #volModal .modal-body .form-group.col-md-6,
+    #volModal .modal-body .form-group.col-md-5,
+    #volModal .modal-body .form-group.col-md-4,
+    #volModal .modal-body .form-group.col-md-3 { padding-left: 8px; padding-right: 8px; }
+
     @media (max-width: 767px) {
-      .vol-hero h1 { font-size: 1.9rem; }
+      .vol-hero h1 { font-size: 1.7rem; }
       .vol-detail-right { border-left: none; border-top: 1px solid #e9ecef; }
+      #volModal .modal-body .form-group[class*="col-"] { flex: 0 0 100%; max-width: 100%; }
     }
   </style>
 </head>
@@ -354,7 +366,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
           </div>
         </div>
-        <div class="modal-body" style="overflow-y:auto; max-height:80vh;">
+        <div class="modal-body" style="overflow-y:auto; overflow-x:hidden; max-height:80vh; padding:20px 24px;">
           <button type="button" class="btn btn-link btn-sm p-0 mb-3 text-success font-weight-bold" onclick="showDetailView()">
             <i class="fas fa-arrow-left mr-1"></i> Back to role details
           </button>
