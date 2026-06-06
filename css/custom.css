@@ -1066,17 +1066,19 @@ img.shadow-sm {
 .ftco_navbar .navbar-brand img,
 .ftco_navbar.scrolled .navbar-brand img { height:46px; width:auto; }
 
-/* ── Inner page heroes: clear fixed navbar (≈62px) + breathing room ──
-   The navbar becomes position:fixed when scrolled/awake. Without compensation
-   the first ~62px of hero content hides behind it. These rules override the
-   per-page padding using !important so one rule fixes all inner page heroes. */
+/* ── Inner page heroes: clear fixed navbar ──
+   Desktop: navbar is position:absolute initially then fixed — hero starts at y=0,
+   needs 66px top to clear the 62px fixed navbar.
+   Mobile (<992px): navbar is position:relative initially (in flow) then JS makes
+   it fixed — hero snaps to y=0 but still needs 66px to clear navbar.
+   Using max-width:991px so BOTH mobile and tablet get the correct clearance. */
 .abt-hero, .con-hero, .ev-hero, .wwd-hero, .vol-hero, .don-hero {
   padding-top:    66px !important;
   padding-bottom: 24px !important;
 }
-@media (max-width: 576px) {
+@media (max-width: 991px) {
   .abt-hero, .con-hero, .ev-hero, .wwd-hero, .vol-hero, .don-hero {
-    padding-top:    56px !important;
+    padding-top:    70px !important;
     padding-bottom: 16px !important;
   }
 }
