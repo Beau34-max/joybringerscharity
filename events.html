@@ -27,73 +27,68 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="css/custom.css">
 
   <style>
-    /* Sticky Footer Layout */
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    nav.navbar {
-      flex-shrink: 0;
-    }
-    main {
-      flex: 1; /* Pushes footer down */
-    }
-    footer {
-      flex-shrink: 0;
-    }
-  </style>
-  
-  <style>
-/* Gold border */
-.event-card.featured {
-  border: 3px solid #d4af37;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  position: relative;
-}
+    /* ── Base ── */
+    body { background-color:#f4f7f4; font-family:'Open Sans',sans-serif; }
 
-/* Featured badge */
-.featured-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #d4af37;
-  color: #fff;
-  font-size: 12px;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+    /* ── Hero ── */
+    .ev-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:110px 0 70px; text-align:center; }
+    .ev-hero-eyebrow { display:inline-block; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; padding:6px 18px; border-radius:20px; margin-bottom:18px; }
+    .ev-hero h1 { font-size:2.8rem; font-weight:800; color:#fff !important; text-shadow:0 1px 4px rgba(0,0,0,.3); margin-bottom:14px; line-height:1.15; }
+    .ev-hero p.lead { color:rgba(255,255,255,.88) !important; font-size:1.05rem; max-width:560px; margin:0 auto; }
+    @media(max-width:576px){ .ev-hero { padding:95px 0 55px; } .ev-hero h1 { font-size:2rem; } }
 
-#selectedEventSummary,
-#selectedEventSummary p,
-#selectedEventSummary span {
-  color: #000 !important;
-}
+    /* ── Scrolled navbar overrides (inner page) ── */
+    .ftco-navbar-light.scrolled .nav-item.active > a,
+    .ftco-navbar-light.scrolled .nav-link.active { color:#006526 !important; }
+    .ftco-navbar-light.scrolled .navbar-brand { color:#006526 !important; }
 
-</style>
+    /* ── Section wrappers ── */
+    .ev-section { padding:60px 0 40px; }
+    .ev-section-title { font-size:1.6rem; font-weight:800; color:#003d14; margin-bottom:6px; }
+    .ev-section-sub  { font-size:.9rem; color:#555; margin-bottom:36px; }
+    .ev-divider { width:48px; height:4px; background:#006526; border-radius:2px; margin:0 0 12px; }
 
+    /* ── Event cards ── */
+    .jb-ev-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.08); display:flex; flex-direction:column; height:100%; transition:transform .2s,box-shadow .2s; }
+    .jb-ev-card:hover { transform:translateY(-4px); box-shadow:0 8px 28px rgba(0,0,0,.13); }
+    .jb-ev-card.featured { border:2px solid #d4af37; }
+    .jb-ev-img-wrap { position:relative; }
+    .jb-ev-img-wrap img { width:100%; height:210px; object-fit:cover; display:block; }
+    .jb-ev-date-pin { position:absolute; top:14px; left:14px; background:#006526; color:#fff; border-radius:10px; padding:8px 12px; text-align:center; line-height:1; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+    .jb-ev-date-pin .ev-day { display:block; font-size:1.4rem; font-weight:800; }
+    .jb-ev-date-pin .ev-mon { display:block; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; opacity:.9; margin-top:2px; }
+    .jb-ev-featured-badge { position:absolute; top:14px; right:14px; background:#d4af37; color:#fff; font-size:.7rem; font-weight:700; padding:5px 10px; border-radius:20px; display:flex; align-items:center; gap:4px; }
+    .jb-ev-body { padding:20px; display:flex; flex-direction:column; flex:1; }
+    .jb-ev-badges { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .jb-ev-badge { font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+    .jb-ev-badge.free     { background:#dcfce7; color:#166534; }
+    .jb-ev-badge.online   { background:#dbeafe; color:#1e40af; }
+    .jb-ev-badge.ticketed { background:#fef9c3; color:#854d0e; }
+    .jb-ev-badge.ended    { background:#f1f5f9; color:#64748b; }
+    .jb-ev-badge.featured-tag { background:#fef3c7; color:#92400e; }
+    .jb-ev-title { font-size:1.05rem; font-weight:700; color:#003d14; margin-bottom:10px; line-height:1.3; }
+    .jb-ev-meta { list-style:none; padding:0; margin:0 0 12px; }
+    .jb-ev-meta li { font-size:.82rem; color:#555; margin-bottom:5px; display:flex; align-items:flex-start; gap:8px; }
+    .jb-ev-meta li i { color:#006526; width:14px; flex-shrink:0; margin-top:2px; }
+    .jb-ev-desc { font-size:.83rem; color:#666; line-height:1.55; flex:1; margin-bottom:16px; }
+    .jb-ev-footer { margin-top:auto; display:flex; flex-wrap:wrap; gap:8px; }
+    .jb-ev-reg-note { font-size:.75rem; color:#888; margin-top:6px; }
 
-  <style>
-    body { background-color: #f9f9f9; font-family: 'Open Sans', sans-serif; }
-    .event-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 30px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .event-card img { width: 100%; height: 220px; object-fit: cover; }
-    .modal-dialog { max-width: 700px; }
-    .modal-body label { font-weight: 600; margin-bottom: 5px; }
-    .modal-body .form-group { margin-bottom: 15px; }
-    .thank-you-message { display: none; text-align: center; padding: 20px; font-weight: bold; color: green; }
-    footer { background:#006526; color:#fff; padding:30px 0; font-size:14px; }
-    .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:36px; height:36px; border-radius:50%; color:#fff; font-size:16px; transition:0.3s; }
-    .footer-social a:hover { opacity:0.8; }
-    .footer-social a.facebook { background:#1877F2; }
-    .footer-social a.instagram { background:#E4405F; }
-    .footer-social a.linkedin { background:#0A66C2; }
-    .footer-social a.twitter { background:#1DA1F2; }
-    .footer-social a.tiktok { background:#000; }
+    /* Past events: slightly muted */
+    .jb-ev-card.past { opacity:.88; }
+    .jb-ev-card.past .jb-ev-date-pin { background:#64748b; }
+
+    /* Empty state */
+    .ev-empty { text-align:center; padding:50px 20px; background:#fff; border-radius:12px; }
+    .ev-empty i { font-size:2.5rem; color:#d1fae5; margin-bottom:12px; }
+    .ev-empty p { color:#888; font-size:.95rem; }
+
+    /* Modal tweaks */
+    .modal-dialog { max-width:700px; }
+    .modal-body label { font-weight:600; margin-bottom:5px; }
+    .modal-body .form-group { margin-bottom:15px; }
+    .thank-you-message { display:none; text-align:center; padding:20px; font-weight:bold; color:green; }
+    #selectedEventSummary, #selectedEventSummary p, #selectedEventSummary span { color:#000 !important; }
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
@@ -127,13 +122,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </nav>
 <!-- END nav -->
 
-<!-- ✅ Event Section -->
-<section class="ftco-section">
+<!-- ══ HERO ════════════════════════════════════════════════ -->
+<section class="ev-hero">
   <div class="container">
-    <h2 class="text-center mb-5">Upcoming Events</h2>
-    <div class="row" id="upcoming-events"></div>
+    <span class="ev-hero-eyebrow"><i class="fas fa-calendar-alt mr-1"></i> What's On</span>
+    <h1>Events &amp; Activities</h1>
+    <p class="lead">Join us at our next event — from workshops and skills sessions to community celebrations across Newcastle and the North East.</p>
+  </div>
+</section>
 
-    <h2 class="text-center mb-5 mt-5">Past Events</h2>
+<!-- ══ UPCOMING EVENTS ═════════════════════════════════════ -->
+<section class="ev-section">
+  <div class="container">
+    <div class="ev-divider"></div>
+    <h2 class="ev-section-title">Upcoming Events</h2>
+    <p class="ev-section-sub">Don't miss what's coming up — register your spot today.</p>
+    <div class="row" id="upcoming-events"></div>
+    <div id="upcoming-empty" class="ev-empty d-none">
+      <i class="fas fa-calendar-check"></i>
+      <p>No upcoming events right now — check back soon or <a href="/contact">get in touch</a> to find out what's planned.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAST EVENTS ══════════════════════════════════════════ -->
+<section class="ev-section" style="background:#edf5ef; padding-top:50px;">
+  <div class="container">
+    <div class="ev-divider" style="background:#64748b;"></div>
+    <h2 class="ev-section-title" style="color:#334155;">Past Events</h2>
+    <p class="ev-section-sub">A look back at everything we've organised for our community.</p>
     <div class="row" id="past-events"></div>
   </div>
 </section>
@@ -413,6 +430,22 @@ function formatDate(dateStr) {
   return d.toDateString();
 }
 
+/* ── Date pin helper ── */
+function getDateParts(dateStr) {
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d = new Date(dateStr + "T00:00:00");
+  return { day: d.getDate(), mon: MONTHS[d.getMonth()], year: d.getFullYear() };
+}
+
+/* ── Event type badge ── */
+function eventTypeBadge(e) {
+  if (e.paidEvent) return '<span class="jb-ev-badge ticketed"><i class="fas fa-ticket-alt mr-1"></i>Ticketed</span>';
+  const v = String(e.venue || '').toLowerCase();
+  if (v.includes('online') || v.includes('zoom') || v.includes('teams') || v.includes('virtual'))
+    return '<span class="jb-ev-badge online"><i class="fas fa-video mr-1"></i>Online</span>';
+  return '<span class="jb-ev-badge free"><i class="fas fa-check-circle mr-1"></i>Free</span>';
+}
+
 /* ✅ Handles month subtraction safely (end-of-month issues) */
 function addMonths(date, months) {
   const d = new Date(date);
@@ -444,91 +477,127 @@ function createEventSlug(title) {
 
 function eventCard(e, isUpcoming) {
   const now = new Date();
-const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const opensDate = registrationOpensOn(e.date);
   const isRegOpen = e.regOverrideOpen === true || (today >= opensDate);
-  // Past events
+  const dp  = getDateParts(e.date);
+  const img = e.image || 'images/events/bg_3.jpg';
+  const typeBadge = eventTypeBadge(e);
+  const featuredBadge = e.featured
+    ? '<div class="jb-ev-featured-badge"><i class="fas fa-star mr-1"></i>Featured</div>' : '';
+
+  /* ── PAST event card ── */
   if (!isUpcoming) {
     return `
-      <div class="col-md-4 d-flex">
-        <div class="event-card ${e.featured ? 'featured' : ''}">
-        ${e.featured ? `<div class="featured-badge"><i class="fa fa-star"></i> Featured Event</div>` : ``}
-          <img src="${e.image}" alt="${e.title}">
-          <div class="p-3">
-            <h5>${e.title}</h5>
-            <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
-            <p><i class="fa fa-clock"></i> ${e.time}</p>
-            <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
-            <p>${e.description}</p>
-            <span class="badge badge-secondary">Event Ended</span>
+      <div class="col-md-4 mb-4 d-flex">
+        <div class="jb-ev-card past w-100${e.featured ? ' featured' : ''}">
+          <div class="jb-ev-img-wrap">
+            <img src="${img}" alt="${e.title}" loading="lazy">
+            <div class="jb-ev-date-pin">
+              <span class="ev-day">${dp.day}</span>
+              <span class="ev-mon">${dp.mon}</span>
+            </div>
+            ${featuredBadge}
+          </div>
+          <div class="jb-ev-body">
+            <div class="jb-ev-badges">${typeBadge}<span class="jb-ev-badge ended">Event Ended</span></div>
+            <h5 class="jb-ev-title">${e.title}</h5>
+            <ul class="jb-ev-meta">
+              <li><i class="fas fa-map-marker-alt"></i>${e.venue}</li>
+              <li><i class="fas fa-clock"></i>${e.time}</li>
+            </ul>
+            <p class="jb-ev-desc">${e.description}</p>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  // Upcoming events (reg open)
+  /* ── UPCOMING — registration OPEN ── */
   if (isRegOpen) {
     return `
-      <div class="col-md-4 d-flex">
-        <div class="event-card ${e.featured ? 'featured' : ''}">
-          <img src="${e.image}" alt="${e.title}">
-          <div class="p-3">
-            <h5>${e.title}</h5>
-            <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
-            <p><i class="fa fa-clock"></i> ${e.time}</p>
-            <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
-            <p>${e.description}</p>
-
-            <button class="btn btn-success btn-sm"
-            data-toggle="modal" data-target="#registerModal"
-            data-title="${e.title}"
-            data-date="${e.date}"
-            data-time="${e.time}"
-            data-location="${e.venue}"
-            data-description="${e.description}"
-            data-joining-link="${e.joiningLink || ''}"
-            data-paid="${e.paidEvent === true}"
-            data-hide-age-range="${e.hideAgeRange === true}">
-            Register Now
-          </button>
-
-          <a 
-            href="/events?event=${createEventSlug(e.title)}"
-            class="btn btn-outline-success btn-sm ml-2">
-            Share Registration Link
-          </a>
+      <div class="col-md-4 mb-4 d-flex">
+        <div class="jb-ev-card w-100${e.featured ? ' featured' : ''}">
+          <div class="jb-ev-img-wrap">
+            <img src="${img}" alt="${e.title}" loading="lazy">
+            <div class="jb-ev-date-pin">
+              <span class="ev-day">${dp.day}</span>
+              <span class="ev-mon">${dp.mon}</span>
+            </div>
+            ${featuredBadge}
+          </div>
+          <div class="jb-ev-body">
+            <div class="jb-ev-badges">${typeBadge}</div>
+            <h5 class="jb-ev-title">${e.title}</h5>
+            <ul class="jb-ev-meta">
+              <li><i class="fas fa-map-marker-alt"></i>${e.venue}</li>
+              <li><i class="fas fa-clock"></i>${e.time}</li>
+              <li><i class="fas fa-calendar-alt"></i>${formatDate(e.date)}</li>
+            </ul>
+            <p class="jb-ev-desc">${e.description}</p>
+            <div class="jb-ev-footer">
+              <button class="btn btn-success btn-sm"
+                data-toggle="modal" data-target="#registerModal"
+                data-title="${e.title}"
+                data-date="${e.date}"
+                data-time="${e.time}"
+                data-location="${e.venue}"
+                data-description="${e.description}"
+                data-joining-link="${e.joiningLink || ''}"
+                data-paid="${e.paidEvent === true}"
+                data-hide-age-range="${e.hideAgeRange === true}">
+                <i class="fas fa-ticket-alt mr-1"></i>Register Now
+              </button>
+              <a href="/events?event=${createEventSlug(e.title)}"
+                class="btn btn-outline-success btn-sm">
+                <i class="fas fa-share-alt mr-1"></i>Share
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  // Upcoming events (reg not open yet)
+  /* ── UPCOMING — registration NOT OPEN YET ── */
   return `
-    <div class="col-md-4 d-flex">
-      <div class="event-card ${e.featured ? 'featured' : ''}">
-        <img src="${e.image}" alt="${e.title}">
-        <div class="p-3">
-          <h5>${e.title}</h5>
-          <p><i class="fa fa-calendar"></i> ${formatDate(e.date)}</p>
-          <p><i class="fa fa-clock"></i> ${e.time}</p>
-          <p><i class="fa fa-map-marker"></i> ${e.venue}</p>
-          <p>${e.description}</p>
-
-          <button class="btn btn-outline-success btn-sm" disabled>
-            Registration Not Open Yet
-          </button>
-          <div style="font-size: 12px; margin-top: 8px; color:#333;">
-            Opens on <strong>${formatLongDate(opensDate)}</strong>
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="jb-ev-card w-100${e.featured ? ' featured' : ''}">
+        <div class="jb-ev-img-wrap">
+          <img src="${img}" alt="${e.title}" loading="lazy">
+          <div class="jb-ev-date-pin">
+            <span class="ev-day">${dp.day}</span>
+            <span class="ev-mon">${dp.mon}</span>
+          </div>
+          ${featuredBadge}
+        </div>
+        <div class="jb-ev-body">
+          <div class="jb-ev-badges">${typeBadge}</div>
+          <h5 class="jb-ev-title">${e.title}</h5>
+          <ul class="jb-ev-meta">
+            <li><i class="fas fa-map-marker-alt"></i>${e.venue}</li>
+            <li><i class="fas fa-clock"></i>${e.time}</li>
+            <li><i class="fas fa-calendar-alt"></i>${formatDate(e.date)}</li>
+          </ul>
+          <p class="jb-ev-desc">${e.description}</p>
+          <div class="jb-ev-footer">
+            <button class="btn btn-outline-secondary btn-sm" disabled>
+              <i class="fas fa-lock mr-1"></i>Registration Not Open Yet
+            </button>
+            <p class="jb-ev-reg-note w-100">Opens <strong>${formatLongDate(opensDate)}</strong></p>
           </div>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 $(document).ready(() => {
+  /* ── Sticky navbar ── */
+  var $nav = $('.ftco_navbar');
+  $nav.addClass('scrolled awake');
+  $(window).on('scroll', function() {
+    if (!$nav.hasClass('scrolled')) $nav.addClass('scrolled awake');
+    if (!$nav.hasClass('awake'))    $nav.addClass('awake');
+  });
+
   fetch('/data/events.json')
     .then(r => r.json())
     .then(data => {
@@ -547,12 +616,15 @@ $(document).ready(() => {
 
     });  
 
+    let upcomingCount = 0;
     events.forEach(e => {
-  const eventDate = new Date(e.date + "T00:00:00");
-  const isUpcoming = eventDate >= today;
-  const section = isUpcoming ? "#upcoming-events" : "#past-events";
-  $(section).append(eventCard(e, isUpcoming));
-});
+      const eventDate = new Date(e.date + "T00:00:00");
+      const isUpcoming = eventDate >= today;
+      if (isUpcoming) upcomingCount++;
+      const section = isUpcoming ? "#upcoming-events" : "#past-events";
+      $(section).append(eventCard(e, isUpcoming));
+    });
+    if (upcomingCount === 0) $('#upcoming-empty').removeClass('d-none');
   
   $('#registerModal').on('show.bs.modal', function(event) {
     const b = $(event.relatedTarget);
