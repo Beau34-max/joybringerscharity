@@ -22,13 +22,13 @@
     body { background:#f4f7f4; font-family:'Open Sans',sans-serif; }
 
     /* ── Hero ── */
-    .abt-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:90px 0 52px; position:relative; }
+    .abt-hero { background:linear-gradient(135deg,#004d1a 0%,#006526 55%,#00883a 100%); padding:58px 0 36px; position:relative; }
     .abt-hero-eyebrow { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,.75) !important; margin-bottom:.5rem; display:block; }
     .abt-hero h1 { font-size:2.4rem; font-weight:800; line-height:1.2; margin-bottom:.85rem; color:#fff !important; text-shadow:0 1px 3px rgba(0,0,0,.3); }
     .abt-hero p.lead { font-size:1rem; color:rgba(255,255,255,.88) !important; max-width:560px; margin-bottom:1.4rem; }
     .abt-hero-wave { position:absolute; bottom:-1px; left:0; width:100%; overflow:hidden; line-height:0; }
     .abt-hero-wave svg { display:block; }
-    @media(max-width:576px){ .abt-hero { padding:80px 0 40px; } .abt-hero h1 { font-size:1.9rem; } }
+    @media(max-width:576px){ .abt-hero { padding:48px 0 28px; } .abt-hero h1 { font-size:1.9rem; } }
 
     /* ── Scrolled navbar ── */
     .ftco-navbar-light.scrolled .nav-item.active > a,
@@ -97,12 +97,19 @@
     .abt-outcome-list li { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:.9rem; color:#333; }
     .abt-outcome-list li i { color:#006526; margin-top:3px; flex-shrink:0; }
 
-    /* ── Team cards ── */
+    /* ── Team cards (executive — rectangular) ── */
     .abt-team-card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.07); text-align:center; padding-bottom:24px; height:100%; transition:transform .2s,box-shadow .2s; }
     .abt-team-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.12); }
-    .abt-team-photo { width:100%; height:220px; object-fit:cover; object-position:top; display:block; }
+    .abt-team-photo { width:100%; height:220px; object-fit:cover; object-position:top center; display:block; image-rendering:-webkit-optimize-contrast; }
     .abt-team-name { font-size:1rem; font-weight:700; color:#003d14; margin:16px 12px 4px; }
     .abt-team-role { font-size:.78rem; color:#006526; font-weight:600; text-transform:uppercase; letter-spacing:.06em; padding:0 12px; }
+
+    /* ── Volunteer cards (circular avatar) ── */
+    .abt-vol-card { background:#fff; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.07); text-align:center; padding:28px 16px 24px; height:100%; transition:transform .2s,box-shadow .2s; }
+    .abt-vol-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.12); }
+    .abt-vol-avatar { width:130px; height:130px; border-radius:50%; object-fit:cover; object-position:top center; display:block; margin:0 auto 16px; border:4px solid #d1fae5; box-shadow:0 2px 10px rgba(0,0,0,.12); }
+    .abt-vol-name { font-size:1rem; font-weight:700; color:#003d14; margin-bottom:4px; }
+    .abt-vol-role { font-size:.78rem; color:#006526; font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
 
     /* ── UK Compliance section ── */
     .abt-compliance { background:#003d14; color:rgba(255,255,255,.85); padding:52px 0; }
@@ -124,7 +131,7 @@
     /* ── Team full photo ── */
     .abt-team-banner { width:100%; max-height:400px; object-fit:cover; border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,.1); }
 
-    @media(max-width:767px){ .abt-intro-img img { height:260px; } .abt-team-photo { height:180px; } }
+    @media(max-width:767px){ .abt-intro-img img { height:260px; } .abt-team-photo { height:180px; } .abt-vol-avatar { width:110px; height:110px; } }
   </style>
 </head>
 <body>
@@ -418,7 +425,7 @@
             <div class="abt-team-card">
               <img src="images/team/BLESSING.jpg" alt="Blessing Ugwu" class="abt-team-photo">
               <h4 class="abt-team-name">Blessing Ugwu</h4>
-              <span class="abt-team-role">Director of Business &amp; Finance</span>
+              <span class="abt-team-role">Director of Business &amp; Finance · Trustee</span>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 mb-4">
@@ -430,23 +437,16 @@
           </div>
           <div class="col-md-4 col-sm-6 mb-4">
             <div class="abt-team-card">
-              <img src="images/team/chima.jpg" alt="David Chima Chiaka" class="abt-team-photo">
-              <h4 class="abt-team-name">David Chima Chiaka</h4>
-              <span class="abt-team-role">Director of Projects &amp; Management</span>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6 mb-4">
-            <div class="abt-team-card">
               <img src="images/team/nnamdi.jpg" alt="Engr. Nnamdi MacOkolinta" class="abt-team-photo">
               <h4 class="abt-team-name">Engr. Nnamdi MacOkolinta</h4>
-              <span class="abt-team-role">Director of Foodbank</span>
+              <span class="abt-team-role">Director of Foodbank &amp; Trustee</span>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 mb-4">
             <div class="abt-team-card">
               <img src="images/team/presh.jpg" alt="Uddolirim P. Osita-Nwokeocha" class="abt-team-photo">
               <h4 class="abt-team-name">Uddolirim P. Osita-Nwokeocha</h4>
-              <span class="abt-team-role">Secretary</span>
+              <span class="abt-team-role">Trustee</span>
             </div>
           </div>
         </div>
@@ -463,24 +463,24 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-4 col-sm-6 mb-4">
-            <div class="abt-team-card">
-              <img src="images/team/Dra.jpg" alt="Dragan C" class="abt-team-photo">
-              <h4 class="abt-team-name">Dragan C</h4>
-              <span class="abt-team-role">Digital &amp; Performance Analyst</span>
+            <div class="abt-vol-card">
+              <img src="images/team/Dra.jpg" alt="Dragan C" class="abt-vol-avatar">
+              <h4 class="abt-vol-name">Dragan C</h4>
+              <span class="abt-vol-role">Digital &amp; Performance Analyst</span>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 mb-4">
-            <div class="abt-team-card">
-              <img src="images/team/Mo.jpg" alt="Mohammed M" class="abt-team-photo">
-              <h4 class="abt-team-name">Mohammed M</h4>
-              <span class="abt-team-role">IT Support Engineer</span>
+            <div class="abt-vol-card">
+              <img src="images/team/Mo.jpg" alt="Mohammed M" class="abt-vol-avatar">
+              <h4 class="abt-vol-name">Mohammed M</h4>
+              <span class="abt-vol-role">IT Support Engineer</span>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 mb-4">
-            <div class="abt-team-card">
-              <img src="images/team/gz.jpg" alt="David C.O" class="abt-team-photo">
-              <h4 class="abt-team-name">David C.O</h4>
-              <span class="abt-team-role">Lead Data &amp; Research Analyst</span>
+            <div class="abt-vol-card">
+              <img src="images/team/gz.jpg" alt="David C.O" class="abt-vol-avatar">
+              <h4 class="abt-vol-name">David C.O</h4>
+              <span class="abt-vol-role">Lead Data &amp; Research Analyst</span>
             </div>
           </div>
         </div>
