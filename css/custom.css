@@ -923,10 +923,7 @@ img.shadow-sm {
   }
 }
 
-/* Reduce hero height */
-.ftco-cover-1 {
-  min-height: 70vh; /* Previously 100vh – lower this value */
-}
+/* Hero height is controlled per-page in index.html inline <style> */
 
 /* Optional: if .box-92819 has extra padding, reduce it */
 .box-92819 {
