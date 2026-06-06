@@ -642,38 +642,53 @@ function renderPayPal() {
         purchase_units: [{ amount: { value: selectedAmount.toFixed(2) } }]
       });
     },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        const donorFirst = document.getElementById('donorFirst').value.trim();
-        const donorLast  = document.getElementById('donorLast').value.trim();
-        const donorEmail = document.getElementById('donorEmail').value.trim();
+    onApprove: async function(data, actions) {
+      const details    = await actions.order.capture();
+      const donorFirst = document.getElementById('donorFirst').value.trim();
+      const donorLast  = document.getElementById('donorLast').value.trim();
+      const donorEmail = document.getElementById('donorEmail').value.trim();
 
-        const payload = {
-          amount:         Number(selectedAmount.toFixed(2)),
-          donation_type:  donationType,
-          gift_aid:       document.getElementById('giftAidCheck').checked,
-          reason:         document.getElementById('reason').value || null,
-          paypal_order_id: data.orderID || null,
-          payer_name:     donorFirst + ' ' + donorLast ||
-                          ((details?.payer?.name?.given_name || '') + ' ' + (details?.payer?.name?.surname || '')).trim(),
-          payer_email:    donorEmail || details?.payer?.email_address || null,
-          email_updates:  document.getElementById('emailPref').checked,
-          status: 'paid',
-          source: 'donate_page'
-        };
+      // Fix: trim concatenated name; fall back to PayPal payer name if blank
+      const enteredName  = (donorFirst + ' ' + donorLast).trim();
+      const paypalName   = ((details?.payer?.name?.given_name || '') + ' ' + (details?.payer?.name?.surname || '')).trim();
 
-        // Save to Supabase
-        if (window.supabaseClient) {
-          window.supabaseClient.from('donation_paypal').insert([payload])
-            .then(res => { if (res.error) console.error('Supabase:', res.error.message); else console.log('Donation saved'); })
-            .catch(err => console.error('Supabase error:', err));
+      const payload = {
+        amount:          Number(selectedAmount.toFixed(2)),
+        donation_type:   donationType,
+        gift_aid:        document.getElementById('giftAidCheck').checked,
+        reason:          document.getElementById('reason').value || null,
+        paypal_order_id: data.orderID || null,
+        payer_name:      enteredName || paypalName || null,
+        payer_email:     donorEmail || details?.payer?.email_address || null,
+        email_updates:   document.getElementById('emailPref').checked,
+        status:          'paid',
+        source:          'donate_page'
+      };
+
+      console.log('[Joybringers] Saving donation:', payload);
+
+      // Save to Supabase — awaited so errors are visible
+      if (window.supabaseClient) {
+        try {
+          const { error: dbError } = await window.supabaseClient
+            .from('donation_paypal')
+            .insert([payload]);
+          if (dbError) {
+            console.error('[Joybringers] Supabase insert error:', dbError.message, dbError);
+          } else {
+            console.log('[Joybringers] Donation saved to Supabase ✓');
+          }
+        } catch (dbErr) {
+          console.error('[Joybringers] Supabase exception:', dbErr);
         }
+      } else {
+        console.warn('[Joybringers] Supabase client not available');
+      }
 
-        // Show success
-        document.getElementById('thankYou').style.display = 'block';
-        container.style.display = 'none';
-        selectedAmount = 5;
-      });
+      // Show success (always — payment was already captured)
+      document.getElementById('thankYou').style.display = 'block';
+      container.style.display = 'none';
+      selectedAmount = 5;
     },
     onError: function(err) {
       console.error('PayPal error:', err);
