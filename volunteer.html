@@ -26,7 +26,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     /* ── Hero ── */
     .vol-hero {
-      background: linear-gradient(150deg, #0c2218 0%, #14382a 55%, #1a4d38 100%);
+      background: linear-gradient(135deg, #004d1a 0%, #006526 55%, #00883a 100%);
       color: white;
       padding: 90px 0 52px;
       position: relative;
@@ -183,6 +183,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .vol-thanks .fa-check-circle { font-size: 3.5rem; color: #006526; margin-bottom: 16px; display: block; }
     .vol-thanks h4 { font-weight: 700; color: #1a1a2e; }
     .vol-thanks p { color: #6c757d; }
+
+    /* Sticky navbar — override scrolled active-link colour to brand green */
+    .ftco-navbar-light.scrolled .nav-item.active > a,
+    .ftco-navbar-light.scrolled .nav-link.active { color: #006526 !important; }
+    .ftco-navbar-light.scrolled .navbar-brand { color: #006526 !important; }
 
     /* force the modal content box to never overflow horizontally */
     #volModal .modal-content { overflow: hidden; }
@@ -1071,6 +1076,17 @@ document.getElementById('volunteerForm').addEventListener('submit', async functi
   this.reset();
   clearCV();
   btnText.style.display = 'inline'; btnLoad.style.display = 'none'; btn.disabled = false;
+});
+
+// Sticky navbar — fix to top immediately on inner pages so it follows scroll
+$(document).ready(function() {
+  var $nav = $('.ftco_navbar');
+  $nav.addClass('scrolled awake');
+  $(window).on('scroll', function() {
+    // Keep it fixed at all scroll positions (override main.js 150px threshold)
+    if (!$nav.hasClass('scrolled')) $nav.addClass('scrolled awake');
+    if (!$nav.hasClass('awake'))    $nav.addClass('awake');
+  });
 });
 </script>
 
