@@ -1082,10 +1082,11 @@ document.getElementById('volunteerForm').addEventListener('submit', async functi
   // 3) Send confirmation email
   try {
     await emailjs.send('service_m8qsdzk', 'template_56p9ftd', {
-      name:  payload.name,
-      email: payload.email,
-      role:  payload.role,
-      phone: payload.phone
+      name:         payload.name,
+      email:        payload.email,
+      role:         payload.role,
+      phone:        payload.phone,
+      booking_link: 'https://calendly.com/joybringerscharity'  // ← update this URL to your interview booking link
     });
   } catch (emailErr) { console.error('EmailJS:', emailErr); }
 
