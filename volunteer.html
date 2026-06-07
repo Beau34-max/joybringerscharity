@@ -1082,11 +1082,10 @@ document.getElementById('volunteerForm').addEventListener('submit', async functi
   // 3) Send confirmation email
   try {
     await emailjs.send('service_m8qsdzk', 'template_56p9ftd', {
-      name:         payload.name,
-      email:        payload.email,
-      role:         payload.role,
-      phone:        payload.phone,
-      booking_link: 'https://bookings.cloud.microsoft/book/JoybringersInterviewBooking@joybringer.org.uk/?ismsaljsauthenabled'
+      name:  payload.name,
+      email: payload.email,
+      role:  payload.role,
+      phone: payload.phone
     });
   } catch (emailErr) { console.error('EmailJS:', emailErr); }
 
