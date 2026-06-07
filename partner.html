@@ -751,9 +751,12 @@
     window.supabaseClient   = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
 
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>(function(){ emailjs.init("6xlIRBT96J-bKz7s3"); })();</script>
+
   <script>
   $(document).ready(function () {
-    // Sticky navbar
     var $nav = $('.ftco_navbar');
     $nav.addClass('scrolled awake');
     $(window).on('scroll', function () {
@@ -762,7 +765,6 @@
     });
   });
 
-  // Partnership enquiry form
   document.getElementById('partner-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -779,6 +781,8 @@
     const email    = document.getElementById('par-email').value.trim();
     const partType = document.getElementById('par-type').value;
     const message  = document.getElementById('par-message').value.trim();
+    const phone    = document.getElementById('par-phone').value.trim() || 'Not provided';
+    const heardFrom = document.getElementById('par-heard').value || 'Not specified';
     const gdpr     = document.getElementById('par-gdpr').checked;
 
     if (!orgName || !contact || !email || !partType || !message) {
@@ -800,29 +804,47 @@
       organisation_name: orgName,
       contact_name:      contact,
       email:             email,
-      phone:             document.getElementById('par-phone').value.trim() || null,
+      phone:             phone !== 'Not provided' ? phone : null,
       partnership_type:  partType,
       message:           message,
-      heard_from:        document.getElementById('par-heard').value || null,
+      heard_from:        heardFrom !== 'Not specified' ? heardFrom : null,
       status:            'new',
       source:            'joybringerscharity.org/partner'
     };
 
-    console.log('[Joybringers] Partnership enquiry:', payload);
-
     try {
+      // 1) Save to Supabase
       const { error: dbError } = await window.supabaseClient
         .from('partnership_enquiries')
         .insert([payload]);
 
       if (dbError) {
-        console.error('[Joybringers] Supabase error:', dbError.message);
-        errorText.textContent = 'Something went wrong saving your enquiry. Please email us directly at info@joybringerscharity.org';
+        console.error('[Joybringers] Supabase error:', dbError.message, dbError.details, dbError.hint);
+        errorText.textContent = 'Database error: ' + dbError.message + '. Please email info@joybringerscharity.org directly.';
         errorEl.style.display = 'block';
+        errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
         return;
       }
 
-      console.log('[Joybringers] Partnership enquiry saved ✓');
+      console.log('[Joybringers] Partnership enquiry saved to Supabase ✓');
+
+      // 2) Send confirmation email via EmailJS
+      try {
+        await emailjs.send('service_jqpd0af', 'template_partner1', {
+          org_name:         orgName,
+          contact_name:     contact,
+          email:            email,
+          phone:            phone,
+          partnership_type: partType,
+          message:          message,
+          heard_from:       heardFrom
+        });
+        console.log('[Joybringers] Partnership confirmation email sent ✓');
+      } catch (emailErr) {
+        console.warn('[Joybringers] EmailJS warning (enquiry still saved):', emailErr);
+      }
+
+      // 3) Show success
       successEl.style.display = 'block';
       successEl.scrollIntoView({ behavior:'smooth', block:'center' });
       this.reset();
