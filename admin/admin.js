@@ -165,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
+    const errorBox = document.getElementById('login-error');
+    errorBox.style.display = 'none';
 
     showLoading('Signing in...');
     try {
@@ -174,8 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'login', email, passwordHash })
       });
-      const data = await result.json();
-      if (!result.ok) throw new Error(data.error || 'Login failed');
+      const data = await result.json().catch(() => ({ error: `Server returned ${result.status}` }));
+      if (!result.ok) throw new Error(data.error || `Login failed (${result.status})`);
 
       localStorage.setItem('jb_session', data.token);
       localStorage.setItem('jb_email',   email);
@@ -184,7 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
       switchTab('events');
     } catch (err) {
       hideLoading();
-      showAlert('danger', `<i class="fas fa-times-circle"></i> ${err.message}`);
+      errorBox.textContent = err.message;
+      errorBox.style.display = 'block';
     }
   });
 });
