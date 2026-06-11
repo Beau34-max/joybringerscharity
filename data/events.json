@@ -238,7 +238,7 @@
       "time": "10",
       "venue": "test",
       "description": "test",
-      "image": "",
+      "image": "images/events/test-1781153760305.jpeg",
       "featured": true,
       "paidEvent": false,
       "regOverrideOpen": true
