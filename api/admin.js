@@ -91,14 +91,14 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const { email, passwordHash } = body;
+    const { password } = body;
 
-    // Only check password — email is cosmetic on this single-admin panel
-    if (passwordHash !== sha256hex(adminPassword)) {
+    // Plain comparison — password sent over HTTPS, no need for client-side hash
+    if (!password || password !== adminPassword) {
       return res.status(401).json({ error: 'Incorrect password.' });
     }
 
-    return res.status(200).json({ token: makeSession(email || adminEmail) });
+    return res.status(200).json({ token: makeSession(adminEmail) });
   }
 
   /* ── ALL OTHER ACTIONS REQUIRE A VALID SESSION ─────────── */

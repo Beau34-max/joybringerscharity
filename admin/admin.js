@@ -168,26 +168,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorBox = document.getElementById('login-error');
     errorBox.style.display = 'none';
 
-    showLoading('Signing in...');
     try {
-      const passwordHash = await sha256(password);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+
       const result = await fetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', email, passwordHash })
+        body: JSON.stringify({ action: 'login', email, password }),
+        signal: controller.signal
       });
-      const data = await result.json().catch(() => ({ error: `Server returned ${result.status}` }));
+      clearTimeout(timeout);
+
+      const data = await result.json().catch(() => ({ error: `Server error (${result.status})` }));
       if (!result.ok) throw new Error(data.error || `Login failed (${result.status})`);
 
       localStorage.setItem('jb_session', data.token);
       localStorage.setItem('jb_email',   email);
-      hideLoading();
       showAdminPanel();
       switchTab('events');
     } catch (err) {
-      hideLoading();
-      errorBox.textContent = err.message;
+      const msg = err.name === 'AbortError' ? 'Request timed out — check your connection.' : err.message;
+      errorBox.textContent = msg;
       errorBox.style.display = 'block';
+      window.alert('Login error: ' + msg);
     }
   });
 });
