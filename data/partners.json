@@ -1,19 +1,49 @@
 {
   "items": [
     {
+      "name": "William Leech Charity",
+      "logo": "images/partners/wl.png",
+      "link": "https://www.williamleechcharity.org.uk"
+    },
+    {
       "name": "Blakelaw Council",
       "logo": "images/partners/blakelaw.png",
-      "link": "https://blakelaw.org"
+      "link": "https://www.newcastle.gov.uk"
     },
     {
       "name": "Coseng Limited UK",
-      "logo": "images/partners/coseng.png",
-      "link": "https://coseng.co.uk"
+      "logo": "images/partners/cosenglogo1.png",
+      "link": "https://www.coseng.co.uk"
+    },
+    {
+      "name": "Avire UK",
+      "logo": "images/partners/avire.gif",
+      "link": "https://avire.co.uk"
+    },
+    {
+      "name": "ASDA Foundation",
+      "logo": "images/partners/asda.png",
+      "link": "https://asdafoundation.org"
+    },
+    {
+      "name": "Sir James Knott Trust",
+      "logo": "images/partners/sjkt.png",
+      "link": "https://www.knott-trust.co.uk"
+    },
+    {
+      "name": "Ordafy",
+      "logo": "images/partners/ordafy.png",
+      "link": "https://www.ordafy.com"
     },
     {
       "name": "FareShare",
       "logo": "images/partners/fareshare.jpg",
       "link": "https://fareshare.org.uk"
+    },
+    {
+      "name": "NCVO",
+      "logo": "images/partners/ncvo-logo.jpg",
+      "link": "https://www.ncvo.org.uk"
     },
     {
       "name": "Groundwork UK",
