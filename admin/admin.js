@@ -122,7 +122,7 @@ function switchTab(tabId) {
   document.getElementById('sidebar-backdrop').classList.remove('open');
 
   if (tabId === 'events')  loadEvents();
-  if (tabId === 'photos')  renderGallery();
+  if (tabId === 'photos')  { renderGallery('events'); renderGallery('partners'); }
   if (tabId === 'content') loadContentTab();
 }
 
@@ -459,22 +459,25 @@ async function uploadPhoto() {
     showAlert('success', `<i class="fas fa-check-circle"></i> Photo uploaded to <code>${target}</code>`);
     document.getElementById('photo-upload-input').value = '';
     document.getElementById('photo-upload-preview').style.display = 'none';
-    if (folder.includes('events')) renderGallery();
+    if (folder.includes('events'))   renderGallery('events');
+    if (folder.includes('partners')) renderGallery('partners');
   } catch (err) {
     hideLoading();
     showAlert('danger', err.message);
   }
 }
 
-async function renderGallery() {
-  const grid = document.getElementById('gallery-grid');
-  grid.innerHTML = '<div class="col-12"><p class="text-muted">Loading photos...</p></div>';
+async function renderGallery(folder = 'events') {
+  const gridId = folder === 'partners' ? 'partners-gallery-grid' : 'gallery-grid';
+  const grid   = document.getElementById(gridId);
+  if (!grid) return;
+  grid.innerHTML = '<div class="col-12"><p class="text-muted">Loading...</p></div>';
   try {
-    const files  = await apiCall('list', { path: 'images/events' });
+    const files  = await apiCall('list', { path: `images/${folder}` });
     const images = Array.isArray(files) ? files.filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.name)) : [];
 
     if (!images.length) {
-      grid.innerHTML = '<div class="col-12"><p class="text-muted">No photos in images/events/ yet.</p></div>';
+      grid.innerHTML = `<div class="col-12"><p class="text-muted">No photos in images/${folder}/ yet.</p></div>`;
       return;
     }
     const raw = 'https://raw.githubusercontent.com/Beau34-max/joybringerswebsitesep/main/';
@@ -486,7 +489,7 @@ async function renderGallery() {
         </div>
       </div>`).join('');
   } catch (err) {
-    grid.innerHTML = `<div class="col-12"><div class="alert alert-danger">Could not load gallery: ${err.message}</div></div>`;
+    grid.innerHTML = `<div class="col-12"><div class="alert alert-danger">Could not load: ${err.message}</div></div>`;
   }
 }
 
