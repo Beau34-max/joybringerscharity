@@ -14,6 +14,11 @@
       "name": "FareShare",
       "logo": "images/partners/fareshare.jpg",
       "link": "https://fareshare.org.uk"
+    },
+    {
+      "name": "Groundwork UK",
+      "logo": "images/partners/gw.jpg",
+      "link": "https://www.groundwork.org.uk/"
     }
   ]
 }
