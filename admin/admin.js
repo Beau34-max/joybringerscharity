@@ -524,8 +524,11 @@ async function loadContentTab() {
     const { data, sha } = await apiReadJSON('data/impact.json');
     contentShas.impact = sha;
     document.getElementById('impact-young-people').value = data.young_people_supported || '';
-    document.getElementById('impact-donation').value     = data.donation_message  || '';
-    document.getElementById('impact-volunteer').value    = data.volunteer_message || '';
+    document.getElementById('impact-events').value       = data.events_workshops       || '';
+    document.getElementById('impact-partner-orgs').value = data.partner_orgs           || '';
+    document.getElementById('impact-volunteers').value   = data.active_volunteers      || '';
+    document.getElementById('impact-donation').value     = data.donation_message       || '';
+    document.getElementById('impact-volunteer').value    = data.volunteer_message      || '';
   } catch (_) {}
 
   /* footer */
@@ -558,6 +561,9 @@ async function saveImpact() {
   try {
     const payload = {
       young_people_supported: parseInt(document.getElementById('impact-young-people').value) || 0,
+      events_workshops:       parseInt(document.getElementById('impact-events').value)       || 0,
+      partner_orgs:           parseInt(document.getElementById('impact-partner-orgs').value) || 0,
+      active_volunteers:      parseInt(document.getElementById('impact-volunteers').value)   || 0,
       donation_message:  document.getElementById('impact-donation').value,
       volunteer_message: document.getElementById('impact-volunteer').value
     };

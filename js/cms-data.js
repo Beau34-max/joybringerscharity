@@ -19,11 +19,13 @@ loadJSON("data/hero.json").then(data => {
   });
 });
 
-// IMPACT SECTION
+// IMPACT / STATS SECTION
 loadJSON("data/impact.json").then(data => {
-  document.querySelector("#impact-count").innerText = data.young_people_supported;
-  document.querySelector("#impact-donation").innerText = data.donation_message;
-  document.querySelector("#impact-volunteer").innerText = data.volunteer_message;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('stat-young-people', (data.young_people_supported || 601) + '+');
+  set('stat-events',       (data.events_workshops       || 40)  + '+');
+  set('stat-partners',      data.partner_orgs           || 8       );
+  set('stat-volunteers',   (data.active_volunteers      || 50)  + '+');
 });
 
 // PROGRAMMES SECTION
@@ -65,17 +67,14 @@ loadJSON("data/events.json").then(data => {
 
 // PARTNERS SECTION
 loadJSON("data/partners.json").then(data => {
-  let container = document.querySelector("#partners-list");
-  container.innerHTML = "";
-  data.items.forEach(partner => {
-    container.innerHTML += `
-      <div class="col-md-3 col-6 ftco-animate">
-        <a href="${partner.link}" target="_blank">
-          <img src="${partner.logo}" alt="${partner.name}" class="img-fluid mb-3">
-        </a>
-      </div>
-    `;
-  });
+  const container = document.getElementById("homepage-partners-row");
+  if (!container || !data.items || !data.items.length) return;
+  container.innerHTML = data.items.map(p => `
+    <div class="col-6 col-md-2 jb-partner-item">
+      <a href="${p.link || '#'}" target="_blank" rel="noopener noreferrer">
+        <img src="${p.logo}" alt="${p.name}" class="jb-partner-logo img-fluid">
+      </a>
+    </div>`).join('');
 });
 
 // FOOTER SECTION
