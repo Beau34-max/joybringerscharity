@@ -483,13 +483,32 @@ async function renderGallery(folder = 'events') {
     const raw = 'https://raw.githubusercontent.com/Beau34-max/joybringerswebsitesep/main/';
     grid.innerHTML = images.map(f => `
       <div class="col-6 col-md-3 col-lg-2">
-        <div class="gallery-photo-card">
+        <div class="gallery-photo-card" style="position:relative;">
           <img src="${raw}${f.path}" alt="${f.name}" loading="lazy">
           <div class="photo-caption" title="${f.path}"><code style="font-size:10px">${f.name}</code></div>
+          <button onclick="deletePhoto('${f.path}','${f.sha}','${folder}')"
+            title="Delete photo"
+            style="position:absolute;top:4px;right:4px;background:rgba(220,38,38,0.85);border:none;border-radius:50%;width:26px;height:26px;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
       </div>`).join('');
   } catch (err) {
     grid.innerHTML = `<div class="col-12"><div class="alert alert-danger">Could not load: ${err.message}</div></div>`;
+  }
+}
+
+async function deletePhoto(path, sha, folder) {
+  if (!confirm(`Delete "${path.split('/').pop()}"?\n\nThis cannot be undone.`)) return;
+  showLoading('Deleting photo...');
+  try {
+    await apiCall('delete', { path, sha, message: `Admin: delete photo — ${path}` });
+    hideLoading();
+    showAlert('success', `<i class="fas fa-check-circle"></i> Photo deleted.`);
+    renderGallery(folder);
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', `<i class="fas fa-times-circle"></i> ${err.message}`);
   }
 }
 

@@ -142,5 +142,17 @@ module.exports = async function handler(req, res) {
     return res.status(r.status).json(data);
   }
 
+  /* ── DELETE A FILE ─────────────────────────────────────── */
+  if (action === 'delete') {
+    const { path, sha, message } = body;
+    const r = await fetch(`${ghBase}/${path}`, {
+      method: 'DELETE',
+      headers: ghHeaders(),
+      body: JSON.stringify({ message, sha, branch: GITHUB_BRANCH })
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
   return res.status(400).json({ error: `Unknown action: ${action}` });
 };
