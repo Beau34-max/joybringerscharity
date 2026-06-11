@@ -470,7 +470,7 @@
           <h2 class="par-title">Our Partners &amp; Supporters</h2>
           <p class="par-sub" style="margin-bottom:0;">We are proud to work alongside these organisations who share our commitment to community.</p>
         </div>
-        <div class="par-logos mb-5">
+        <div class="par-logos mb-5" id="par-logos-container">
           <div class="par-logo-item">
             <img src="images/partners/asda.png" alt="ASDA">
           </div>
@@ -742,6 +742,18 @@
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/cookie-consent.js"></script>
+  <script>
+  fetch('/data/partners.json').then(r=>r.json()).then(d=>{
+    const c = document.getElementById('par-logos-container');
+    if (!c || !d.items || !d.items.length) return;
+    c.innerHTML = d.items.map(p=>`
+      <div class="par-logo-item">
+        <a href="${p.link||'#'}" target="_blank" rel="noopener noreferrer">
+          <img src="${p.logo}" alt="${p.name}">
+        </a>
+      </div>`).join('');
+  }).catch(()=>{});
+  </script>
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

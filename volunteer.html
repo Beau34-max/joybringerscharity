@@ -268,7 +268,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
       <div class="row">
         <div class="col-6 col-md-3 vol-stat">
-          <div class="vol-stat-number">50+</div>
+          <div class="vol-stat-number" id="vol-stat-volunteers">50+</div>
           <div class="vol-stat-label">Active Volunteers</div>
         </div>
         <div class="col-6 col-md-3 vol-stat">
@@ -608,6 +608,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/scrollax.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/cookie-consent.js"></script>
+<script>
+fetch('/data/impact.json').then(r=>r.json()).then(d=>{
+  const el = document.getElementById('vol-stat-volunteers');
+  if (el && d.active_volunteers) el.textContent = d.active_volunteers + '+';
+}).catch(()=>{});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
