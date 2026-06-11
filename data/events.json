@@ -231,6 +231,17 @@
       "featured": false,
       "paidEvent": false,
       "regOverrideOpen": false
+    },
+    {
+      "title": "test",
+      "date": "2026-06-12",
+      "time": "10",
+      "venue": "test",
+      "description": "test",
+      "image": "",
+      "featured": true,
+      "paidEvent": false,
+      "regOverrideOpen": true
     }
   ]
 }
