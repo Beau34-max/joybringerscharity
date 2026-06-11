@@ -93,12 +93,12 @@ module.exports = async function handler(req, res) {
 
     const { email, passwordHash } = body;
 
-    // passwordHash = SHA-256 of what the user typed
-    if (email !== adminEmail || passwordHash !== sha256hex(adminPassword)) {
-      return res.status(401).json({ error: 'Incorrect email or password.' });
+    // Only check password — email is cosmetic on this single-admin panel
+    if (passwordHash !== sha256hex(adminPassword)) {
+      return res.status(401).json({ error: 'Incorrect password.' });
     }
 
-    return res.status(200).json({ token: makeSession(email) });
+    return res.status(200).json({ token: makeSession(email || adminEmail) });
   }
 
   /* ── ALL OTHER ACTIONS REQUIRE A VALID SESSION ─────────── */
