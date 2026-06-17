@@ -314,6 +314,7 @@ function openEditModal(idx) {
   document.getElementById('event-date').value                = e.date         || '';
   document.getElementById('event-time').value                = e.time         || '';
   document.getElementById('event-venue').value               = e.venue        || '';
+  document.getElementById('event-joining-link').value        = e.joiningLink  || '';
   document.getElementById('event-description').value         = e.description  || '';
   document.getElementById('event-featured').checked          = !!e.featured;
   document.getElementById('event-paid').checked              = !!e.paidEvent;
@@ -369,6 +370,7 @@ async function saveEvent() {
       imagePath = target;
     }
 
+    const joiningLink = document.getElementById('event-joining-link').value.trim();
     const eventObj = {
       title,
       date:            document.getElementById('event-date').value,
@@ -378,7 +380,8 @@ async function saveEvent() {
       image:           imagePath,
       featured:        document.getElementById('event-featured').checked,
       paidEvent:       document.getElementById('event-paid').checked,
-      regOverrideOpen: document.getElementById('event-reg-override').checked
+      regOverrideOpen: document.getElementById('event-reg-override').checked,
+      ...(joiningLink && { joiningLink })
     };
 
     if (idx !== '') eventsData.items[parseInt(idx)] = eventObj;
