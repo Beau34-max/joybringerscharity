@@ -9,7 +9,13 @@ const API = '/api/admin';
 /* ── session ─────────────────────────────────────────────── */
 
 function getSession()    { return localStorage.getItem('jb_session') || ''; }
-function clearSession()  { localStorage.removeItem('jb_session'); localStorage.removeItem('jb_email'); }
+function getRole()       { return localStorage.getItem('jb_role') || 'admin'; }
+function isAdmin()       { return getRole() === 'admin'; }
+function clearSession()  {
+  localStorage.removeItem('jb_session');
+  localStorage.removeItem('jb_email');
+  localStorage.removeItem('jb_role');
+}
 function isLoggedIn()    { return !!getSession(); }
 
 function logout() {
@@ -115,15 +121,25 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).style.display = 'block';
   const link = document.querySelector(`[data-tab="${tabId}"]`);
   if (link) link.classList.add('active');
-  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', settings: 'Settings' };
+  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', settings: 'Settings' };
   document.getElementById('page-title').textContent = titles[tabId] || tabId;
   // close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-backdrop').classList.remove('open');
 
-  if (tabId === 'events')  loadEvents();
-  if (tabId === 'photos')  { renderGallery('events'); renderGallery('partners'); }
-  if (tabId === 'content') loadContentTab();
+  if (tabId === 'events')    loadEvents();
+  if (tabId === 'photos')    { renderGallery('events'); renderGallery('partners'); }
+  if (tabId === 'content')   loadContentTab();
+  if (tabId === 'dataentry') loadDataEntryTab();
+}
+
+/* ── Role-based UI restriction ───────────────────────────── */
+
+function applyRoleUI() {
+  const admin = isAdmin();
+  document.querySelectorAll('.sidebar-link[data-role="admin"]').forEach(el => {
+    el.style.display = admin ? '' : 'none';
+  });
 }
 
 /* ── SHA-256 (for password hashing in browser) ───────────── */
@@ -139,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // If a session is stored, verify it quickly with the server
   if (isLoggedIn()) {
     apiCall('list', { path: 'data' })
-      .then(() => { showAdminPanel(); switchTab('events'); })
+      .then(() => { showAdminPanel(); switchTab(isAdmin() ? 'events' : 'dataentry'); })
       .catch(() => { clearSession(); showLoginScreen(); });
     return;
   }
@@ -156,6 +172,7 @@ function showAdminPanel() {
   document.getElementById('admin-panel').style.display  = 'flex';
   const email = localStorage.getItem('jb_email') || '';
   document.getElementById('logged-in-email').textContent = email;
+  applyRoleUI();
 }
 
 /* ── LOGIN ───────────────────────────────────────────────── */
@@ -185,8 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       localStorage.setItem('jb_session', data.token);
       localStorage.setItem('jb_email',   email);
+      localStorage.setItem('jb_role',    data.role || 'admin');
       showAdminPanel();
-      switchTab('events');
+      switchTab(data.role === 'data_entry' ? 'dataentry' : 'events');
     } catch (err) {
       const msg = err.name === 'AbortError' ? 'Request timed out — check your connection.' : err.message;
       errorBox.textContent = msg;
@@ -657,4 +675,158 @@ async function savePartners() {
     hideLoading();
     showAlert('success', '<i class="fas fa-check-circle"></i> Partners saved! Goes live in ~1 minute.');
   } catch (err) { hideLoading(); showAlert('danger', err.message); }
+}
+
+/* ============================================================
+   DATA ENTRY — Event Attendance & Grants Received
+   Stored in Supabase, not GitHub — available to both admin
+   and data_entry roles. Deleting entries is admin-only.
+   ============================================================ */
+
+function loadDataEntryTab() {
+  populateAttendanceEventOptions();
+  loadAttendanceList();
+  loadGrantsList();
+}
+
+async function populateAttendanceEventOptions() {
+  const select = document.getElementById('attendance-event-select');
+  try {
+    const { data } = await apiReadJSON('data/events.json');
+    const items = (data.items || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    select.innerHTML = '<option value="">Select an event...</option>' +
+      items.map(e => `<option value="${e.title}">${e.title} — ${fmtDate(e.date)}</option>`).join('');
+  } catch (_) {
+    select.innerHTML = '<option value="">Could not load events — type the name below</option>';
+  }
+}
+
+async function submitAttendance() {
+  const selected   = document.getElementById('attendance-event-select').value;
+  const custom     = document.getElementById('attendance-event-custom').value.trim();
+  const eventName  = custom || selected;
+  const date       = document.getElementById('attendance-date').value;
+  const count      = document.getElementById('attendance-count').value;
+
+  if (!eventName || !date || count === '') {
+    showAlert('warning', 'Please select/enter an event, a date, and the number attended.');
+    return;
+  }
+
+  showLoading('Saving attendance...');
+  try {
+    await apiCall('add_attendance', {
+      record: {
+        event_name: eventName,
+        event_date: date,
+        attendees_count: parseInt(count) || 0,
+        notes: document.getElementById('attendance-notes').value.trim() || null
+      }
+    });
+    hideLoading();
+    showAlert('success', '<i class="fas fa-check-circle"></i> Attendance saved.');
+    document.getElementById('attendance-form').reset();
+    loadAttendanceList();
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+async function loadAttendanceList() {
+  const body = document.getElementById('attendance-list-body');
+  body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
+  try {
+    const rows = await apiCall('list_attendance');
+    if (!Array.isArray(rows) || !rows.length) {
+      body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No attendance logged yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.event_name}</td>
+        <td>${fmtDate(r.event_date)}</td>
+        <td>${r.attendees_count}</td>
+        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteAttendance(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+      </tr>`).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
+  }
+}
+
+async function deleteAttendance(id) {
+  if (!confirm('Delete this attendance record?\n\nThis cannot be undone.')) return;
+  try {
+    await apiCall('delete_attendance', { id });
+    showAlert('success', 'Attendance record deleted.');
+    loadAttendanceList();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+async function submitGrant() {
+  const name   = document.getElementById('grant-name').value.trim();
+  const amount = document.getElementById('grant-amount').value;
+  const method = document.getElementById('grant-method').value;
+  const date   = document.getElementById('grant-date').value;
+
+  if (!name || amount === '' || !method || !date) {
+    showAlert('warning', 'Please fill in grantor name, amount, payment method, and date received.');
+    return;
+  }
+
+  showLoading('Saving grant...');
+  try {
+    await apiCall('add_grant', {
+      record: {
+        grantor_name: name,
+        amount: parseFloat(amount) || 0,
+        payment_method: method,
+        date_received: date,
+        reference: document.getElementById('grant-reference').value.trim() || null,
+        notes: document.getElementById('grant-notes').value.trim() || null
+      }
+    });
+    hideLoading();
+    showAlert('success', '<i class="fas fa-check-circle"></i> Grant saved.');
+    document.getElementById('grant-form').reset();
+    loadGrantsList();
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+async function loadGrantsList() {
+  const body = document.getElementById('grants-list-body');
+  body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>';
+  try {
+    const rows = await apiCall('list_grants');
+    if (!Array.isArray(rows) || !rows.length) {
+      body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No grants logged yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.grantor_name}</td>
+        <td>£${parseFloat(r.amount).toFixed(2)}</td>
+        <td>${r.payment_method === 'cash' ? 'Cash' : 'Bank Transfer'}</td>
+        <td>${fmtDate(r.date_received)}</td>
+        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteGrant(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+      </tr>`).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="5" class="text-danger text-center py-3">${err.message}</td></tr>`;
+  }
+}
+
+async function deleteGrant(id) {
+  if (!confirm('Delete this grant record?\n\nThis cannot be undone.')) return;
+  try {
+    await apiCall('delete_grant', { id });
+    showAlert('success', 'Grant record deleted.');
+    loadGrantsList();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
 }

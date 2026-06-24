@@ -81,16 +81,19 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="#" class="sidebar-link active" data-tab="events" onclick="switchTab('events');return false;">
+      <a href="#" class="sidebar-link active" data-tab="events" data-role="admin" onclick="switchTab('events');return false;">
         <i class="fas fa-calendar-alt"></i> Events
       </a>
-      <a href="#" class="sidebar-link" data-tab="photos" onclick="switchTab('photos');return false;">
+      <a href="#" class="sidebar-link" data-tab="photos" data-role="admin" onclick="switchTab('photos');return false;">
         <i class="fas fa-images"></i> Photos &amp; Gallery
       </a>
-      <a href="#" class="sidebar-link" data-tab="content" onclick="switchTab('content');return false;">
+      <a href="#" class="sidebar-link" data-tab="content" data-role="admin" onclick="switchTab('content');return false;">
         <i class="fas fa-pen-to-square"></i> Website Content
       </a>
-      <a href="#" class="sidebar-link" data-tab="settings" onclick="switchTab('settings');return false;">
+      <a href="#" class="sidebar-link" data-tab="dataentry" onclick="switchTab('dataentry');return false;">
+        <i class="fas fa-clipboard-list"></i> Data Entry
+      </a>
+      <a href="#" class="sidebar-link" data-tab="settings" data-role="admin" onclick="switchTab('settings');return false;">
         <i class="fas fa-gear"></i> Settings
       </a>
     </nav>
@@ -383,6 +386,136 @@
       </div>
     </div>
 
+    <!-- ============ DATA ENTRY TAB ============ -->
+    <div id="tab-dataentry" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-clipboard-list text-success"></i> Data Entry</h2>
+          <p class="text-muted mb-0 small">Log event attendance and grants received. Saved straight to the database.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-user-check"></i> Log Event Attendance</div>
+            <div class="card-body">
+              <form id="attendance-form">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Event</label>
+                  <select class="form-select" id="attendance-event-select">
+                    <option value="">Select an event...</option>
+                  </select>
+                  <input type="text" class="form-control mt-2" id="attendance-event-custom"
+                         placeholder="Or type an event name not listed above">
+                </div>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Date</label>
+                    <input type="date" class="form-control" id="attendance-date" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Number Attended</label>
+                    <input type="number" min="0" class="form-control" id="attendance-count" required>
+                  </div>
+                </div>
+                <div class="mb-3 mt-2">
+                  <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
+                  <textarea class="form-control" id="attendance-notes" rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-success" onclick="submitAttendance()">
+                  <i class="fas fa-save"></i> Save Attendance
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <span><i class="fas fa-list-ul"></i> Recent Attendance</span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="loadAttendanceList()">
+                <i class="fas fa-rotate"></i> Refresh
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead><tr><th>Event</th><th>Date</th><th>Attendees</th><th></th></tr></thead>
+                  <tbody id="attendance-list-body">
+                    <tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-hand-holding-dollar"></i> Log Grant Received</div>
+            <div class="card-body">
+              <form id="grant-form">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Grantor / Funder Name</label>
+                  <input type="text" class="form-control" id="grant-name" required placeholder="e.g. Sir James Knott Trust">
+                </div>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Amount (£)</label>
+                    <input type="number" min="0" step="0.01" class="form-control" id="grant-amount" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Payment Method</label>
+                    <select class="form-select" id="grant-method" required>
+                      <option value="">Select...</option>
+                      <option value="cash">Cash</option>
+                      <option value="bank_transfer">Bank Transfer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Date Received</label>
+                    <input type="date" class="form-control" id="grant-date" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Reference <small class="text-muted fw-normal">(optional)</small></label>
+                    <input type="text" class="form-control" id="grant-reference" placeholder="e.g. grant ref number">
+                  </div>
+                </div>
+                <div class="mb-3 mt-2">
+                  <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
+                  <textarea class="form-control" id="grant-notes" rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-success" onclick="submitGrant()">
+                  <i class="fas fa-save"></i> Save Grant
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <span><i class="fas fa-list-ul"></i> Recent Grants</span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="loadGrantsList()">
+                <i class="fas fa-rotate"></i> Refresh
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead><tr><th>Grantor</th><th>Amount</th><th>Method</th><th>Date</th><th></th></tr></thead>
+                  <tbody id="grants-list-body">
+                    <tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ============ SETTINGS TAB ============ -->
     <div id="tab-settings" class="admin-tab" style="display:none">
       <div class="tab-header">
@@ -419,13 +552,11 @@
           </div>
 
           <div class="card">
-            <div class="card-header"><i class="fas fa-users"></i> Adding More Admins</div>
+            <div class="card-header"><i class="fas fa-users"></i> Staff Accounts &amp; Roles</div>
             <div class="card-body small text-muted">
-              <p>Currently one admin account is supported. To add another:</p>
-              <ul class="mb-0">
-                <li>Go to Vercel → Settings → Environment Variables</li>
-                <li>Share the <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> values with trusted volunteers</li>
-              </ul>
+              <p class="mb-2"><strong>Full Admin</strong> — sees everything in this panel. Logs in with the <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code> values set in Vercel.</p>
+              <p class="mb-2"><strong>Data Entry Staff</strong> — only sees the <strong>Data Entry</strong> tab (event attendance &amp; grants received). Cannot edit events, photos, content, or settings. Set up by adding <code>STAFF_EMAIL</code> / <code>STAFF_PASSWORD</code> in Vercel.</p>
+              <p class="mb-0">Both roles log in at the same page — the password typed decides which role they get.</p>
             </div>
           </div>
         </div>
