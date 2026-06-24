@@ -647,6 +647,9 @@ $(document).ready(() => {
     const description = b.data('description') || "";
     const joiningLink = b.data('joining-link') || "";
 
+    const eventSlug = createEventSlug(title);
+    history.replaceState(null, '', `${window.location.pathname}?event=${eventSlug}`);
+
     $('#registerModalLabel').text(`Register for: ${title}`);
     $('#modalEventTitle').text(title);
     $('#modalEventDate').text(formatDate(date));
@@ -692,7 +695,11 @@ $(document).ready(() => {
 
     $('#thankYouMessage').hide();
   });
-  
+
+  $('#registerModal').on('hidden.bs.modal', function() {
+    history.replaceState(null, '', window.location.pathname);
+  });
+
   const params = new URLSearchParams(window.location.search);
 const requestedEventSlug = params.get("event");
 
