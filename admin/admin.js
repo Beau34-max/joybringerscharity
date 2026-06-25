@@ -687,6 +687,7 @@ function loadDataEntryTab() {
   populateAttendanceEventOptions();
   loadAttendanceList();
   loadGrantsList();
+  loadFoodbankList();
 }
 
 async function populateAttendanceEventOptions() {
@@ -826,6 +827,69 @@ async function deleteGrant(id) {
     await apiCall('delete_grant', { id });
     showAlert('success', 'Grant record deleted.');
     loadGrantsList();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+async function submitFoodbank() {
+  const date   = document.getElementById('foodbank-date').value;
+  const people = document.getElementById('foodbank-people').value;
+
+  if (!date || people === '') {
+    showAlert('warning', 'Please fill in the date and number of people.');
+    return;
+  }
+
+  const households = document.getElementById('foodbank-households').value;
+
+  showLoading('Saving foodbank record...');
+  try {
+    await apiCall('add_foodbank', {
+      record: {
+        distribution_date: date,
+        people_count: parseInt(people) || 0,
+        households_count: households !== '' ? (parseInt(households) || 0) : null,
+        notes: document.getElementById('foodbank-notes').value.trim() || null
+      }
+    });
+    hideLoading();
+    showAlert('success', '<i class="fas fa-check-circle"></i> Foodbank record saved.');
+    document.getElementById('foodbank-form').reset();
+    loadFoodbankList();
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+async function loadFoodbankList() {
+  const body = document.getElementById('foodbank-list-body');
+  body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
+  try {
+    const rows = await apiCall('list_foodbank');
+    if (!Array.isArray(rows) || !rows.length) {
+      body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No foodbank records yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td>${fmtDate(r.distribution_date)}</td>
+        <td>${r.people_count}</td>
+        <td>${r.households_count ?? '—'}</td>
+        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteFoodbank(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+      </tr>`).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
+  }
+}
+
+async function deleteFoodbank(id) {
+  if (!confirm('Delete this foodbank record?\n\nThis cannot be undone.')) return;
+  try {
+    await apiCall('delete_foodbank', { id });
+    showAlert('success', 'Foodbank record deleted.');
+    loadFoodbankList();
   } catch (err) {
     showAlert('danger', err.message);
   }

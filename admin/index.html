@@ -513,6 +513,56 @@
             </div>
           </div>
         </div>
+
+        <div class="col-lg-6">
+          <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-box-open"></i> Log Foodbank Distribution</div>
+            <div class="card-body">
+              <form id="foodbank-form">
+                <div class="row g-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Date</label>
+                    <input type="date" class="form-control" id="foodbank-date" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Number of People</label>
+                    <input type="number" min="0" class="form-control" id="foodbank-people" required>
+                  </div>
+                </div>
+                <div class="mb-3 mt-2">
+                  <label class="form-label fw-semibold">Number of Households <small class="text-muted fw-normal">(optional)</small></label>
+                  <input type="number" min="0" class="form-control" id="foodbank-households">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
+                  <textarea class="form-control" id="foodbank-notes" rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-success" onclick="submitFoodbank()">
+                  <i class="fas fa-save"></i> Save Foodbank Record
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <span><i class="fas fa-list-ul"></i> Recent Foodbank Records</span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="loadFoodbankList()">
+                <i class="fas fa-rotate"></i> Refresh
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead><tr><th>Date</th><th>People</th><th>Households</th><th></th></tr></thead>
+                  <tbody id="foodbank-list-body">
+                    <tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -6,11 +6,11 @@
      - Login  (verifies email + password against env vars)
      - Session tokens  (HMAC-signed, 8-hour expiry, carry a role)
      - GitHub API proxy  (token never leaves the server) — admin role only for writes
-     - Supabase proxy for Event Attendance & Grants Received — both roles
+     - Supabase proxy for Event Attendance, Grants Received & Foodbank — both roles
 
    Roles:
      admin      — full access (events, photos, content, settings, data entry)
-     data_entry — can only log/view event attendance & grants received
+     data_entry — can only log/view event attendance, grants & foodbank records
 
    Required Vercel Environment Variables:
      ADMIN_EMAIL            e.g. admin@joybringerscharity.org
@@ -31,6 +31,7 @@ const SESSION_TTL     = 8 * 60 * 60 * 1000; // 8 hours
 const SUPABASE_URL    = 'https://roofompdejyndlpqfrjl.supabase.co';
 const ATTENDANCE_TABLE = 'event_attendance';
 const GRANTS_TABLE     = 'grants_income';
+const FOODBANK_TABLE   = 'foodbank_distribution';
 
 /* ── helpers ─────────────────────────────────────────────── */
 
@@ -182,19 +183,22 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  /* ── SUPABASE-BACKED ACTIONS — Event Attendance & Grants Received ─── */
-  const SUPABASE_ACTIONS = [
-    'add_attendance', 'list_attendance', 'delete_attendance',
-    'add_grant', 'list_grants', 'delete_grant'
-  ];
+  /* ── SUPABASE-BACKED ACTIONS — Attendance, Grants & Foodbank ──────── */
+  const RECORD_TABLES = {
+    attendance: ATTENDANCE_TABLE,
+    grant:      GRANTS_TABLE,
+    grants:     GRANTS_TABLE, // 'list_grants' is plural; add/delete_grant are singular
+    foodbank:   FOODBANK_TABLE
+  };
+  const recordType = action.replace(/^(add|list|delete)_/, '');
+  const table       = RECORD_TABLES[recordType];
 
-  if (SUPABASE_ACTIONS.includes(action)) {
+  if (table && /^(add|list|delete)_/.test(action)) {
     if (!process.env.SUPABASE_SERVICE_KEY) {
       return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set in environment variables.' });
     }
 
-    if (action === 'add_attendance' || action === 'add_grant') {
-      const table  = action === 'add_attendance' ? ATTENDANCE_TABLE : GRANTS_TABLE;
+    if (action.startsWith('add_')) {
       const record = { ...body.record, entered_by: session.email };
       const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
         method: 'POST',
@@ -205,8 +209,7 @@ module.exports = async function handler(req, res) {
       return res.status(r.status).json(data);
     }
 
-    if (action === 'list_attendance' || action === 'list_grants') {
-      const table = action === 'list_attendance' ? ATTENDANCE_TABLE : GRANTS_TABLE;
+    if (action.startsWith('list_')) {
       const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?order=created_at.desc&limit=200`, {
         headers: sbHeaders()
       });
@@ -214,11 +217,10 @@ module.exports = async function handler(req, res) {
       return res.status(r.status).json(data);
     }
 
-    if (action === 'delete_attendance' || action === 'delete_grant') {
+    if (action.startsWith('delete_')) {
       if (role !== 'admin') {
         return res.status(403).json({ error: 'Only admins can delete entries.' });
       }
-      const table = action === 'delete_attendance' ? ATTENDANCE_TABLE : GRANTS_TABLE;
       const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${body.id}`, {
         method: 'DELETE',
         headers: sbHeaders()
