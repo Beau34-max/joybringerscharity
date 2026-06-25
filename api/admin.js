@@ -6,11 +6,11 @@
      - Login  (verifies email + password against env vars)
      - Session tokens  (HMAC-signed, 8-hour expiry, carry a role)
      - GitHub API proxy  (token never leaves the server) — admin role only for writes
-     - Supabase proxy for Event Attendance, Grants Received & Foodbank — both roles
+     - Supabase proxy for Attendance, Grants, Foodbank & Assets — both roles
 
    Roles:
      admin      — full access (events, photos, content, settings, data entry)
-     data_entry — can only log/view event attendance, grants & foodbank records
+     data_entry — can only log/view attendance, grants, foodbank & asset records
 
    Required Vercel Environment Variables:
      ADMIN_EMAIL            e.g. admin@joybringerscharity.org
@@ -32,6 +32,7 @@ const SUPABASE_URL    = 'https://roofompdejyndlpqfrjl.supabase.co';
 const ATTENDANCE_TABLE = 'event_attendance';
 const GRANTS_TABLE     = 'grants_income';
 const FOODBANK_TABLE   = 'foodbank_distribution';
+const ASSETS_TABLE     = 'assets';
 
 /* ── helpers ─────────────────────────────────────────────── */
 
@@ -188,7 +189,8 @@ module.exports = async function handler(req, res) {
     attendance: ATTENDANCE_TABLE,
     grant:      GRANTS_TABLE,
     grants:     GRANTS_TABLE, // 'list_grants' is plural; add/delete_grant are singular
-    foodbank:   FOODBANK_TABLE
+    foodbank:   FOODBANK_TABLE,
+    asset:      ASSETS_TABLE
   };
   const recordType = action.replace(/^(add|list|delete|update)_/, '');
   const table       = RECORD_TABLES[recordType];

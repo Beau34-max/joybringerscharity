@@ -391,7 +391,7 @@
       <div class="tab-header">
         <div>
           <h2 class="mb-1"><i class="fas fa-clipboard-list text-success"></i> Data Entry</h2>
-          <p class="text-muted mb-0 small">Log event attendance and grants received. Saved straight to the database.</p>
+          <p class="text-muted mb-0 small">Log event attendance, grants received, foodbank distribution and asset purchases/donations. Saved straight to the database.</p>
         </div>
       </div>
 
@@ -408,6 +408,10 @@
                   </select>
                   <input type="text" class="form-control mt-2" id="attendance-event-custom"
                          placeholder="Or type an event name not listed above">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Your Name <small class="text-muted fw-normal">(so we know who entered this)</small></label>
+                  <input type="text" class="form-control" id="attendance-volunteer" placeholder="e.g. Jane Smith">
                 </div>
                 <div class="row g-2">
                   <div class="col-6">
@@ -442,9 +446,9 @@
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                  <thead><tr><th>Event</th><th>Date</th><th>Attendees</th><th></th></tr></thead>
+                  <thead><tr><th>Event</th><th>Date</th><th>Attendees</th><th>By</th><th></th></tr></thead>
                   <tbody id="attendance-list-body">
-                    <tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>
+                    <tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -460,6 +464,10 @@
                 <div class="mb-3">
                   <label class="form-label fw-semibold">Grantor / Funder Name</label>
                   <input type="text" class="form-control" id="grant-name" required placeholder="e.g. Sir James Knott Trust">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Your Name <small class="text-muted fw-normal">(so we know who entered this)</small></label>
+                  <input type="text" class="form-control" id="grant-volunteer" placeholder="e.g. Jane Smith">
                 </div>
                 <div class="row g-2">
                   <div class="col-6">
@@ -510,9 +518,9 @@
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                  <thead><tr><th>Grantor</th><th>Amount</th><th>Method</th><th>Date</th><th></th></tr></thead>
+                  <thead><tr><th>Grantor</th><th>Amount</th><th>Method</th><th>Date</th><th>By</th><th></th></tr></thead>
                   <tbody id="grants-list-body">
-                    <tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>
+                    <tr><td colspan="6" class="text-muted text-center py-3">Loading...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -525,6 +533,10 @@
             <div class="card-header"><i class="fas fa-box-open"></i> Log Foodbank Distribution</div>
             <div class="card-body">
               <form id="foodbank-form">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Your Name <small class="text-muted fw-normal">(so we know who entered this)</small></label>
+                  <input type="text" class="form-control" id="foodbank-volunteer" placeholder="e.g. Jane Smith">
+                </div>
                 <div class="row g-2">
                   <div class="col-6">
                     <label class="form-label fw-semibold">Date</label>
@@ -562,9 +574,101 @@
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                  <thead><tr><th>Date</th><th>People</th><th>Households</th><th></th></tr></thead>
+                  <thead><tr><th>Date</th><th>People</th><th>Households</th><th>By</th><th></th></tr></thead>
                   <tbody id="foodbank-list-body">
-                    <tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>
+                    <tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-boxes-stacked"></i> Log Asset (Purchased / Donated)</div>
+            <div class="card-body">
+              <form id="asset-form">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Asset Name / Description</label>
+                  <input type="text" class="form-control" id="asset-name" required placeholder="e.g. Dell Latitude Laptop, Minibus, Office Building">
+                </div>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Category <small class="text-muted fw-normal">(optional)</small></label>
+                    <select class="form-select" id="asset-category">
+                      <option value="">Select...</option>
+                      <option value="equipment">Equipment / IT</option>
+                      <option value="vehicle">Vehicle</option>
+                      <option value="property">Property</option>
+                      <option value="furniture">Furniture</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Acquired By</label>
+                    <select class="form-select" id="asset-type" required>
+                      <option value="">Select...</option>
+                      <option value="purchased">Purchased</option>
+                      <option value="donated">Donated</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Value (£)</label>
+                    <input type="number" min="0" step="0.01" class="form-control" id="asset-value" required placeholder="Worth, whether bought or donated">
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Date Acquired</label>
+                    <input type="date" class="form-control" id="asset-date" required>
+                  </div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Donor / Supplier <small class="text-muted fw-normal">(optional)</small></label>
+                    <input type="text" class="form-control" id="asset-source" placeholder="Who donated it / where bought from">
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold">Condition <small class="text-muted fw-normal">(optional)</small></label>
+                    <select class="form-select" id="asset-condition">
+                      <option value="">Select...</option>
+                      <option value="new">New</option>
+                      <option value="used">Used</option>
+                      <option value="refurbished">Refurbished</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3 mt-2">
+                  <label class="form-label fw-semibold">Your Name <small class="text-muted fw-normal">(so we know who entered this)</small></label>
+                  <input type="text" class="form-control" id="asset-volunteer" placeholder="e.g. Jane Smith">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
+                  <textarea class="form-control" id="asset-notes" rows="2" placeholder="Serial number, location, condition details..."></textarea>
+                </div>
+                <button type="button" class="btn btn-success" id="asset-submit-btn" onclick="submitAsset()">
+                  <i class="fas fa-save"></i> Save Asset
+                </button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="asset-cancel-btn"
+                        style="display:none" onclick="cancelEditAsset()">Cancel</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <span><i class="fas fa-list-ul"></i> Recent Assets</span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="loadAssetsList()">
+                <i class="fas fa-rotate"></i> Refresh
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead><tr><th>Asset</th><th>Type</th><th>Value</th><th>Date</th><th>By</th><th></th></tr></thead>
+                  <tbody id="assets-list-body">
+                    <tr><td colspan="6" class="text-muted text-center py-3">Loading...</td></tr>
                   </tbody>
                 </table>
               </div>

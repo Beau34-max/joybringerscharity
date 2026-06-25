@@ -688,15 +688,18 @@ function loadDataEntryTab() {
   loadAttendanceList();
   loadGrantsList();
   loadFoodbankList();
+  loadAssetsList();
 }
 
 let attendanceRows = [];
 let grantsRows     = [];
 let foodbankRows   = [];
+let assetsRows     = [];
 
 let editingAttendanceId = null;
 let editingGrantId       = null;
 let editingFoodbankId    = null;
+let editingAssetId       = null;
 
 async function populateAttendanceEventOptions() {
   const select = document.getElementById('attendance-event-select');
@@ -726,6 +729,7 @@ async function submitAttendance() {
     event_name: eventName,
     event_date: date,
     attendees_count: parseInt(count) || 0,
+    volunteer_name: document.getElementById('attendance-volunteer').value.trim() || null,
     notes: document.getElementById('attendance-notes').value.trim() || null
   };
 
@@ -748,12 +752,12 @@ async function submitAttendance() {
 
 async function loadAttendanceList() {
   const body = document.getElementById('attendance-list-body');
-  body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
+  body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_attendance');
     attendanceRows = Array.isArray(rows) ? rows : [];
     if (!attendanceRows.length) {
-      body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No attendance logged yet.</td></tr>';
+      body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No attendance logged yet.</td></tr>';
       return;
     }
     body.innerHTML = attendanceRows.map(r => `
@@ -761,13 +765,14 @@ async function loadAttendanceList() {
         <td>${r.event_name}</td>
         <td>${fmtDate(r.event_date)}</td>
         <td>${r.attendees_count}</td>
+        <td>${r.volunteer_name || '—'}</td>
         <td>
           <button class="btn btn-sm btn-outline-secondary" onclick="editAttendance(${r.id})"><i class="fas fa-pen"></i></button>
           ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteAttendance(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
         </td>
       </tr>`).join('');
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="5" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
 }
 
@@ -780,9 +785,10 @@ function editAttendance(id) {
   const hasOption = Array.from(select.options).some(o => o.value === r.event_name);
   select.value = hasOption ? r.event_name : '';
   document.getElementById('attendance-event-custom').value = hasOption ? '' : r.event_name;
-  document.getElementById('attendance-date').value  = r.event_date;
-  document.getElementById('attendance-count').value = r.attendees_count;
-  document.getElementById('attendance-notes').value = r.notes || '';
+  document.getElementById('attendance-date').value      = r.event_date;
+  document.getElementById('attendance-count').value     = r.attendees_count;
+  document.getElementById('attendance-volunteer').value = r.volunteer_name || '';
+  document.getElementById('attendance-notes').value     = r.notes || '';
 
   document.getElementById('attendance-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Attendance';
   document.getElementById('attendance-cancel-btn').style.display = 'inline-block';
@@ -824,6 +830,7 @@ async function submitGrant() {
     payment_method: method,
     date_received: date,
     reference: document.getElementById('grant-reference').value.trim() || null,
+    volunteer_name: document.getElementById('grant-volunteer').value.trim() || null,
     notes: document.getElementById('grant-notes').value.trim() || null
   };
 
@@ -846,12 +853,12 @@ async function submitGrant() {
 
 async function loadGrantsList() {
   const body = document.getElementById('grants-list-body');
-  body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>';
+  body.innerHTML = '<tr><td colspan="6" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_grants');
     grantsRows = Array.isArray(rows) ? rows : [];
     if (!grantsRows.length) {
-      body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No grants logged yet.</td></tr>';
+      body.innerHTML = '<tr><td colspan="6" class="text-muted text-center py-3">No grants logged yet.</td></tr>';
       return;
     }
     body.innerHTML = grantsRows.map(r => `
@@ -860,13 +867,14 @@ async function loadGrantsList() {
         <td>£${parseFloat(r.amount).toFixed(2)}</td>
         <td>${{ cash: 'Cash', bank_transfer: 'Bank Transfer', cheque: 'Cheque', other: 'Other' }[r.payment_method] || r.payment_method}</td>
         <td>${fmtDate(r.date_received)}</td>
+        <td>${r.volunteer_name || '—'}</td>
         <td>
           <button class="btn btn-sm btn-outline-secondary" onclick="editGrant(${r.id})"><i class="fas fa-pen"></i></button>
           ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteGrant(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
         </td>
       </tr>`).join('');
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="5" class="text-danger text-center py-3">${err.message}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
 }
 
@@ -880,6 +888,7 @@ function editGrant(id) {
   document.getElementById('grant-method').value    = r.payment_method;
   document.getElementById('grant-date').value      = r.date_received;
   document.getElementById('grant-reference').value = r.reference || '';
+  document.getElementById('grant-volunteer').value = r.volunteer_name || '';
   document.getElementById('grant-notes').value     = r.notes || '';
 
   document.getElementById('grant-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Grant';
@@ -919,6 +928,7 @@ async function submitFoodbank() {
     distribution_date: date,
     people_count: parseInt(people) || 0,
     households_count: households !== '' ? (parseInt(households) || 0) : null,
+    volunteer_name: document.getElementById('foodbank-volunteer').value.trim() || null,
     notes: document.getElementById('foodbank-notes').value.trim() || null
   };
 
@@ -941,12 +951,12 @@ async function submitFoodbank() {
 
 async function loadFoodbankList() {
   const body = document.getElementById('foodbank-list-body');
-  body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
+  body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_foodbank');
     foodbankRows = Array.isArray(rows) ? rows : [];
     if (!foodbankRows.length) {
-      body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No foodbank records yet.</td></tr>';
+      body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No foodbank records yet.</td></tr>';
       return;
     }
     body.innerHTML = foodbankRows.map(r => `
@@ -954,13 +964,14 @@ async function loadFoodbankList() {
         <td>${fmtDate(r.distribution_date)}</td>
         <td>${r.people_count}</td>
         <td>${r.households_count ?? '—'}</td>
+        <td>${r.volunteer_name || '—'}</td>
         <td>
           <button class="btn btn-sm btn-outline-secondary" onclick="editFoodbank(${r.id})"><i class="fas fa-pen"></i></button>
           ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteFoodbank(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
         </td>
       </tr>`).join('');
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="5" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
 }
 
@@ -972,7 +983,8 @@ function editFoodbank(id) {
   document.getElementById('foodbank-date').value       = r.distribution_date;
   document.getElementById('foodbank-people').value     = r.people_count;
   document.getElementById('foodbank-households').value = r.households_count ?? '';
-  document.getElementById('foodbank-notes').value       = r.notes || '';
+  document.getElementById('foodbank-volunteer').value  = r.volunteer_name || '';
+  document.getElementById('foodbank-notes').value      = r.notes || '';
 
   document.getElementById('foodbank-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Record';
   document.getElementById('foodbank-cancel-btn').style.display = 'inline-block';
@@ -992,6 +1004,113 @@ async function deleteFoodbank(id) {
     await apiCall('delete_foodbank', { id });
     showAlert('success', 'Foodbank record deleted.');
     loadFoodbankList();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+const ASSET_TYPE_LABELS = { purchased: 'Purchased', donated: 'Donated' };
+
+async function submitAsset() {
+  const name  = document.getElementById('asset-name').value.trim();
+  const type  = document.getElementById('asset-type').value;
+  const value = document.getElementById('asset-value').value;
+  const date  = document.getElementById('asset-date').value;
+
+  if (!name || !type || value === '' || !date) {
+    showAlert('warning', 'Please fill in asset name, acquired by, value, and date acquired.');
+    return;
+  }
+
+  const record = {
+    asset_name: name,
+    category: document.getElementById('asset-category').value || null,
+    acquisition_type: type,
+    value: parseFloat(value) || 0,
+    date_acquired: date,
+    source_name: document.getElementById('asset-source').value.trim() || null,
+    condition: document.getElementById('asset-condition').value || null,
+    volunteer_name: document.getElementById('asset-volunteer').value.trim() || null,
+    notes: document.getElementById('asset-notes').value.trim() || null
+  };
+
+  showLoading(editingAssetId ? 'Updating asset...' : 'Saving asset...');
+  try {
+    if (editingAssetId) {
+      await apiCall('update_asset', { id: editingAssetId, record });
+    } else {
+      await apiCall('add_asset', { record });
+    }
+    hideLoading();
+    showAlert('success', `<i class="fas fa-check-circle"></i> Asset ${editingAssetId ? 'updated' : 'saved'}.`);
+    cancelEditAsset();
+    loadAssetsList();
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+async function loadAssetsList() {
+  const body = document.getElementById('assets-list-body');
+  body.innerHTML = '<tr><td colspan="6" class="text-muted text-center py-3">Loading...</td></tr>';
+  try {
+    const rows = await apiCall('list_asset');
+    assetsRows = Array.isArray(rows) ? rows : [];
+    if (!assetsRows.length) {
+      body.innerHTML = '<tr><td colspan="6" class="text-muted text-center py-3">No assets logged yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = assetsRows.map(r => `
+      <tr>
+        <td>${r.asset_name}</td>
+        <td>${ASSET_TYPE_LABELS[r.acquisition_type] || r.acquisition_type}</td>
+        <td>£${parseFloat(r.value).toFixed(2)}</td>
+        <td>${fmtDate(r.date_acquired)}</td>
+        <td>${r.volunteer_name || '—'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" onclick="editAsset(${r.id})"><i class="fas fa-pen"></i></button>
+          ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteAsset(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
+        </td>
+      </tr>`).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="6" class="text-danger text-center py-3">${err.message}</td></tr>`;
+  }
+}
+
+function editAsset(id) {
+  const r = assetsRows.find(x => x.id === id);
+  if (!r) return;
+  editingAssetId = id;
+
+  document.getElementById('asset-name').value      = r.asset_name;
+  document.getElementById('asset-category').value   = r.category || '';
+  document.getElementById('asset-type').value      = r.acquisition_type;
+  document.getElementById('asset-value').value     = r.value;
+  document.getElementById('asset-date').value      = r.date_acquired;
+  document.getElementById('asset-source').value    = r.source_name || '';
+  document.getElementById('asset-condition').value = r.condition || '';
+  document.getElementById('asset-volunteer').value = r.volunteer_name || '';
+  document.getElementById('asset-notes').value     = r.notes || '';
+
+  document.getElementById('asset-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Asset';
+  document.getElementById('asset-cancel-btn').style.display = 'inline-block';
+  document.getElementById('asset-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditAsset() {
+  editingAssetId = null;
+  document.getElementById('asset-form').reset();
+  document.getElementById('asset-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Asset';
+  document.getElementById('asset-cancel-btn').style.display = 'none';
+}
+
+async function deleteAsset(id) {
+  if (!confirm('Delete this asset record?\n\nThis cannot be undone.')) return;
+  try {
+    await apiCall('delete_asset', { id });
+    showAlert('success', 'Asset record deleted.');
+    loadAssetsList();
   } catch (err) {
     showAlert('danger', err.message);
   }
