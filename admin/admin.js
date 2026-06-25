@@ -812,7 +812,7 @@ async function loadGrantsList() {
       <tr>
         <td>${r.grantor_name}</td>
         <td>£${parseFloat(r.amount).toFixed(2)}</td>
-        <td>${r.payment_method === 'cash' ? 'Cash' : 'Bank Transfer'}</td>
+        <td>${{ cash: 'Cash', bank_transfer: 'Bank Transfer', cheque: 'Cheque' }[r.payment_method] || r.payment_method}</td>
         <td>${fmtDate(r.date_received)}</td>
         <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteGrant(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
       </tr>`).join('');
