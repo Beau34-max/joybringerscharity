@@ -575,6 +575,36 @@ async function loadContentTab() {
     contentShas.partners = sha;
     renderPartnersEditor(data.items || []);
   } catch (_) {}
+
+  /* foodbank impact */
+  try {
+    const { data, sha } = await apiReadJSON('data/foodbank-impact.json');
+    contentShas.foodbank = sha;
+    document.getElementById('fb-impact-people').value      = data.people_supported      || '';
+    document.getElementById('fb-impact-volunteers').value  = data.volunteers            || '';
+    document.getElementById('fb-impact-collections').value = data.collections_completed || '';
+    document.getElementById('fb-impact-kg').value          = data.food_rescued_kg       || '';
+    document.getElementById('fb-impact-meals').value       = data.meals_provided        || '';
+    document.getElementById('fb-impact-co2').value         = data.co2_saved_kg          || '';
+  } catch (_) {}
+}
+
+async function saveFoodbankImpact() {
+  showLoading('Saving...');
+  try {
+    const payload = {
+      people_supported:      parseInt(document.getElementById('fb-impact-people').value)      || 0,
+      volunteers:            parseInt(document.getElementById('fb-impact-volunteers').value)  || 0,
+      collections_completed: parseInt(document.getElementById('fb-impact-collections').value) || 0,
+      food_rescued_kg:       parseInt(document.getElementById('fb-impact-kg').value)          || 0,
+      meals_provided:        parseInt(document.getElementById('fb-impact-meals').value)       || 0,
+      co2_saved_kg:          parseInt(document.getElementById('fb-impact-co2').value)          || 0
+    };
+    const r = await apiWriteJSON('data/foodbank-impact.json', payload, contentShas.foodbank, 'Admin: update foodbank impact numbers');
+    contentShas.foodbank = r.content.sha;
+    hideLoading();
+    showAlert('success', '<i class="fas fa-check-circle"></i> Foodbank numbers saved! Goes live in ~1 minute.');
+  } catch (err) { hideLoading(); showAlert('danger', err.message); }
 }
 
 async function saveImpact() {

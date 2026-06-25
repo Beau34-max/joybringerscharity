@@ -383,6 +383,51 @@
           </div>
         </div>
 
+        <!-- Foodbank Impact -->
+        <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFoodbank">
+              <i class="fas fa-shopping-basket text-success me-2"></i> Foodbank Impact Numbers
+            </button>
+          </h2>
+          <div id="collapseFoodbank" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="text-muted small">These numbers appear on the <a href="/foodbank" target="_blank">Foodbank page</a>.</p>
+              <div class="row g-3">
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">People Supported</label>
+                  <input type="number" class="form-control" id="fb-impact-people" placeholder="e.g. 520">
+                </div>
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">Dedicated Volunteers</label>
+                  <input type="number" class="form-control" id="fb-impact-volunteers" placeholder="e.g. 34">
+                </div>
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">Food Collections Completed</label>
+                  <input type="number" class="form-control" id="fb-impact-collections" placeholder="e.g. 434">
+                </div>
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">Food Rescued (kg)</label>
+                  <input type="number" class="form-control" id="fb-impact-kg" placeholder="e.g. 7778">
+                </div>
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">Meals Provided</label>
+                  <input type="number" class="form-control" id="fb-impact-meals" placeholder="e.g. 18520">
+                </div>
+                <div class="col-md-4 col-6">
+                  <label class="form-label fw-semibold">CO&sup2; Saved (kg)</label>
+                  <input type="number" class="form-control" id="fb-impact-co2" placeholder="e.g. 22050">
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-success" onclick="saveFoodbankImpact()">
+                    <i class="fas fa-save"></i> Save Foodbank Numbers
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
