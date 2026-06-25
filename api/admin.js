@@ -190,10 +190,10 @@ module.exports = async function handler(req, res) {
     grants:     GRANTS_TABLE, // 'list_grants' is plural; add/delete_grant are singular
     foodbank:   FOODBANK_TABLE
   };
-  const recordType = action.replace(/^(add|list|delete)_/, '');
+  const recordType = action.replace(/^(add|list|delete|update)_/, '');
   const table       = RECORD_TABLES[recordType];
 
-  if (table && /^(add|list|delete)_/.test(action)) {
+  if (table && /^(add|list|delete|update)_/.test(action)) {
     if (!process.env.SUPABASE_SERVICE_KEY) {
       return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set in environment variables.' });
     }
@@ -212,6 +212,17 @@ module.exports = async function handler(req, res) {
     if (action.startsWith('list_')) {
       const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?order=created_at.desc&limit=200`, {
         headers: sbHeaders()
+      });
+      const data = await r.json();
+      return res.status(r.status).json(data);
+    }
+
+    // Anyone with a valid session can correct a mistake in an entry
+    if (action.startsWith('update_')) {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${body.id}`, {
+        method: 'PATCH',
+        headers: { ...sbHeaders(), Prefer: 'return=representation' },
+        body: JSON.stringify(body.record)
       });
       const data = await r.json();
       return res.status(r.status).json(data);

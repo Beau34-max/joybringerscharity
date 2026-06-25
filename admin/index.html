@@ -423,9 +423,11 @@
                   <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
                   <textarea class="form-control" id="attendance-notes" rows="2"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" onclick="submitAttendance()">
+                <button type="button" class="btn btn-success" id="attendance-submit-btn" onclick="submitAttendance()">
                   <i class="fas fa-save"></i> Save Attendance
                 </button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="attendance-cancel-btn"
+                        style="display:none" onclick="cancelEditAttendance()">Cancel</button>
               </form>
             </div>
           </div>
@@ -471,6 +473,7 @@
                       <option value="cash">Cash</option>
                       <option value="bank_transfer">Bank Transfer</option>
                       <option value="cheque">Cheque</option>
+                      <option value="other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -488,9 +491,11 @@
                   <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
                   <textarea class="form-control" id="grant-notes" rows="2"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" onclick="submitGrant()">
+                <button type="button" class="btn btn-success" id="grant-submit-btn" onclick="submitGrant()">
                   <i class="fas fa-save"></i> Save Grant
                 </button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="grant-cancel-btn"
+                        style="display:none" onclick="cancelEditGrant()">Cancel</button>
               </form>
             </div>
           </div>
@@ -538,9 +543,11 @@
                   <label class="form-label fw-semibold">Notes <small class="text-muted fw-normal">(optional)</small></label>
                   <textarea class="form-control" id="foodbank-notes" rows="2"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" onclick="submitFoodbank()">
+                <button type="button" class="btn btn-success" id="foodbank-submit-btn" onclick="submitFoodbank()">
                   <i class="fas fa-save"></i> Save Foodbank Record
                 </button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="foodbank-cancel-btn"
+                        style="display:none" onclick="cancelEditFoodbank()">Cancel</button>
               </form>
             </div>
           </div>

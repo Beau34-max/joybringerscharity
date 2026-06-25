@@ -690,6 +690,14 @@ function loadDataEntryTab() {
   loadFoodbankList();
 }
 
+let attendanceRows = [];
+let grantsRows     = [];
+let foodbankRows   = [];
+
+let editingAttendanceId = null;
+let editingGrantId       = null;
+let editingFoodbankId    = null;
+
 async function populateAttendanceEventOptions() {
   const select = document.getElementById('attendance-event-select');
   try {
@@ -714,19 +722,23 @@ async function submitAttendance() {
     return;
   }
 
-  showLoading('Saving attendance...');
+  const record = {
+    event_name: eventName,
+    event_date: date,
+    attendees_count: parseInt(count) || 0,
+    notes: document.getElementById('attendance-notes').value.trim() || null
+  };
+
+  showLoading(editingAttendanceId ? 'Updating attendance...' : 'Saving attendance...');
   try {
-    await apiCall('add_attendance', {
-      record: {
-        event_name: eventName,
-        event_date: date,
-        attendees_count: parseInt(count) || 0,
-        notes: document.getElementById('attendance-notes').value.trim() || null
-      }
-    });
+    if (editingAttendanceId) {
+      await apiCall('update_attendance', { id: editingAttendanceId, record });
+    } else {
+      await apiCall('add_attendance', { record });
+    }
     hideLoading();
-    showAlert('success', '<i class="fas fa-check-circle"></i> Attendance saved.');
-    document.getElementById('attendance-form').reset();
+    showAlert('success', `<i class="fas fa-check-circle"></i> Attendance ${editingAttendanceId ? 'updated' : 'saved'}.`);
+    cancelEditAttendance();
     loadAttendanceList();
   } catch (err) {
     hideLoading();
@@ -739,20 +751,49 @@ async function loadAttendanceList() {
   body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_attendance');
-    if (!Array.isArray(rows) || !rows.length) {
+    attendanceRows = Array.isArray(rows) ? rows : [];
+    if (!attendanceRows.length) {
       body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No attendance logged yet.</td></tr>';
       return;
     }
-    body.innerHTML = rows.map(r => `
+    body.innerHTML = attendanceRows.map(r => `
       <tr>
         <td>${r.event_name}</td>
         <td>${fmtDate(r.event_date)}</td>
         <td>${r.attendees_count}</td>
-        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteAttendance(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" onclick="editAttendance(${r.id})"><i class="fas fa-pen"></i></button>
+          ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteAttendance(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
+        </td>
       </tr>`).join('');
   } catch (err) {
     body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
+}
+
+function editAttendance(id) {
+  const r = attendanceRows.find(x => x.id === id);
+  if (!r) return;
+  editingAttendanceId = id;
+
+  const select = document.getElementById('attendance-event-select');
+  const hasOption = Array.from(select.options).some(o => o.value === r.event_name);
+  select.value = hasOption ? r.event_name : '';
+  document.getElementById('attendance-event-custom').value = hasOption ? '' : r.event_name;
+  document.getElementById('attendance-date').value  = r.event_date;
+  document.getElementById('attendance-count').value = r.attendees_count;
+  document.getElementById('attendance-notes').value = r.notes || '';
+
+  document.getElementById('attendance-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Attendance';
+  document.getElementById('attendance-cancel-btn').style.display = 'inline-block';
+  document.getElementById('attendance-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditAttendance() {
+  editingAttendanceId = null;
+  document.getElementById('attendance-form').reset();
+  document.getElementById('attendance-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Attendance';
+  document.getElementById('attendance-cancel-btn').style.display = 'none';
 }
 
 async function deleteAttendance(id) {
@@ -777,21 +818,25 @@ async function submitGrant() {
     return;
   }
 
-  showLoading('Saving grant...');
+  const record = {
+    grantor_name: name,
+    amount: parseFloat(amount) || 0,
+    payment_method: method,
+    date_received: date,
+    reference: document.getElementById('grant-reference').value.trim() || null,
+    notes: document.getElementById('grant-notes').value.trim() || null
+  };
+
+  showLoading(editingGrantId ? 'Updating grant...' : 'Saving grant...');
   try {
-    await apiCall('add_grant', {
-      record: {
-        grantor_name: name,
-        amount: parseFloat(amount) || 0,
-        payment_method: method,
-        date_received: date,
-        reference: document.getElementById('grant-reference').value.trim() || null,
-        notes: document.getElementById('grant-notes').value.trim() || null
-      }
-    });
+    if (editingGrantId) {
+      await apiCall('update_grant', { id: editingGrantId, record });
+    } else {
+      await apiCall('add_grant', { record });
+    }
     hideLoading();
-    showAlert('success', '<i class="fas fa-check-circle"></i> Grant saved.');
-    document.getElementById('grant-form').reset();
+    showAlert('success', `<i class="fas fa-check-circle"></i> Grant ${editingGrantId ? 'updated' : 'saved'}.`);
+    cancelEditGrant();
     loadGrantsList();
   } catch (err) {
     hideLoading();
@@ -804,21 +849,49 @@ async function loadGrantsList() {
   body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_grants');
-    if (!Array.isArray(rows) || !rows.length) {
+    grantsRows = Array.isArray(rows) ? rows : [];
+    if (!grantsRows.length) {
       body.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No grants logged yet.</td></tr>';
       return;
     }
-    body.innerHTML = rows.map(r => `
+    body.innerHTML = grantsRows.map(r => `
       <tr>
         <td>${r.grantor_name}</td>
         <td>£${parseFloat(r.amount).toFixed(2)}</td>
-        <td>${{ cash: 'Cash', bank_transfer: 'Bank Transfer', cheque: 'Cheque' }[r.payment_method] || r.payment_method}</td>
+        <td>${{ cash: 'Cash', bank_transfer: 'Bank Transfer', cheque: 'Cheque', other: 'Other' }[r.payment_method] || r.payment_method}</td>
         <td>${fmtDate(r.date_received)}</td>
-        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteGrant(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" onclick="editGrant(${r.id})"><i class="fas fa-pen"></i></button>
+          ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteGrant(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
+        </td>
       </tr>`).join('');
   } catch (err) {
     body.innerHTML = `<tr><td colspan="5" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
+}
+
+function editGrant(id) {
+  const r = grantsRows.find(x => x.id === id);
+  if (!r) return;
+  editingGrantId = id;
+
+  document.getElementById('grant-name').value      = r.grantor_name;
+  document.getElementById('grant-amount').value    = r.amount;
+  document.getElementById('grant-method').value    = r.payment_method;
+  document.getElementById('grant-date').value      = r.date_received;
+  document.getElementById('grant-reference').value = r.reference || '';
+  document.getElementById('grant-notes').value     = r.notes || '';
+
+  document.getElementById('grant-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Grant';
+  document.getElementById('grant-cancel-btn').style.display = 'inline-block';
+  document.getElementById('grant-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditGrant() {
+  editingGrantId = null;
+  document.getElementById('grant-form').reset();
+  document.getElementById('grant-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Grant';
+  document.getElementById('grant-cancel-btn').style.display = 'none';
 }
 
 async function deleteGrant(id) {
@@ -842,20 +915,23 @@ async function submitFoodbank() {
   }
 
   const households = document.getElementById('foodbank-households').value;
+  const record = {
+    distribution_date: date,
+    people_count: parseInt(people) || 0,
+    households_count: households !== '' ? (parseInt(households) || 0) : null,
+    notes: document.getElementById('foodbank-notes').value.trim() || null
+  };
 
-  showLoading('Saving foodbank record...');
+  showLoading(editingFoodbankId ? 'Updating foodbank record...' : 'Saving foodbank record...');
   try {
-    await apiCall('add_foodbank', {
-      record: {
-        distribution_date: date,
-        people_count: parseInt(people) || 0,
-        households_count: households !== '' ? (parseInt(households) || 0) : null,
-        notes: document.getElementById('foodbank-notes').value.trim() || null
-      }
-    });
+    if (editingFoodbankId) {
+      await apiCall('update_foodbank', { id: editingFoodbankId, record });
+    } else {
+      await apiCall('add_foodbank', { record });
+    }
     hideLoading();
-    showAlert('success', '<i class="fas fa-check-circle"></i> Foodbank record saved.');
-    document.getElementById('foodbank-form').reset();
+    showAlert('success', `<i class="fas fa-check-circle"></i> Foodbank record ${editingFoodbankId ? 'updated' : 'saved'}.`);
+    cancelEditFoodbank();
     loadFoodbankList();
   } catch (err) {
     hideLoading();
@@ -868,20 +944,46 @@ async function loadFoodbankList() {
   body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">Loading...</td></tr>';
   try {
     const rows = await apiCall('list_foodbank');
-    if (!Array.isArray(rows) || !rows.length) {
+    foodbankRows = Array.isArray(rows) ? rows : [];
+    if (!foodbankRows.length) {
       body.innerHTML = '<tr><td colspan="4" class="text-muted text-center py-3">No foodbank records yet.</td></tr>';
       return;
     }
-    body.innerHTML = rows.map(r => `
+    body.innerHTML = foodbankRows.map(r => `
       <tr>
         <td>${fmtDate(r.distribution_date)}</td>
         <td>${r.people_count}</td>
         <td>${r.households_count ?? '—'}</td>
-        <td>${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteFoodbank(${r.id})"><i class="fas fa-trash"></i></button>` : ''}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" onclick="editFoodbank(${r.id})"><i class="fas fa-pen"></i></button>
+          ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteFoodbank(${r.id})"><i class="fas fa-trash"></i></button>` : ''}
+        </td>
       </tr>`).join('');
   } catch (err) {
     body.innerHTML = `<tr><td colspan="4" class="text-danger text-center py-3">${err.message}</td></tr>`;
   }
+}
+
+function editFoodbank(id) {
+  const r = foodbankRows.find(x => x.id === id);
+  if (!r) return;
+  editingFoodbankId = id;
+
+  document.getElementById('foodbank-date').value       = r.distribution_date;
+  document.getElementById('foodbank-people').value     = r.people_count;
+  document.getElementById('foodbank-households').value = r.households_count ?? '';
+  document.getElementById('foodbank-notes').value       = r.notes || '';
+
+  document.getElementById('foodbank-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Record';
+  document.getElementById('foodbank-cancel-btn').style.display = 'inline-block';
+  document.getElementById('foodbank-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditFoodbank() {
+  editingFoodbankId = null;
+  document.getElementById('foodbank-form').reset();
+  document.getElementById('foodbank-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Foodbank Record';
+  document.getElementById('foodbank-cancel-btn').style.display = 'none';
 }
 
 async function deleteFoodbank(id) {
