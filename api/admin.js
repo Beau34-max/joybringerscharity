@@ -9,14 +9,21 @@
      - Supabase proxy for Attendance, Grants, Foodbank & Assets — both roles
 
    Roles:
-     admin      — full access (events, photos, content, settings, data entry)
-     data_entry — can only log/view attendance, grants, foodbank & asset records
+     admin      — full access: can edit everything AND delete anything,
+                  plus Settings. The only role that can delete.
+     editor     — can edit/add everything admin can (events, photos,
+                  content, data entry) but cannot delete anything, and
+                  cannot see Settings.
+     data_entry — can only log/view attendance, grants, foodbank & asset
+                  records. Cannot delete, cannot see other tabs.
 
    Required Vercel Environment Variables:
      ADMIN_EMAIL            e.g. admin@joybringerscharity.org
      ADMIN_PASSWORD         plain text password (stored encrypted by Vercel)
      GITHUB_TOKEN           Personal Access Token with "repo" scope
      SESSION_SECRET         any long random string
+     EDITOR_EMAIL           (optional) e.g. editor@joybringerscharity.org
+     EDITOR_PASSWORD        (optional) password for the editor (no-delete) login
      STAFF_EMAIL            (optional) e.g. data@joybringerscharity.org
      STAFF_PASSWORD         (optional) password for restricted data-entry login
      SUPABASE_SERVICE_KEY   service_role secret key from Supabase project settings
@@ -99,11 +106,13 @@ module.exports = async function handler(req, res) {
 
   /* ── LOGIN ─────────────────────────────────────────────── */
   if (action === 'login') {
-    const adminEmail    = process.env.ADMIN_EMAIL    || '';
-    const adminPassword = process.env.ADMIN_PASSWORD || '';
-    const staffEmail    = process.env.STAFF_EMAIL    || '';
-    const staffPassword = process.env.STAFF_PASSWORD || '';
-    const githubToken   = process.env.GITHUB_TOKEN   || '';
+    const adminEmail     = process.env.ADMIN_EMAIL     || '';
+    const adminPassword  = process.env.ADMIN_PASSWORD  || '';
+    const editorEmail    = process.env.EDITOR_EMAIL    || '';
+    const editorPassword = process.env.EDITOR_PASSWORD || '';
+    const staffEmail     = process.env.STAFF_EMAIL     || '';
+    const staffPassword  = process.env.STAFF_PASSWORD  || '';
+    const githubToken    = process.env.GITHUB_TOKEN    || '';
 
     if (!adminEmail || !adminPassword || !githubToken) {
       return res.status(503).json({
@@ -117,6 +126,12 @@ module.exports = async function handler(req, res) {
     // Plain comparison — password sent over HTTPS, no need for client-side hash
     if (password === adminPassword) {
       return res.status(200).json({ token: makeSession(adminEmail, 'admin'), role: 'admin' });
+    }
+    if (editorPassword && password === editorPassword) {
+      return res.status(200).json({
+        token: makeSession(editorEmail || 'editor@joybringerscharity.org', 'editor'),
+        role: 'editor'
+      });
     }
     if (staffPassword && password === staffPassword) {
       return res.status(200).json({
@@ -142,7 +157,10 @@ module.exports = async function handler(req, res) {
     if (!process.env.GITHUB_TOKEN) {
       return res.status(503).json({ error: 'GITHUB_TOKEN not set in environment variables.' });
     }
-    if ((action === 'write' || action === 'delete') && role !== 'admin') {
+    if (action === 'delete' && role !== 'admin') {
+      return res.status(403).json({ error: 'Only Full Admin can delete.' });
+    }
+    if (action === 'write' && !['admin', 'editor'].includes(role)) {
       return res.status(403).json({ error: 'Your account does not have permission to do this.' });
     }
 

@@ -81,19 +81,19 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="#" class="sidebar-link active" data-tab="events" data-role="admin" onclick="switchTab('events');return false;">
+      <a href="#" class="sidebar-link active" data-tab="events" data-roles="admin,editor" onclick="switchTab('events');return false;">
         <i class="fas fa-calendar-alt"></i> Events
       </a>
-      <a href="#" class="sidebar-link" data-tab="photos" data-role="admin" onclick="switchTab('photos');return false;">
+      <a href="#" class="sidebar-link" data-tab="photos" data-roles="admin,editor" onclick="switchTab('photos');return false;">
         <i class="fas fa-images"></i> Photos &amp; Gallery
       </a>
-      <a href="#" class="sidebar-link" data-tab="content" data-role="admin" onclick="switchTab('content');return false;">
+      <a href="#" class="sidebar-link" data-tab="content" data-roles="admin,editor" onclick="switchTab('content');return false;">
         <i class="fas fa-pen-to-square"></i> Website Content
       </a>
       <a href="#" class="sidebar-link" data-tab="dataentry" onclick="switchTab('dataentry');return false;">
         <i class="fas fa-clipboard-list"></i> Data Entry
       </a>
-      <a href="#" class="sidebar-link" data-tab="settings" data-role="admin" onclick="switchTab('settings');return false;">
+      <a href="#" class="sidebar-link" data-tab="settings" data-roles="admin" onclick="switchTab('settings');return false;">
         <i class="fas fa-gear"></i> Settings
       </a>
     </nav>
@@ -761,9 +761,10 @@
           <div class="card">
             <div class="card-header"><i class="fas fa-users"></i> Staff Accounts &amp; Roles</div>
             <div class="card-body small text-muted">
-              <p class="mb-2"><strong>Full Admin</strong> — sees everything in this panel. Logs in with the <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code> values set in Vercel.</p>
-              <p class="mb-2"><strong>Data Entry Staff</strong> — only sees the <strong>Data Entry</strong> tab (event attendance &amp; grants received). Cannot edit events, photos, content, or settings. Set up by adding <code>STAFF_EMAIL</code> / <code>STAFF_PASSWORD</code> in Vercel.</p>
-              <p class="mb-0">Both roles log in at the same page — the password typed decides which role they get.</p>
+              <p class="mb-2"><strong>Full Admin</strong> — sees everything and is the only role that can delete anything (events, photos, data entry records). Logs in with <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code>.</p>
+              <p class="mb-2"><strong>Editor</strong> — can add and edit Events, Photos, Website Content, and Data Entry, same as Full Admin — but cannot delete anything, and cannot see this Settings tab. Set up by adding <code>EDITOR_EMAIL</code> / <code>EDITOR_PASSWORD</code> in Vercel.</p>
+              <p class="mb-2"><strong>Data Entry Staff</strong> — only sees the <strong>Data Entry</strong> tab (attendance, grants, foodbank, assets). Cannot edit events, photos, content, settings, or delete anything. Set up with <code>STAFF_EMAIL</code> / <code>STAFF_PASSWORD</code>.</p>
+              <p class="mb-0">All roles log in at the same page — the password typed decides which role they get.</p>
             </div>
           </div>
         </div>

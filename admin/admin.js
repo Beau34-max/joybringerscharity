@@ -136,9 +136,10 @@ function switchTab(tabId) {
 /* ── Role-based UI restriction ───────────────────────────── */
 
 function applyRoleUI() {
-  const admin = isAdmin();
-  document.querySelectorAll('.sidebar-link[data-role="admin"]').forEach(el => {
-    el.style.display = admin ? '' : 'none';
+  const role = getRole();
+  document.querySelectorAll('.sidebar-link[data-roles]').forEach(el => {
+    const allowed = el.dataset.roles.split(',');
+    el.style.display = allowed.includes(role) ? '' : 'none';
   });
 }
 
@@ -155,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // If a session is stored, verify it quickly with the server
   if (isLoggedIn()) {
     apiCall('list', { path: 'data' })
-      .then(() => { showAdminPanel(); switchTab(isAdmin() ? 'events' : 'dataentry'); })
+      .then(() => { showAdminPanel(); switchTab(getRole() === 'data_entry' ? 'dataentry' : 'events'); })
       .catch(() => { clearSession(); showLoginScreen(); });
     return;
   }
@@ -301,9 +302,7 @@ function renderEventsList(filter = '') {
           <button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${idx})">
             <i class="fas fa-pen"></i> Edit
           </button>
-          <button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${idx})">
-            <i class="fas fa-trash"></i>
-          </button>
+          ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${idx})"><i class="fas fa-trash"></i></button>` : ''}
         </div>
       </div>`;
   }).join('');
@@ -507,11 +506,11 @@ async function renderGallery(folder = 'events') {
         <div class="gallery-photo-card" style="position:relative;">
           <img src="${raw}${f.path}" alt="${f.name}" loading="lazy">
           <div class="photo-caption" title="${f.path}"><code style="font-size:10px">${f.name}</code></div>
-          <button onclick="deletePhoto('${f.path}','${f.sha}','${folder}')"
+          ${isAdmin() ? `<button onclick="deletePhoto('${f.path}','${f.sha}','${folder}')"
             title="Delete photo"
             style="position:absolute;top:4px;right:4px;background:rgba(220,38,38,0.85);border:none;border-radius:50%;width:26px;height:26px;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">
             <i class="fas fa-trash"></i>
-          </button>
+          </button>` : ''}
         </div>
       </div>`).join('');
   } catch (err) {
