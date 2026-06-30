@@ -169,6 +169,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .don-hero h1 { font-size:1.75rem; }
       .don-amounts .don-amount-btn { flex:1; min-width:60px; }
     }
+
+    /* ── Mobile sticky donate bar ── */
+    #mobile-donate-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 2px solid #006526;
+      padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      z-index: 1045;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 991px) {
+      main { padding-bottom: 90px; }
+    }
   </style>
 </head>
 <body>
@@ -370,6 +384,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   </div>
                   <h6 style="font-size:0.82rem;color:#374151;margin-bottom:6px;">Pay securely with</h6>
                   <div id="paypal-button-container" style="max-width:360px;margin:0 auto;"></div>
+                  <div id="alt-pay-section" style="display:none;max-width:360px;margin:0 auto;">
+                    <div style="display:flex;align-items:center;gap:10px;margin:10px 0;color:#adb5bd;font-size:0.78rem;">
+                      <hr style="flex:1;border-color:#dee2e6;margin:0;"> or <hr style="flex:1;border-color:#dee2e6;margin:0;">
+                    </div>
+                    <div id="google-pay-container"></div>
+                    <div id="apple-pay-container" style="margin-top:6px;"></div>
+                  </div>
                   <div class="don-success" id="thankYou">
                     <i class="fas fa-check-circle"></i>
                     <p>Thank you for supporting Joybringers! 💚<br>
@@ -531,6 +552,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </footer>
 
 
+<!-- Mobile sticky donate bar — hidden on desktop (d-lg-none) -->
+<div id="mobile-donate-bar" class="d-lg-none">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <div id="mobile-sticky-amount" style="font-size:1.25rem;font-weight:700;color:#006526;line-height:1.1;">£5</div>
+      <div id="mobile-sticky-freq" style="font-size:0.72rem;color:#6c757d;text-transform:uppercase;letter-spacing:0.05em;">per month</div>
+    </div>
+    <button id="mobile-sticky-btn"
+      style="background:#006526;color:white;border:none;font-weight:700;border-radius:50px;padding:11px 26px;font-size:0.9rem;cursor:pointer;"
+      onclick="document.getElementById('paypal-button-container').scrollIntoView({behavior:'smooth',block:'center'})">
+      Donate £5
+    </button>
+  </div>
+</div>
+
 <div id="ftco-loader" class="show fullscreen">
   <svg class="circular" width="48px" height="48px">
     <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
@@ -551,7 +587,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/cookie-consent.js"></script>
 
 <!-- PayPal SDK — loaded here (not in <head>) so it never blocks page render -->
-<script src="https://www.paypal.com/sdk/js?client-id=AWhztww01sTTQ3t6C3dLu2DRxIACPGIOvt6uj3RifSXZ2scFnep5uyaVRD0kUu_MjE-gCr8gDFR3GpPh&currency=GBP&components=buttons"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AWhztww01sTTQ3t6C3dLu2DRxIACPGIOvt6uj3RifSXZ2scFnep5uyaVRD0kUu_MjE-gCr8gDFR3GpPh&currency=GBP&components=buttons&enable-funding=googlepay,applepay"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -591,6 +627,14 @@ function updateSummary() {
   const extraAmt  = (selectedAmount * 0.25).toFixed(2);
   extraEl.textContent = `£${extraAmt}`;
   boostEl.style.display = giftAid ? 'block' : 'none';
+
+  // Sync mobile sticky bar
+  const mobileAmount = document.getElementById('mobile-sticky-amount');
+  const mobileFreq   = document.getElementById('mobile-sticky-freq');
+  const mobileBtn    = document.getElementById('mobile-sticky-btn');
+  if (mobileAmount) mobileAmount.textContent = `£${selectedAmount}`;
+  if (mobileFreq)   mobileFreq.textContent   = donationType === 'monthly' ? 'per month' : 'one-off';
+  if (mobileBtn)    mobileBtn.textContent     = `Donate £${selectedAmount}`;
 
   renderPayPal();
 }
@@ -633,71 +677,104 @@ document.getElementById('customAmount').addEventListener('input', function() {
 /* ── Gift Aid toggle ── */
 document.getElementById('giftAidCheck').addEventListener('change', updateSummary);
 
-/* ── PayPal ── */
+/* ── Shared payment logic ── */
+function makeCreateOrder() {
+  return function(data, actions) {
+    return actions.order.create({
+      purchase_units: [{ amount: { value: selectedAmount.toFixed(2) } }]
+    });
+  };
+}
+
+async function handlePaymentApproved(data, actions) {
+  const details    = await actions.order.capture();
+  const donorFirst = document.getElementById('donorFirst').value.trim();
+  const donorLast  = document.getElementById('donorLast').value.trim();
+  const donorEmail = document.getElementById('donorEmail').value.trim();
+  const enteredName = (donorFirst + ' ' + donorLast).trim();
+  const paypalName  = ((details?.payer?.name?.given_name || '') + ' ' + (details?.payer?.name?.surname || '')).trim();
+
+  const payload = {
+    amount:          Number(selectedAmount.toFixed(2)),
+    donation_type:   donationType,
+    gift_aid:        document.getElementById('giftAidCheck').checked,
+    reason:          document.getElementById('reason').value || null,
+    paypal_order_id: data.orderID || null,
+    payer_name:      enteredName || paypalName || null,
+    payer_email:     donorEmail || details?.payer?.email_address || null,
+    email_updates:   document.getElementById('emailPref').checked,
+    status:          'paid',
+    source:          'donate_page'
+  };
+
+  console.log('[Joybringers] Saving donation:', payload);
+
+  if (window.supabaseClient) {
+    try {
+      const { error: dbError } = await window.supabaseClient
+        .from('donation_paypal')
+        .insert([payload]);
+      if (dbError) console.error('[Joybringers] Supabase insert error:', dbError.message, dbError);
+      else          console.log('[Joybringers] Donation saved to Supabase ✓');
+    } catch (dbErr) { console.error('[Joybringers] Supabase exception:', dbErr); }
+  } else {
+    console.warn('[Joybringers] Supabase client not available');
+  }
+
+  // Show success — hide all payment buttons
+  document.getElementById('thankYou').style.display = 'block';
+  document.getElementById('paypal-button-container').style.display = 'none';
+  document.getElementById('alt-pay-section').style.display = 'none';
+  document.getElementById('mobile-donate-bar').style.display = 'none';
+  selectedAmount = 5;
+}
+
+function handlePaymentError(err) {
+  console.error('PayPal error:', err);
+  alert('Something went wrong with the payment. Please try again or contact us for help.');
+}
+
+/* ── PayPal + Google Pay + Apple Pay ── */
 function renderPayPal() {
-  if (typeof paypal === 'undefined') return; // SDK not loaded yet — skip silently
+  if (typeof paypal === 'undefined') return;
   const container = document.getElementById('paypal-button-container');
   container.innerHTML = '';
+  document.getElementById('google-pay-container').innerHTML = '';
+  document.getElementById('apple-pay-container').innerHTML  = '';
+
+  const createOrder = makeCreateOrder();
+
+  // Standard PayPal / card button
   paypal.Buttons({
     style: { layout:'vertical', color:'gold', shape:'rect', label:'donate' },
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{ amount: { value: selectedAmount.toFixed(2) } }]
-      });
-    },
-    onApprove: async function(data, actions) {
-      const details    = await actions.order.capture();
-      const donorFirst = document.getElementById('donorFirst').value.trim();
-      const donorLast  = document.getElementById('donorLast').value.trim();
-      const donorEmail = document.getElementById('donorEmail').value.trim();
-
-      // Fix: trim concatenated name; fall back to PayPal payer name if blank
-      const enteredName  = (donorFirst + ' ' + donorLast).trim();
-      const paypalName   = ((details?.payer?.name?.given_name || '') + ' ' + (details?.payer?.name?.surname || '')).trim();
-
-      const payload = {
-        amount:          Number(selectedAmount.toFixed(2)),
-        donation_type:   donationType,
-        gift_aid:        document.getElementById('giftAidCheck').checked,
-        reason:          document.getElementById('reason').value || null,
-        paypal_order_id: data.orderID || null,
-        payer_name:      enteredName || paypalName || null,
-        payer_email:     donorEmail || details?.payer?.email_address || null,
-        email_updates:   document.getElementById('emailPref').checked,
-        status:          'paid',
-        source:          'donate_page'
-      };
-
-      console.log('[Joybringers] Saving donation:', payload);
-
-      // Save to Supabase — awaited so errors are visible
-      if (window.supabaseClient) {
-        try {
-          const { error: dbError } = await window.supabaseClient
-            .from('donation_paypal')
-            .insert([payload]);
-          if (dbError) {
-            console.error('[Joybringers] Supabase insert error:', dbError.message, dbError);
-          } else {
-            console.log('[Joybringers] Donation saved to Supabase ✓');
-          }
-        } catch (dbErr) {
-          console.error('[Joybringers] Supabase exception:', dbErr);
-        }
-      } else {
-        console.warn('[Joybringers] Supabase client not available');
-      }
-
-      // Show success (always — payment was already captured)
-      document.getElementById('thankYou').style.display = 'block';
-      container.style.display = 'none';
-      selectedAmount = 5;
-    },
-    onError: function(err) {
-      console.error('PayPal error:', err);
-      alert('Something went wrong with the payment. Please try again or contact us for help.');
-    }
+    createOrder,
+    onApprove: handlePaymentApproved,
+    onError:   handlePaymentError
   }).render('#paypal-button-container');
+
+  // Google Pay — only rendered if device/browser supports it (Android Chrome, etc.)
+  if (paypal.FUNDING && typeof paypal.isFundingEligible === 'function' &&
+      paypal.isFundingEligible(paypal.FUNDING.GOOGLEPAY)) {
+    document.getElementById('alt-pay-section').style.display = 'block';
+    paypal.Buttons({
+      fundingSource: paypal.FUNDING.GOOGLEPAY,
+      createOrder,
+      onApprove: handlePaymentApproved,
+      onError:   handlePaymentError
+    }).render('#google-pay-container');
+  }
+
+  // Apple Pay — only rendered on Safari / Apple devices with domain verification in place
+  if (paypal.FUNDING && typeof paypal.isFundingEligible === 'function' &&
+      paypal.isFundingEligible(paypal.FUNDING.APPLEPAY)) {
+    document.getElementById('alt-pay-section').style.display = 'block';
+    paypal.Buttons({
+      fundingSource: paypal.FUNDING.APPLEPAY,
+      createOrder,
+      onApprove: handlePaymentApproved,
+      onError:   handlePaymentError
+    }).render('#apple-pay-container');
+  }
 }
 
 // Init — script is at bottom of body so DOM is already ready; call directly
