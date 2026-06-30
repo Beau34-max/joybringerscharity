@@ -603,6 +603,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 let selectedAmount = 5;
 let donationType   = 'monthly';
 
+// Funnel tracking — pushes to GTM dataLayer (GA4 picks these up automatically)
+window.dataLayer = window.dataLayer || [];
+function dlPush(event, params) {
+  window.dataLayer.push(Object.assign({ event }, params || {}));
+}
+
+// Step 1 — page viewed
+dlPush('donate_page_view');
+
 const IMPACT = {
   5:  'covers workshop materials for one young person for a full session.',
   10: 'funds a food parcel for a local family in need for one week.',
@@ -649,6 +658,8 @@ document.querySelectorAll('.don-freq-btn').forEach(btn => {
     note.innerHTML = donationType === 'monthly'
       ? '<i class="fas fa-info-circle mr-1 text-success"></i>Monthly donations help us plan ahead and have a sustained impact all year round.'
       : '<i class="fas fa-info-circle mr-1 text-success"></i>A one-off gift is always welcome and makes an immediate difference.';
+    // Step 2 — frequency chosen
+    dlPush('donate_step_frequency', { donation_type: donationType });
     updateSummary();
   });
 });
@@ -660,26 +671,59 @@ document.querySelectorAll('.don-amount-btn').forEach(btn => {
     this.classList.add('active');
     document.getElementById('customAmount').value = '';
     selectedAmount = parseFloat(this.dataset.amount);
+    // Step 3 — preset amount chosen
+    dlPush('donate_step_amount', { amount: selectedAmount, amount_type: 'preset' });
     updateSummary();
   });
 });
 
 /* ── Custom amount ── */
+let customAmountTracked = false;
 document.getElementById('customAmount').addEventListener('input', function() {
   const val = parseFloat(this.value);
   if (!isNaN(val) && val > 0) {
     document.querySelectorAll('.don-amount-btn').forEach(b => b.classList.remove('active'));
     selectedAmount = val;
+    // Step 3 — custom amount entered (fire once per focus, not on every keystroke)
+    if (!customAmountTracked) {
+      dlPush('donate_step_amount', { amount: val, amount_type: 'custom' });
+      customAmountTracked = true;
+    }
     updateSummary();
   }
 });
+document.getElementById('customAmount').addEventListener('blur', function() {
+  customAmountTracked = false; // reset so next visit fires again
+});
 
 /* ── Gift Aid toggle ── */
-document.getElementById('giftAidCheck').addEventListener('change', updateSummary);
+document.getElementById('giftAidCheck').addEventListener('change', function() {
+  // Step 4 — Gift Aid decision
+  dlPush('donate_step_giftaid', { gift_aid: this.checked });
+  updateSummary();
+});
+
+/* ── Personal details — fire once when first field is touched ── */
+let personalDetailsTracked = false;
+['donorFirst','donorLast','donorEmail'].forEach(id => {
+  document.getElementById(id).addEventListener('focus', function() {
+    if (!personalDetailsTracked) {
+      // Step 5 — started filling in personal details
+      dlPush('donate_step_personal_details');
+      personalDetailsTracked = true;
+    }
+  });
+});
 
 /* ── Shared payment logic ── */
 function makeCreateOrder() {
   return function(data, actions) {
+    // Step 6 — PayPal checkout opened
+    dlPush('donate_payment_initiated', {
+      amount: selectedAmount,
+      donation_type: donationType,
+      gift_aid: document.getElementById('giftAidCheck').checked
+    });
     return actions.order.create({
       purchase_units: [{ amount: { value: selectedAmount.toFixed(2) } }]
     });
@@ -720,6 +764,14 @@ async function handlePaymentApproved(data, actions) {
   } else {
     console.warn('[Joybringers] Supabase client not available');
   }
+
+  // Step 7 — donation completed
+  dlPush('donate_payment_completed', {
+    amount: payload.amount,
+    donation_type: payload.donation_type,
+    gift_aid: payload.gift_aid,
+    currency: 'GBP'
+  });
 
   // Show success — hide all payment buttons
   document.getElementById('thankYou').style.display = 'block';
