@@ -310,21 +310,22 @@
             <!-- Car panel -->
             <div class="exp-panel" id="car-panel">
               <p class="exp-panel-label"><i class="fas fa-car mr-1"></i> Car Mileage (HMRC 45p/mile)</p>
-              <div class="row mb-3">
+              <div class="row mb-1">
                 <div class="col-sm-6 mb-3">
-                  <label class="exp-label">From</label>
-                  <input type="text" class="exp-input" id="fromLoc" placeholder="e.g. Newcastle city centre">
+                  <label class="exp-label">From <span style="font-weight:400;color:#adb5bd;">(postcode)</span></label>
+                  <input type="text" class="exp-input" id="fromLoc" placeholder="e.g. NE1 7RU" oninput="scheduleDistCalc()">
                 </div>
                 <div class="col-sm-6">
-                  <label class="exp-label">To</label>
-                  <input type="text" class="exp-input" id="toLoc" placeholder="e.g. Sunderland SR5">
+                  <label class="exp-label">To <span style="font-weight:400;color:#adb5bd;">(postcode)</span></label>
+                  <input type="text" class="exp-input" id="toLoc" placeholder="e.g. NE12 8BU" oninput="scheduleDistCalc()">
                 </div>
               </div>
+              <p id="dist-status" class="hint" style="margin:0 0 14px;min-height:1.3em;"></p>
               <div class="row align-items-end">
                 <div class="col-sm-5 mb-3">
                   <label class="exp-label">Total Miles Driven <span class="req">*</span></label>
                   <input type="number" class="exp-input" id="totalMiles" placeholder="0" min="0" step="0.1" oninput="recalc()">
-                  <p class="hint">Include all trips (e.g. return × number of days)</p>
+                  <p class="hint">Adjust for return trips × number of days</p>
                 </div>
                 <div class="col-sm-4 mb-3">
                   <label class="exp-label">HMRC Rate</label>
@@ -384,9 +385,12 @@
           </div>
           <div class="exp-section-bd">
 
-            <p style="font-size:0.85rem;color:#6c757d;margin-bottom:14px;">
+            <p style="font-size:0.85rem;color:#6c757d;margin-bottom:6px;">
               Attach your receipt(s) — ticket confirmation for bus/train, or a route screenshot for car journeys.
               Accepted: PDF, JPG, PNG, HEIC, ZIP (max 5 MB).
+            </p>
+            <p id="receipt-required-note" style="display:none;font-size:0.8rem;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 12px;margin-bottom:10px;">
+              <i class="fas fa-exclamation-triangle mr-1"></i> Receipt is required for bus/train travel.
             </p>
 
             <div class="exp-upload" id="upload-zone" onclick="document.getElementById('receiptInput').click()">
@@ -473,7 +477,60 @@
       document.getElementById('sum-pub-row').style.display = (type === 'public' || type === 'both') ? 'flex' : 'none';
       document.getElementById('cost-summary').style.display = 'block';
 
+      // Show receipt-required warning for bus/train
+      const needsReceipt = type === 'public' || type === 'both';
+      document.getElementById('receipt-required-note').style.display = needsReceipt ? 'block' : 'none';
+      document.getElementById('upload-zone').style.borderColor = needsReceipt ? '#f59e0b' : '';
+
       recalc();
+    }
+
+    /* ── Auto distance from postcodes ────────────────────── */
+    let _distTimer = null;
+    function scheduleDistCalc() {
+      clearTimeout(_distTimer);
+      const from = document.getElementById('fromLoc').value.trim();
+      const to   = document.getElementById('toLoc').value.trim();
+      if (from.length < 5 || to.length < 5) return;
+      document.getElementById('dist-status').innerHTML =
+        '<i class="fas fa-spinner fa-spin" style="color:#6c757d;"></i> <span style="color:#6c757d;">Calculating route…</span>';
+      _distTimer = setTimeout(calculateDistance, 900);
+    }
+
+    async function calculateDistance() {
+      const from = document.getElementById('fromLoc').value.trim().replace(/\s/g, '');
+      const to   = document.getElementById('toLoc').value.trim().replace(/\s/g, '');
+      const statusEl = document.getElementById('dist-status');
+      try {
+        const [r1, r2] = await Promise.all([
+          fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(from)}`).then(r => r.json()),
+          fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(to)}`).then(r => r.json())
+        ]);
+        if (r1.status !== 200) throw new Error(`Postcode not recognised: ${from}`);
+        if (r2.status !== 200) throw new Error(`Postcode not recognised: ${to}`);
+
+        const { longitude: lon1, latitude: lat1 } = r1.result;
+        const { longitude: lon2, latitude: lat2 } = r2.result;
+
+        const osrm = await fetch(
+          `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`
+        ).then(r => r.json());
+        if (osrm.code !== 'Ok') throw new Error('Could not calculate driving route');
+
+        const oneway    = +(osrm.routes[0].distance * 0.000621371).toFixed(1);
+        const roundtrip = +(oneway * 2).toFixed(1);
+
+        document.getElementById('totalMiles').value = oneway;
+        statusEl.innerHTML =
+          `<i class="fas fa-check-circle" style="color:#006526;"></i> ` +
+          `<span style="color:#065f46;">One-way: <strong>${oneway} mi</strong> &nbsp;·&nbsp; Round trip: <strong>${roundtrip} mi</strong></span>` +
+          ` <span style="color:#6c757d;">— adjust "Total Miles" above for your actual journeys</span>`;
+        recalc();
+      } catch (err) {
+        statusEl.innerHTML =
+          `<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ` +
+          `<span style="color:#dc3545;">${err.message || 'Could not calculate — enter miles manually'}</span>`;
+      }
     }
 
     /* ── Reimbursement calculation ───────────────────────── */
@@ -548,6 +605,8 @@
         return 'Please enter the total miles driven.';
       if ((transportType === 'public' || transportType === 'both') && !document.getElementById('pubAmount').value)
         return 'Please enter the public transport cost.';
+      if ((transportType === 'public' || transportType === 'both') && !chosenFile)
+        return 'A receipt is required for bus/train travel. Please attach your ticket or booking confirmation.';
       const s = new Date(document.getElementById('periodStart').value);
       const e = new Date(document.getElementById('periodEnd').value);
       if (e < s) return 'End date cannot be before start date.';
