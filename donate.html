@@ -108,6 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .don-custom-wrap { position:relative; max-width:160px; }
     .don-custom-wrap .don-pound { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-weight:700; color:#6c757d; }
     .don-custom-input { padding-left:26px; border:2px solid #dee2e6; border-radius:8px; font-size:1rem; font-weight:700; height:48px; width:100%; outline:none; }
+    input.don-custom-input { padding-left: 30px; }
     .don-custom-input:focus { border-color:#006526; }
 
     /* ── Impact ── */
@@ -300,68 +301,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
 
-          <!-- Step 3: Gift Aid -->
-          <div class="don-card">
-            <div class="don-card-header">
-              <div class="d-flex align-items-center">
-                <span class="mr-3" style="background:rgba(255,255,255,0.2);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">3</span>
-                <h5 class="mb-0">Boost your donation with Gift Aid</h5>
-              </div>
-            </div>
-            <div class="don-card-body">
-              <div class="don-giftaid">
-                <span class="don-giftaid-logo">Gift Aid</span>
-                <h6>Make your donation worth 25% more — at no extra cost to you</h6>
-                <p>If you're a UK taxpayer, we can claim an extra 25p for every £1 you donate. On a £20 gift, that's an extra £5 for Joybringers — completely free.</p>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="giftAidCheck">
-                  <label class="form-check-label" for="giftAidCheck" style="font-size:0.875rem; font-weight:600;">
-                    Yes, I am a UK taxpayer and I want Joybringers to claim Gift Aid on this donation and any future donations, until I notify you otherwise.
-                  </label>
-                </div>
-                <p class="mt-2 mb-0 text-muted" style="font-size:0.75rem;">I confirm I have paid or will pay an amount of Income Tax and/or Capital Gains Tax for each tax year that is at least equal to the amount of tax all the charities I donate to will reclaim on my gifts. I understand Joybringers will reclaim 25p of tax on every £1 I give.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 4: About you -->
-          <div class="don-card">
-            <div class="don-card-header">
-              <div class="d-flex align-items-center">
-                <span class="mr-3" style="background:rgba(255,255,255,0.2);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">4</span>
-                <h5 class="mb-0">A little about you <span style="font-size:0.8rem;opacity:0.7;font-weight:400;">(for your receipt)</span></h5>
-              </div>
-            </div>
-            <div class="don-card-body">
-              <div class="row">
-                <div class="col-sm-6 mb-3">
-                  <p class="don-field-label">First name</p>
-                  <input type="text" class="don-input" id="donorFirst" placeholder="Your first name">
-                </div>
-                <div class="col-sm-6 mb-3">
-                  <p class="don-field-label">Last name</p>
-                  <input type="text" class="don-input" id="donorLast" placeholder="Your last name">
-                </div>
-              </div>
-              <div class="mb-3">
-                <p class="don-field-label">Email address</p>
-                <input type="email" class="don-input" id="donorEmail" placeholder="name@example.com">
-              </div>
-              <div class="mb-0">
-                <p class="don-field-label">What prompted your donation today?</p>
-                <select class="don-input" id="reason" style="appearance:auto;">
-                  <option value="">Please select (optional)</option>
-                  <option>Supporting a campaign</option>
-                  <option>Attended a Joybringers event</option>
-                  <option>Saw something on social media</option>
-                  <option>Friend or family recommended</option>
-                  <option>Google search</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         <!-- ── RIGHT: SUMMARY + PAY ── -->
@@ -382,6 +321,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       <i class="fas fa-plus mr-1"></i>Gift Aid: worth <span id="giftaid-extra">£1.25</span> extra
                     </span>
                   </div>
+                  <!-- Compact Gift Aid -->
+                  <div id="gift-aid-compact" style="margin-bottom:12px;padding:10px 12px;background:#f0fff4;border-radius:8px;border:1px solid #a7f3d0;text-align:left;">
+                    <div class="form-check mb-0">
+                      <input type="checkbox" class="form-check-input" id="giftAidCheck">
+                      <label class="form-check-label" for="giftAidCheck" style="font-size:0.82rem;font-weight:600;color:#065f46;cursor:pointer;line-height:1.35;">
+                        <span style="background:#006526;color:white;border-radius:3px;padding:1px 6px;font-size:0.65rem;font-weight:700;letter-spacing:0.04em;margin-right:5px;">GIFT AID</span>
+                        I'm a UK taxpayer — add 25% extra at no cost to me
+                      </label>
+                    </div>
+                    <p style="font-size:0.7rem;color:#6c757d;margin:5px 0 0;line-height:1.4;">I confirm I pay Income Tax equal to or more than the tax Joybringers reclaims on my donation (25p per £1).</p>
+                  </div>
+
                   <h6 style="font-size:0.82rem;color:#374151;margin-bottom:6px;">Pay securely with</h6>
                   <div id="paypal-button-container" style="max-width:360px;margin:0 auto;"></div>
                   <div id="alt-pay-section" style="display:none;max-width:360px;margin:0 auto;">
@@ -401,6 +352,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       <div id="stripe-error" style="color:#dc3545;font-size:0.8rem;margin-top:8px;display:none;padding:8px;background:#fff5f5;border-radius:6px;"></div>
                     </div>
                   </div>
+
+                  <!-- Optional: name / email for receipt & Gift Aid -->
+                  <details id="donor-details-section" style="margin-top:14px;border-top:1px solid #f0f0f0;padding-top:10px;">
+                    <summary style="cursor:pointer;list-style:none;-webkit-appearance:none;font-size:0.8rem;color:#374151;font-weight:600;outline:none;user-select:none;">
+                      <span style="color:#006526;font-size:0.7rem;">▸</span> Add your details <span style="font-weight:400;color:#adb5bd;font-size:0.75rem;">(optional — for receipt &amp; Gift Aid)</span>
+                    </summary>
+                    <div style="padding-top:10px;">
+                      <div class="row">
+                        <div class="col-6 mb-2">
+                          <p class="don-field-label">First name</p>
+                          <input type="text" class="don-input" id="donorFirst" placeholder="First name">
+                        </div>
+                        <div class="col-6 mb-2">
+                          <p class="don-field-label">Last name</p>
+                          <input type="text" class="don-input" id="donorLast" placeholder="Last name">
+                        </div>
+                      </div>
+                      <div class="mb-2">
+                        <p class="don-field-label">Email <span style="color:#adb5bd;font-weight:400;">(for receipt)</span></p>
+                        <input type="email" class="don-input" id="donorEmail" placeholder="name@example.com">
+                      </div>
+                      <div>
+                        <p class="don-field-label">What brought you here?</p>
+                        <select class="don-input" id="reason" style="appearance:auto;">
+                          <option value="">Optional</option>
+                          <option>Supporting a campaign</option>
+                          <option>Attended a Joybringers event</option>
+                          <option>Saw something on social media</option>
+                          <option>Friend or family recommended</option>
+                          <option>Google search</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                    </div>
+                  </details>
 
                   <div class="don-success" id="thankYou">
                     <i class="fas fa-check-circle"></i>
@@ -791,6 +777,8 @@ function showDonationSuccess() {
   document.getElementById('alt-pay-section').style.display = 'none';
   document.getElementById('stripe-section').style.display = 'none';
   document.getElementById('mobile-donate-bar').style.display = 'none';
+  document.getElementById('gift-aid-compact').style.display = 'none';
+  document.getElementById('donor-details-section').style.display = 'none';
   selectedAmount = 5;
 }
 
