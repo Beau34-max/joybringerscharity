@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Travel Claim — Joybringers</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Open Sans', sans-serif; background: #f7f8fa; margin: 0; color: #1a1a2e; }
+
+    /* ── Header ── */
+    .exp-header {
+      background: linear-gradient(135deg, #004d1a 0%, #006526 55%, #00883a 100%);
+      padding: 36px 20px 28px;
+      text-align: center;
+      color: white;
+    }
+    .exp-header img  { height: 60px; margin-bottom: 14px; display: block; margin-left: auto; margin-right: auto; }
+    .exp-header h1   { font-size: 1.8rem; font-weight: 700; margin: 0 0 8px; }
+    .exp-header p    { opacity: 0.88; font-size: 0.88rem; margin: 0; }
+
+    /* ── Container ── */
+    .exp-container { max-width: 740px; margin: 0 auto; padding: 32px 16px 80px; }
+
+    /* ── Section cards ── */
+    .exp-section { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
+    .exp-section-hd {
+      background: linear-gradient(135deg, #004d1a, #006526);
+      color: white; padding: 13px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .exp-num {
+      background: rgba(255,255,255,0.22); border-radius: 50%;
+      width: 28px; height: 28px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.82rem;
+    }
+    .exp-section-hd h2  { margin: 0; font-size: 0.97rem; font-weight: 700; }
+    .exp-section-hd em  { font-style: normal; font-size: 0.78rem; opacity: 0.78; font-weight: 400; margin-left: 4px; }
+    .exp-section-bd     { padding: 22px; }
+
+    /* ── Fields ── */
+    .exp-label { font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 5px; display: block; }
+    .exp-label .req { color: #dc3545; }
+    .exp-input {
+      border: 1.5px solid #dee2e6; border-radius: 8px;
+      padding: 10px 13px; font-size: 0.875rem; width: 100%;
+      outline: none; transition: border-color 0.15s; background: white;
+      font-family: 'Open Sans', sans-serif; color: #1a1a2e;
+    }
+    .exp-input:focus  { border-color: #006526; box-shadow: 0 0 0 3px rgba(0,101,38,0.08); }
+    .exp-input:disabled { background: #f8f9fa; color: #6c757d; cursor: default; }
+
+    /* ── Secure notice ── */
+    .exp-secure {
+      background: #f0fff4; border: 1px solid #a7f3d0; border-radius: 8px;
+      padding: 10px 14px; font-size: 0.78rem; color: #065f46;
+      display: flex; align-items: flex-start; gap: 8px; margin-bottom: 18px;
+    }
+    .exp-secure i { margin-top: 2px; flex-shrink: 0; }
+
+    /* ── Transport buttons ── */
+    .exp-transport-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .exp-transport-btn {
+      border: 2px solid #dee2e6; border-radius: 10px; background: white;
+      padding: 16px 8px; text-align: center; cursor: pointer;
+      transition: all 0.15s; color: #6c757d; font-size: 0.82rem; font-weight: 600;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .exp-transport-btn i { font-size: 1.5rem; }
+    .exp-transport-btn:hover  { border-color: #00883a; color: #006526; background: #f0fff4; }
+    .exp-transport-btn.active { border-color: #006526; background: #f0fff4; color: #006526; }
+
+    /* ── Conditional panels ── */
+    .exp-panel { display: none; margin-top: 22px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
+    .exp-panel.visible { display: block; }
+    .exp-panel-label {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: #006526; margin-bottom: 16px;
+    }
+
+    /* ── Calculated row ── */
+    .exp-calc-row {
+      background: #f8f9fa; border-radius: 8px; padding: 11px 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px;
+    }
+    .exp-calc-label { font-size: 0.8rem; color: #6c757d; }
+    .exp-calc-val   { font-size: 1.05rem; font-weight: 700; color: #006526; }
+
+    /* ── Summary ── */
+    .exp-summary {
+      background: linear-gradient(135deg, #f0fff4, #f7f8fa);
+      border: 2px solid #a7f3d0; border-radius: 12px;
+      padding: 20px 22px; margin-bottom: 20px; display: none;
+    }
+    .exp-summary h3      { font-size: 0.9rem; font-weight: 700; color: #065f46; margin: 0 0 14px; }
+    .exp-sum-row         { display: flex; justify-content: space-between; font-size: 0.85rem; color: #374151; margin-bottom: 8px; }
+    .exp-sum-total       { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; color: #006526; padding-top: 12px; border-top: 2px solid #a7f3d0; margin-top: 8px; }
+
+    /* ── File upload ── */
+    .exp-upload {
+      border: 2px dashed #dee2e6; border-radius: 10px; padding: 30px 20px;
+      text-align: center; cursor: pointer; transition: all 0.2s;
+    }
+    .exp-upload:hover, .exp-upload.dragover { border-color: #006526; background: #f0fff4; }
+    .exp-upload i { font-size: 2rem; color: #adb5bd; display: block; margin-bottom: 8px; }
+    .exp-upload p { margin: 0; color: #6c757d; font-size: 0.85rem; }
+    .exp-upload strong { color: #374151; }
+
+    .exp-file-chip {
+      background: #f0fff4; border: 1px solid #a7f3d0; border-radius: 8px;
+      padding: 10px 14px; margin-top: 10px;
+      display: none; align-items: center; gap: 10px;
+    }
+    .exp-file-chip i       { color: #006526; flex-shrink: 0; }
+    .exp-file-chip-name    { font-size: 0.82rem; font-weight: 600; color: #065f46; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .exp-file-chip-size    { font-size: 0.75rem; color: #6c757d; flex-shrink: 0; }
+    .exp-file-chip-remove  { background: none; border: none; color: #dc3545; cursor: pointer; padding: 0 4px; font-size: 0.9rem; }
+
+    /* ── Submit ── */
+    .exp-submit {
+      width: 100%; background: #006526; color: white; border: none;
+      border-radius: 10px; padding: 15px 20px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .exp-submit:hover    { background: #004d1a; }
+    .exp-submit:disabled { background: #6c757d; cursor: not-allowed; }
+
+    /* ── Error banner ── */
+    .exp-error {
+      background: #fff5f5; border: 1px solid #fca5a5; border-radius: 8px;
+      padding: 12px 16px; color: #dc3545; font-size: 0.875rem;
+      margin-bottom: 20px; display: none; align-items: center; gap: 10px;
+    }
+
+    /* ── Success screen ── */
+    #exp-success { display: none; text-align: center; padding: 50px 20px; }
+    #exp-success .success-icon { font-size: 4rem; color: #006526; margin-bottom: 20px; }
+    #exp-success h2 { font-weight: 700; color: #1a1a2e; margin-bottom: 10px; font-size: 1.5rem; }
+    #exp-success p  { color: #6c757d; max-width: 420px; margin: 0 auto 20px; font-size: 0.9rem; }
+    .exp-ref {
+      background: #f0fff4; border: 1px solid #a7f3d0; border-radius: 8px;
+      padding: 12px 24px; display: inline-block;
+      font-weight: 700; color: #006526; font-size: 0.88rem; margin-bottom: 24px;
+    }
+
+    /* ── Pound prefix ── */
+    .pound-wrap { position: relative; }
+    .pound-wrap .pfx { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #6c757d; pointer-events: none; }
+    .pound-wrap .exp-input { padding-left: 24px; }
+
+    /* ── Divider ── */
+    .mb-12 { margin-bottom: 12px !important; }
+    .mb-3  { margin-bottom: 12px !important; }
+    .hint  { font-size: 0.72rem; color: #6c757d; margin: 4px 0 0; }
+
+    @media (max-width: 480px) {
+      .exp-header h1 { font-size: 1.35rem; }
+      .exp-transport-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .exp-transport-btn  { padding: 12px 4px; font-size: 0.75rem; }
+      .exp-transport-btn i { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="exp-header">
+    <img src="images/logo.png" alt="Joybringers Charity">
+    <h1>Volunteer Travel Reimbursement</h1>
+    <p>Complete this form to claim reimbursement for your volunteering travel costs.<br>We aim to process all claims within <strong>5 working days</strong>.</p>
+  </div>
+
+  <main>
+    <div class="exp-container">
+
+      <!-- Error banner -->
+      <div class="exp-error" id="form-error"><i class="fas fa-exclamation-circle"></i><span id="form-error-text"></span></div>
+
+      <!-- ══ FORM ══════════════════════════════════════════ -->
+      <form id="expense-form" novalidate>
+
+        <!-- ── 1. Your Details ───────────────────────────── -->
+        <div class="exp-section">
+          <div class="exp-section-hd">
+            <span class="exp-num">1</span>
+            <h2>Your Details</h2>
+          </div>
+          <div class="exp-section-bd">
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <label class="exp-label">First Name <span class="req">*</span></label>
+                <input type="text" class="exp-input" id="firstName" placeholder="Jane" required autocomplete="given-name">
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="exp-label">Last Name <span class="req">*</span></label>
+                <input type="text" class="exp-input" id="lastName" placeholder="Smith" required autocomplete="family-name">
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="exp-label">Email Address <span class="req">*</span></label>
+                <input type="email" class="exp-input" id="emailAddr" placeholder="jane@example.com" required autocomplete="email">
+              </div>
+              <div class="col-sm-6">
+                <label class="exp-label">Phone Number <span class="req">*</span></label>
+                <input type="tel" class="exp-input" id="phoneNum" placeholder="07700 900000" required autocomplete="tel">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 2. Bank Details ───────────────────────────── -->
+        <div class="exp-section">
+          <div class="exp-section-hd">
+            <span class="exp-num">2</span>
+            <h2>Bank Details <em>— for BACS payment</em></h2>
+          </div>
+          <div class="exp-section-bd">
+            <div class="exp-secure">
+              <i class="fas fa-lock"></i>
+              Your bank details are transmitted securely and used only to process your reimbursement. Leave blank if you'd prefer to email them separately.
+            </div>
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <label class="exp-label">Account Number</label>
+                <input type="text" class="exp-input" id="accountNum" placeholder="12345678" maxlength="8" inputmode="numeric" autocomplete="off">
+                <p class="hint">8 digits, no spaces</p>
+              </div>
+              <div class="col-sm-6">
+                <label class="exp-label">Sort Code</label>
+                <input type="text" class="exp-input" id="sortCode" placeholder="12-34-56" maxlength="8" autocomplete="off">
+                <p class="hint">6 digits — auto-formatted</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 3. Travel Period ──────────────────────────── -->
+        <div class="exp-section">
+          <div class="exp-section-hd">
+            <span class="exp-num">3</span>
+            <h2>Travel Period</h2>
+          </div>
+          <div class="exp-section-bd">
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <label class="exp-label">Start Date <span class="req">*</span></label>
+                <input type="date" class="exp-input" id="periodStart" required>
+              </div>
+              <div class="col-sm-6">
+                <label class="exp-label">End Date <span class="req">*</span></label>
+                <input type="date" class="exp-input" id="periodEnd" required>
+              </div>
+            </div>
+            <p class="hint" style="margin-top:10px;">Claiming for a single day? Use the same date for both fields.</p>
+          </div>
+        </div>
+
+        <!-- ── 4. Travel Costs ───────────────────────────── -->
+        <div class="exp-section">
+          <div class="exp-section-hd">
+            <span class="exp-num">4</span>
+            <h2>Travel Details &amp; Costs</h2>
+          </div>
+          <div class="exp-section-bd">
+
+            <label class="exp-label mb-2">How did you travel? <span class="req">*</span></label>
+            <div class="exp-transport-grid">
+              <button type="button" class="exp-transport-btn" data-type="car" onclick="setTransport('car')">
+                <i class="fas fa-car"></i>Own car
+              </button>
+              <button type="button" class="exp-transport-btn" data-type="public" onclick="setTransport('public')">
+                <i class="fas fa-bus"></i>Bus / Train
+              </button>
+              <button type="button" class="exp-transport-btn" data-type="both" onclick="setTransport('both')">
+                <i class="fas fa-road"></i>Both
+              </button>
+            </div>
+            <input type="hidden" id="transportType">
+
+            <!-- Car panel -->
+            <div class="exp-panel" id="car-panel">
+              <p class="exp-panel-label"><i class="fas fa-car mr-1"></i> Car Mileage (HMRC 45p/mile)</p>
+              <div class="row mb-3">
+                <div class="col-sm-6 mb-3">
+                  <label class="exp-label">From</label>
+                  <input type="text" class="exp-input" id="fromLoc" placeholder="e.g. Newcastle city centre">
+                </div>
+                <div class="col-sm-6">
+                  <label class="exp-label">To</label>
+                  <input type="text" class="exp-input" id="toLoc" placeholder="e.g. Sunderland SR5">
+                </div>
+              </div>
+              <div class="row align-items-end">
+                <div class="col-sm-5 mb-3">
+                  <label class="exp-label">Total Miles Driven <span class="req">*</span></label>
+                  <input type="number" class="exp-input" id="totalMiles" placeholder="0" min="0" step="0.1" oninput="recalc()">
+                  <p class="hint">Include all trips (e.g. return × number of days)</p>
+                </div>
+                <div class="col-sm-4 mb-3">
+                  <label class="exp-label">HMRC Rate</label>
+                  <input class="exp-input" value="45p per mile" disabled>
+                </div>
+                <div class="col-sm-3 mb-3">
+                  <label class="exp-label">Car Claim</label>
+                  <input class="exp-input" id="carDisplay" value="£0.00" disabled style="font-weight:700;color:#006526;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Public transport panel -->
+            <div class="exp-panel" id="pub-panel">
+              <p class="exp-panel-label"><i class="fas fa-bus mr-1"></i> Bus / Train Costs</p>
+              <div class="row">
+                <div class="col-sm-5 mb-3">
+                  <label class="exp-label">Total Amount Spent <span class="req">*</span></label>
+                  <div class="pound-wrap">
+                    <span class="pfx">£</span>
+                    <input type="number" class="exp-input" id="pubAmount" placeholder="0.00" min="0" step="0.01" oninput="recalc()">
+                  </div>
+                </div>
+                <div class="col-sm-7 mb-3">
+                  <label class="exp-label">Journey Description</label>
+                  <input type="text" class="exp-input" id="pubDesc" placeholder="e.g. Bus from Gateshead to Sunderland × 4">
+                </div>
+              </div>
+              <p class="hint">Please attach your ticket/receipt in section 5.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Summary (shown after transport selected) ──── -->
+        <div class="exp-summary" id="cost-summary">
+          <h3><i class="fas fa-receipt mr-2"></i>Claim Summary</h3>
+          <div class="exp-sum-row" id="sum-car-row" style="display:none;">
+            <span>Car mileage reimbursement</span>
+            <span id="sum-car">£0.00</span>
+          </div>
+          <div class="exp-sum-row" id="sum-pub-row" style="display:none;">
+            <span>Bus / train costs</span>
+            <span id="sum-pub">£0.00</span>
+          </div>
+          <div class="exp-sum-total">
+            <span>Total Claim</span>
+            <span id="sum-total">£0.00</span>
+          </div>
+        </div>
+
+        <!-- ── 5. Receipt & Notes ─────────────────────────── -->
+        <div class="exp-section">
+          <div class="exp-section-hd">
+            <span class="exp-num">5</span>
+            <h2>Receipt &amp; Notes</h2>
+          </div>
+          <div class="exp-section-bd">
+
+            <p style="font-size:0.85rem;color:#6c757d;margin-bottom:14px;">
+              Attach your receipt(s) — ticket confirmation for bus/train, or a route screenshot for car journeys.
+              Accepted: PDF, JPG, PNG, HEIC, ZIP (max 5 MB).
+            </p>
+
+            <div class="exp-upload" id="upload-zone" onclick="document.getElementById('receiptInput').click()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p><strong>Click to browse</strong> or drag &amp; drop your file here</p>
+              <p style="font-size:0.75rem;margin-top:4px;">PDF · JPG · PNG · HEIC · ZIP — max 5 MB</p>
+            </div>
+            <input type="file" id="receiptInput" style="display:none;" accept=".pdf,.jpg,.jpeg,.png,.heic,.zip" onchange="onFileChosen(this)">
+
+            <div class="exp-file-chip" id="file-chip">
+              <i class="fas fa-file-alt"></i>
+              <span class="exp-file-chip-name"  id="chip-name"></span>
+              <span class="exp-file-chip-size"  id="chip-size"></span>
+              <button type="button" class="exp-file-chip-remove" onclick="clearFile()" title="Remove"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div style="margin-top:20px;">
+              <label class="exp-label">Additional Notes <span style="font-weight:400;color:#adb5bd;">(optional)</span></label>
+              <textarea class="exp-input" id="extraNotes" rows="3" placeholder="Any extra information about this claim…" style="resize:vertical;"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Submit ─────────────────────────────────────── -->
+        <button type="submit" class="exp-submit" id="submit-btn">
+          <i class="fas fa-paper-plane"></i> Submit Claim
+        </button>
+
+      </form>
+
+      <!-- ══ SUCCESS SCREEN ════════════════════════════════ -->
+      <div id="exp-success">
+        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+        <h2>Claim Submitted!</h2>
+        <p>Your travel reimbursement claim has been received. We aim to process all claims within <strong>5 working days</strong> and will contact you if we need any further information.</p>
+        <div class="exp-ref" id="success-ref"></div>
+        <div>
+          <button onclick="window.location.reload()" style="background:transparent;border:2px solid #006526;color:#006526;border-radius:8px;padding:10px 24px;font-weight:700;cursor:pointer;font-size:0.875rem;">Submit another claim</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Libraries ──────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <script>
+    /* ── Config ──────────────────────────────────────────── */
+    const SUPABASE_URL      = "https://roofompdejyndlpqfrjl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Ys9Vq0Akl7BW6VXVVgy65g_MBuXloNO";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    emailjs.init("6xlIRBT96J-bKz7s3");
+    const EJ_SERVICE  = 'service_jqpd0af';
+    const EJ_TEMPLATE = 'template_expense'; // ← create this template in EmailJS
+
+    /* ── State ───────────────────────────────────────────── */
+    let transportType = '';
+    let chosenFile    = null;
+
+    /* ── Sort code auto-format ───────────────────────────── */
+    document.getElementById('sortCode').addEventListener('input', function () {
+      let v = this.value.replace(/\D/g, '').slice(0, 6);
+      if (v.length > 4) v = v.slice(0,2) + '-' + v.slice(2,4) + '-' + v.slice(4);
+      else if (v.length > 2) v = v.slice(0,2) + '-' + v.slice(2);
+      this.value = v;
+    });
+
+    /* ── Transport type ──────────────────────────────────── */
+    function setTransport(type) {
+      transportType = type;
+      document.getElementById('transportType').value = type;
+
+      document.querySelectorAll('.exp-transport-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`[data-type="${type}"]`).classList.add('active');
+
+      document.getElementById('car-panel').classList.toggle('visible', type === 'car' || type === 'both');
+      document.getElementById('pub-panel').classList.toggle('visible', type === 'public' || type === 'both');
+
+      document.getElementById('sum-car-row').style.display = (type === 'car'    || type === 'both') ? 'flex' : 'none';
+      document.getElementById('sum-pub-row').style.display = (type === 'public' || type === 'both') ? 'flex' : 'none';
+      document.getElementById('cost-summary').style.display = 'block';
+
+      recalc();
+    }
+
+    /* ── Reimbursement calculation ───────────────────────── */
+    function recalc() {
+      const miles  = parseFloat(document.getElementById('totalMiles').value) || 0;
+      const pub    = parseFloat(document.getElementById('pubAmount').value)  || 0;
+      const carAmt = +(miles * 0.45).toFixed(2);
+      const total  = +(carAmt + pub).toFixed(2);
+
+      document.getElementById('carDisplay').value       = `£${carAmt.toFixed(2)}`;
+      document.getElementById('sum-car').textContent    = `£${carAmt.toFixed(2)}`;
+      document.getElementById('sum-pub').textContent    = `£${pub.toFixed(2)}`;
+      document.getElementById('sum-total').textContent  = `£${total.toFixed(2)}`;
+    }
+
+    /* ── File handling ───────────────────────────────────── */
+    function onFileChosen(input) {
+      const f = input.files[0];
+      if (!f) return;
+      if (f.size > 5 * 1024 * 1024) {
+        showError('File is too large. Maximum size is 5 MB.');
+        input.value = '';
+        return;
+      }
+      chosenFile = f;
+      document.getElementById('chip-name').textContent = f.name;
+      document.getElementById('chip-size').textContent = fmtSize(f.size);
+      document.getElementById('file-chip').style.display = 'flex';
+    }
+
+    function clearFile() {
+      chosenFile = null;
+      document.getElementById('receiptInput').value = '';
+      document.getElementById('file-chip').style.display = 'none';
+    }
+
+    function fmtSize(b) {
+      return b >= 1024 * 1024 ? `${(b/1024/1024).toFixed(1)} MB` : `${Math.round(b/1024)} KB`;
+    }
+
+    /* Drag-and-drop */
+    const zone = document.getElementById('upload-zone');
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', ()  => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      const f = e.dataTransfer.files[0];
+      if (!f) return;
+      /* Simulate input change */
+      const dt   = new DataTransfer();
+      dt.items.add(f);
+      document.getElementById('receiptInput').files = dt.files;
+      onFileChosen({ files: [f] });
+    });
+
+    /* ── Validation ──────────────────────────────────────── */
+    function validate() {
+      const required = [
+        { id: 'firstName',   label: 'First name' },
+        { id: 'lastName',    label: 'Last name' },
+        { id: 'emailAddr',   label: 'Email address' },
+        { id: 'phoneNum',    label: 'Phone number' },
+        { id: 'periodStart', label: 'Start date' },
+        { id: 'periodEnd',   label: 'End date' },
+      ];
+      for (const f of required) {
+        if (!document.getElementById(f.id).value.trim()) return `Please fill in: ${f.label}`;
+      }
+      if (!transportType) return 'Please select how you travelled.';
+      if ((transportType === 'car' || transportType === 'both') && !document.getElementById('totalMiles').value)
+        return 'Please enter the total miles driven.';
+      if ((transportType === 'public' || transportType === 'both') && !document.getElementById('pubAmount').value)
+        return 'Please enter the public transport cost.';
+      const s = new Date(document.getElementById('periodStart').value);
+      const e = new Date(document.getElementById('periodEnd').value);
+      if (e < s) return 'End date cannot be before start date.';
+      return null;
+    }
+
+    /* ── Submit ──────────────────────────────────────────── */
+    document.getElementById('expense-form').addEventListener('submit', async function (ev) {
+      ev.preventDefault();
+      const err = validate();
+      if (err) { showError(err); return; }
+      hideError();
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+
+      try {
+        /* 1 — Upload receipt to Supabase Storage (best effort) */
+        let receiptUrl = null;
+        if (chosenFile) {
+          const ext  = chosenFile.name.split('.').pop();
+          const path = `claims/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+          const { error: upErr } = await sb.storage
+            .from('expense-receipts')
+            .upload(path, chosenFile, { contentType: chosenFile.type, upsert: false });
+
+          if (upErr) {
+            console.warn('[Storage]', upErr.message); // non-fatal
+          } else {
+            const { data: { publicUrl } } = sb.storage.from('expense-receipts').getPublicUrl(path);
+            receiptUrl = publicUrl;
+          }
+        }
+
+        /* 2 — Build payload */
+        const miles   = parseFloat(document.getElementById('totalMiles').value) || 0;
+        const pub     = parseFloat(document.getElementById('pubAmount').value)  || 0;
+        const carAmt  = +(miles * 0.45).toFixed(2);
+        const total   = +(carAmt + pub).toFixed(2);
+
+        const payload = {
+          first_name:             document.getElementById('firstName').value.trim(),
+          last_name:              document.getElementById('lastName').value.trim(),
+          email:                  document.getElementById('emailAddr').value.trim(),
+          phone:                  document.getElementById('phoneNum').value.trim(),
+          account_number:         document.getElementById('accountNum').value.trim() || null,
+          sort_code:              document.getElementById('sortCode').value.trim()   || null,
+          period_start:           document.getElementById('periodStart').value,
+          period_end:             document.getElementById('periodEnd').value,
+          transport_type:         transportType,
+          from_location:          document.getElementById('fromLoc').value.trim() || null,
+          to_location:            document.getElementById('toLoc').value.trim()   || null,
+          total_miles:            miles  || null,
+          car_reimbursement:      carAmt || null,
+          public_transport_cost:  pub    || null,
+          total_amount:           total,
+          receipt_url:            receiptUrl,
+          notes:                  document.getElementById('extraNotes').value.trim() || null,
+          status:                 'pending'
+        };
+
+        /* 3 — Save to Supabase */
+        const { error: dbErr } = await sb.from('volunteer_expenses').insert([payload]);
+        if (dbErr) console.error('[Supabase]', dbErr.message); // non-fatal if email succeeds
+
+        /* 4 — Send email notification */
+        const transportLabel = { car: 'Own car', public: 'Bus / Train', both: 'Both' }[transportType] || transportType;
+        try {
+          await emailjs.send(EJ_SERVICE, EJ_TEMPLATE, {
+            volunteer_name:   `${payload.first_name} ${payload.last_name}`,
+            volunteer_email:  payload.email,
+            volunteer_phone:  payload.phone,
+            account_number:   payload.account_number || 'Not provided',
+            sort_code:        payload.sort_code       || 'Not provided',
+            period_start:     payload.period_start,
+            period_end:       payload.period_end,
+            transport_type:   transportLabel,
+            from_location:    payload.from_location   || '—',
+            to_location:      payload.to_location      || '—',
+            total_miles:      payload.total_miles      ? `${payload.total_miles} miles` : '—',
+            car_amount:       `£${carAmt.toFixed(2)}`,
+            public_amount:    `£${pub.toFixed(2)}`,
+            total_amount:     `£${total.toFixed(2)}`,
+            receipt_url:      receiptUrl              || 'No receipt uploaded',
+            notes:            payload.notes           || 'None',
+            journey_desc:     document.getElementById('pubDesc').value.trim() || '—',
+          });
+        } catch (ejErr) {
+          console.error('[EmailJS]', ejErr); // non-fatal — data is in DB
+        }
+
+        /* 5 — Show success */
+        document.getElementById('expense-form').style.display  = 'none';
+        document.getElementById('exp-success').style.display   = 'block';
+        const ref = `EXP-${Date.now().toString(36).toUpperCase()}`;
+        document.getElementById('success-ref').textContent = `Reference: ${ref}`;
+
+      } catch (e) {
+        console.error('[Submit]', e);
+        showError('Something went wrong. Please try again or email info@joybringerscharity.org.');
+        btn.disabled  = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Claim';
+      }
+    });
+
+    /* ── Helpers ─────────────────────────────────────────── */
+    function showError(msg) {
+      const el = document.getElementById('form-error');
+      document.getElementById('form-error-text').textContent = msg;
+      el.style.display = 'flex';
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideError() {
+      document.getElementById('form-error').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
