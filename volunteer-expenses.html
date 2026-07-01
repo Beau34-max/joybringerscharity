@@ -133,6 +133,22 @@
     .exp-submit:hover    { background: #004d1a; }
     .exp-submit:disabled { background: #6c757d; cursor: not-allowed; }
 
+    /* ── Recalled details banner ── */
+    .exp-recall {
+      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+      padding: 12px 16px; margin-bottom: 16px;
+      display: none; align-items: center; gap: 10px; font-size: 0.82rem; color: #1e40af;
+      flex-wrap: wrap;
+    }
+    .exp-recall i { color: #3b82f6; flex-shrink: 0; }
+    .exp-recall span { flex: 1; min-width: 180px; }
+    .exp-recall-clear {
+      background: none; border: 1px solid #93c5fd; border-radius: 6px;
+      color: #1e40af; font-size: 0.75rem; cursor: pointer;
+      padding: 4px 10px; white-space: nowrap; font-family: inherit;
+    }
+    .exp-recall-clear:hover { background: #dbeafe; }
+
     /* ── Error banner ── */
     .exp-error {
       background: #fff5f5; border: 1px solid #fca5a5; border-radius: 8px;
@@ -180,6 +196,13 @@
 
   <main>
     <div class="exp-container">
+
+      <!-- Recalled details banner -->
+      <div class="exp-recall" id="recall-banner">
+        <i class="fas fa-user-check"></i>
+        <span>We've pre-filled your details from last time — please check they're still correct before submitting.</span>
+        <button type="button" class="exp-recall-clear" onclick="clearSaved()">Clear &amp; start fresh</button>
+      </div>
 
       <!-- Error banner -->
       <div class="exp-error" id="form-error"><i class="fas fa-exclamation-circle"></i><span id="form-error-text"></span></div>
@@ -587,7 +610,10 @@
           status:                 'pending'
         };
 
-        /* 3 — Save to Supabase */
+        /* 3 — Remember this volunteer's details for next time */
+        saveDetails(payload);
+
+        /* 4 — Save to Supabase */
         const { error: dbErr } = await sb.from('volunteer_expenses').insert([payload]);
         if (dbErr) console.error('[Supabase]', dbErr.message); // non-fatal if email succeeds
 
@@ -632,6 +658,47 @@
     });
 
     /* ── Helpers ─────────────────────────────────────────── */
+    /* ── Saved details (localStorage) ───────────────────── */
+    const SAVED_KEY = 'jb_expense_details';
+
+    function loadSaved() {
+      try {
+        const s = JSON.parse(localStorage.getItem(SAVED_KEY));
+        if (!s) return;
+        document.getElementById('firstName').value  = s.firstName  || '';
+        document.getElementById('lastName').value   = s.lastName   || '';
+        document.getElementById('emailAddr').value  = s.email      || '';
+        document.getElementById('phoneNum').value   = s.phone      || '';
+        document.getElementById('accountNum').value = s.accountNum || '';
+        document.getElementById('sortCode').value   = s.sortCode   || '';
+        if (s.firstName || s.email) {
+          document.getElementById('recall-banner').style.display = 'flex';
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    function saveDetails(p) {
+      try {
+        localStorage.setItem(SAVED_KEY, JSON.stringify({
+          firstName:  p.first_name,
+          lastName:   p.last_name,
+          email:      p.email,
+          phone:      p.phone,
+          accountNum: p.account_number || '',
+          sortCode:   p.sort_code      || '',
+        }));
+      } catch (e) { /* ignore */ }
+    }
+
+    function clearSaved() {
+      localStorage.removeItem(SAVED_KEY);
+      document.getElementById('recall-banner').style.display = 'none';
+      ['firstName','lastName','emailAddr','phoneNum','accountNum','sortCode']
+        .forEach(id => { document.getElementById(id).value = ''; });
+    }
+
+    loadSaved();
+
     function showError(msg) {
       const el = document.getElementById('form-error');
       document.getElementById('form-error-text').textContent = msg;
