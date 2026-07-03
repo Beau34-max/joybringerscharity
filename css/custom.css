@@ -1066,14 +1066,20 @@ img.shadow-sm {
 .ftco_navbar .navbar-brand img,
 .ftco_navbar.scrolled .navbar-brand img { height:46px; width:auto; }
 .jb-brand-text {
-  display:flex; flex-direction:column; line-height:1.15;
-  font-family:'Poppins',sans-serif; color:#fff;
+  display:flex; flex-direction:row; align-items:center; gap:5px;
+  font-family:'Poppins',sans-serif;
 }
-.jb-brand-text strong {
-  font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#fff;
-}
+.jb-brand-text strong,
 .jb-brand-text small {
-  font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#fff; opacity:1;
+  font-size:0.88rem; font-weight:700; letter-spacing:0.05em;
+  text-transform:uppercase; color:#fff; opacity:1; line-height:1;
+}
+/* Compact nav links */
+.ftco-navbar-light .navbar-nav > .nav-item > .nav-link,
+.ftco-navbar-light.scrolled .navbar-nav > .nav-item > .nav-link {
+  padding-left:0.6rem !important;
+  padding-right:0.6rem !important;
+  font-size:0.82rem;
 }
 
 /* ── Inner page heroes: clear fixed navbar ──
