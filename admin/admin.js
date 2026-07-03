@@ -302,6 +302,9 @@ function renderEventsList(filter = '') {
           <button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${idx})">
             <i class="fas fa-pen"></i> Edit
           </button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="duplicateEvent(${idx})" title="Duplicate this event">
+            <i class="fas fa-copy"></i>
+          </button>
           ${isAdmin() ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${idx})"><i class="fas fa-trash"></i></button>` : ''}
         </div>
       </div>`;
@@ -329,6 +332,34 @@ function openEditModal(idx) {
   document.getElementById('event-idx').value                 = idx;
   document.getElementById('event-title').value               = e.title        || '';
   document.getElementById('event-date').value                = e.date         || '';
+  document.getElementById('event-time').value                = e.time         || '';
+  document.getElementById('event-venue').value               = e.venue        || '';
+  document.getElementById('event-joining-link').value        = e.joiningLink  || '';
+  document.getElementById('event-description').value         = e.description  || '';
+  document.getElementById('event-featured').checked          = !!e.featured;
+  document.getElementById('event-paid').checked              = !!e.paidEvent;
+  document.getElementById('event-reg-override').checked      = !!e.regOverrideOpen;
+  document.getElementById('event-current-image').value       = e.image        || '';
+  document.getElementById('event-image').value               = '';
+
+  const wrap = document.getElementById('event-image-preview-wrap');
+  const img  = document.getElementById('event-image-preview');
+  if (e.image) {
+    const raw = 'https://raw.githubusercontent.com/Beau34-max/joybringerswebsitesep/main/';
+    img.src = e.image.startsWith('http') ? e.image : raw + e.image.replace(/^\//, '');
+    wrap.style.display = 'block';
+  } else {
+    wrap.style.display = 'none';
+  }
+  new bootstrap.Modal(document.getElementById('eventModal')).show();
+}
+
+function duplicateEvent(idx) {
+  const e = eventsData.items[idx];
+  document.getElementById('event-modal-title').textContent   = 'Duplicate Event';
+  document.getElementById('event-idx').value                 = '';  // no idx = creates new
+  document.getElementById('event-title').value               = e.title + ' (Copy)';
+  document.getElementById('event-date').value                = '';  // admin must set new date
   document.getElementById('event-time').value                = e.time         || '';
   document.getElementById('event-venue').value               = e.venue        || '';
   document.getElementById('event-joining-link').value        = e.joiningLink  || '';
