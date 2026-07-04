@@ -49,6 +49,11 @@
       "name": "Groundwork UK",
       "logo": "images/partners/gw.jpg",
       "link": "https://www.groundwork.org.uk/"
+    },
+    {
+      "name": "OneStop Shop",
+      "logo": "images/partners/onestop.png",
+      "link": "https://www.onestop.co.uk/"
     }
   ]
 }
