@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/.well-known/apple-developer-merchantid-domain-association", "destination": "/api/apple-pay-domain" },
     { "source": "/volunteer-expenses", "destination": "/volunteer-expenses.html" },
+    { "source": "/awards-sponsorship", "destination": "/awards-sponsorship.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/events", "destination": "/events.html" },

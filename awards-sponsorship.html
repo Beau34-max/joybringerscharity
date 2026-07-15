@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Awards Night Sponsorship — Joybringers Charity</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin:0; background:#f4f7f4; font-family:'Open Sans',sans-serif; color:#1a1a1a; }
+
+    /* ── Header ── */
+    .sp-header { background:linear-gradient(135deg,#003d14 0%,#006526 60%,#00883a 100%); padding:32px 16px 28px; text-align:center; position:relative; overflow:hidden; }
+    .sp-header::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:40px; background:#f4f7f4; clip-path:ellipse(55% 100% at 50% 100%); }
+    .sp-logo { width:72px; height:72px; border-radius:50%; background:#fff; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+    .sp-logo img { width:56px; height:56px; object-fit:contain; }
+    .sp-header h1 { color:#fbbf24; font-size:1.9rem; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; margin:0 0 4px; text-shadow:0 2px 8px rgba(0,0,0,0.4); }
+    .sp-header h2 { color:#fff; font-size:1.05rem; font-weight:600; margin:0 0 14px; opacity:0.9; }
+    .sp-event-strip { display:inline-flex; gap:24px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:50px; padding:8px 24px; flex-wrap:wrap; justify-content:center; }
+    .sp-event-chip { color:#fff; font-size:0.82rem; font-weight:600; display:flex; align-items:center; gap:7px; }
+    .sp-event-chip i { color:#fbbf24; }
+
+    /* ── Layout ── */
+    .sp-container { max-width:720px; margin:0 auto; padding:32px 16px 60px; }
+
+    /* ── Section title ── */
+    .sp-section-title { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:#006526; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .sp-section-title::after { content:''; flex:1; height:1px; background:#d1fae5; }
+
+    /* ── Package cards ── */
+    .sp-packages { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
+    @media(max-width:500px){ .sp-packages { grid-template-columns:1fr; } }
+
+    .sp-pkg { border:2px solid #e2e8e4; border-radius:12px; padding:16px; cursor:pointer; transition:all 0.18s; background:#fff; position:relative; }
+    .sp-pkg:hover { border-color:#006526; box-shadow:0 4px 16px rgba(0,101,38,0.1); }
+    .sp-pkg.selected { border-color:#006526; background:#f0fdf4; box-shadow:0 4px 20px rgba(0,101,38,0.15); }
+    .sp-pkg-check { position:absolute; top:12px; right:12px; width:22px; height:22px; border-radius:50%; border:2px solid #cbd5e1; background:#fff; display:flex; align-items:center; justify-content:center; transition:all 0.18s; }
+    .sp-pkg.selected .sp-pkg-check { background:#006526; border-color:#006526; }
+    .sp-pkg.selected .sp-pkg-check::after { content:'✓'; color:#fff; font-size:12px; font-weight:700; }
+    .sp-pkg-icon { font-size:1.4rem; margin-bottom:8px; }
+    .sp-pkg-name { font-weight:700; font-size:0.9rem; color:#003d14; margin-bottom:4px; }
+    .sp-pkg-desc { font-size:0.75rem; color:#666; line-height:1.45; margin-bottom:10px; }
+    .sp-pkg-price { font-size:1.2rem; font-weight:800; color:#006526; }
+    .sp-pkg-price small { font-size:0.7rem; font-weight:500; color:#888; margin-left:4px; }
+
+    /* Headline package — full width, gold accent */
+    .sp-pkg.headline { grid-column:1/-1; border-color:#fbbf24; background:linear-gradient(135deg,#003d14,#006526); }
+    .sp-pkg.headline .sp-pkg-name { color:#fbbf24; font-size:1rem; }
+    .sp-pkg.headline .sp-pkg-desc { color:rgba(255,255,255,0.8); }
+    .sp-pkg.headline .sp-pkg-price { color:#fbbf24; font-size:1.5rem; }
+    .sp-pkg.headline:hover { box-shadow:0 6px 24px rgba(251,191,36,0.3); }
+    .sp-pkg.headline.selected { border-color:#fbbf24; background:linear-gradient(135deg,#002d0f,#004d1a); }
+    .sp-pkg.headline .sp-pkg-check { border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.1); }
+    .sp-pkg.headline.selected .sp-pkg-check { background:#fbbf24; border-color:#fbbf24; }
+    .sp-pkg.headline.selected .sp-pkg-check::after { color:#003d14; }
+
+    /* Marketplace — full width, teal accent */
+    .sp-pkg.marketplace { grid-column:1/-1; border-color:#0d9488; }
+    .sp-pkg.marketplace.selected { border-color:#0d9488; background:#f0fdfa; }
+    .sp-pkg.marketplace.selected .sp-pkg-check { background:#0d9488; border-color:#0d9488; }
+    .sp-pkg.marketplace .sp-pkg-price { color:#0d9488; }
+
+    /* ── Custom amount ── */
+    .sp-custom-box { background:#fff; border:2px solid #006526; border-radius:10px; padding:16px; margin-bottom:16px; display:none; }
+    .sp-custom-box.visible { display:block; }
+    .sp-custom-label { font-size:0.82rem; font-weight:700; color:#003d14; margin-bottom:8px; }
+    .sp-amount-input-wrap { position:relative; display:inline-flex; align-items:center; width:100%; max-width:200px; }
+    .sp-amount-input-wrap span { position:absolute; left:12px; font-weight:700; color:#006526; font-size:1.1rem; }
+    .sp-amount-input-wrap input { padding:10px 12px 10px 28px; border:1.5px solid #d1d5db; border-radius:8px; font-size:1.1rem; font-weight:700; width:100%; outline:none; }
+    .sp-amount-input-wrap input:focus { border-color:#006526; box-shadow:0 0 0 3px rgba(0,101,38,0.1); }
+
+    /* Marketplace table count */
+    .sp-table-count { background:#fff; border:2px solid #0d9488; border-radius:10px; padding:16px; margin-bottom:16px; display:none; }
+    .sp-table-count.visible { display:block; }
+    .sp-qty { display:flex; align-items:center; gap:12px; }
+    .sp-qty button { width:36px; height:36px; border-radius:8px; border:2px solid #0d9488; background:#fff; color:#0d9488; font-size:1.2rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+    .sp-qty button:hover { background:#0d9488; color:#fff; }
+    .sp-qty-num { font-size:1.3rem; font-weight:800; color:#003d14; min-width:32px; text-align:center; }
+    .sp-qty-cost { font-size:0.85rem; color:#0d9488; font-weight:600; margin-top:6px; }
+
+    /* Award category field */
+    .sp-award-field { background:#fff; border:2px solid #f59e0b; border-radius:10px; padding:16px; margin-bottom:16px; display:none; }
+    .sp-award-field.visible { display:block; }
+
+    /* ── Form ── */
+    .sp-card { background:#fff; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:24px; margin-bottom:20px; }
+    .sp-label { font-size:0.8rem; font-weight:700; color:#374151; margin-bottom:5px; display:block; letter-spacing:0.02em; }
+    .sp-input { width:100%; border:1.5px solid #d1d5db; border-radius:8px; padding:10px 14px; font-size:0.9rem; outline:none; transition:border-color 0.15s; background:#fff; font-family:inherit; }
+    .sp-input:focus { border-color:#006526; box-shadow:0 0 0 3px rgba(0,101,38,0.08); }
+    .sp-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:480px){ .sp-row { grid-template-columns:1fr; } }
+
+    /* ── Summary bar ── */
+    .sp-summary { background:linear-gradient(135deg,#003d14,#006526); border-radius:12px; padding:18px 22px; color:#fff; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .sp-summary-label { font-size:0.8rem; opacity:0.8; }
+    .sp-summary-pkg { font-size:1rem; font-weight:700; }
+    .sp-summary-amount { font-size:1.8rem; font-weight:800; color:#fbbf24; }
+
+    /* ── Payment ── */
+    .sp-pay-divider { display:flex; align-items:center; gap:10px; margin:16px 0; color:#9ca3af; font-size:0.78rem; }
+    .sp-pay-divider::before, .sp-pay-divider::after { content:''; flex:1; height:1px; background:#e5e7eb; }
+    #sp-stripe-ec-wrapper { display:none; }
+    #sp-stripe-error { display:none; background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:10px 14px; font-size:0.83rem; color:#b91c1c; margin-top:10px; }
+    .sp-pay-btn { width:100%; background:#006526; color:#fff; border:none; border-radius:10px; padding:15px; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.18s; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .sp-pay-btn:hover { background:#004d1a; }
+    .sp-pay-btn:disabled { background:#9ca3af; cursor:not-allowed; }
+
+    /* ── Success ── */
+    #sp-success { display:none; text-align:center; padding:40px 20px; }
+    .sp-success-icon { width:72px; height:72px; border-radius:50%; background:#d1fae5; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+    .sp-success-icon i { color:#006526; font-size:2rem; }
+
+    /* ── Error ── */
+    #sp-form-error { display:none; background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:12px 16px; font-size:0.85rem; color:#b91c1c; margin-bottom:16px; }
+
+    /* ── Benefits strip ── */
+    .sp-benefits { background:#fff; border-radius:12px; border:1px solid #d1fae5; padding:18px 22px; margin-bottom:20px; }
+    .sp-benefit-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; font-size:0.85rem; color:#374151; }
+    .sp-benefit-item:last-child { margin-bottom:0; }
+    .sp-benefit-item i { color:#006526; margin-top:2px; flex-shrink:0; }
+
+    /* ── In-kind note ── */
+    .sp-inkind { background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:0.83rem; color:#78350f; }
+    .sp-inkind strong { color:#92400e; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="sp-header">
+  <div class="sp-logo">
+    <img src="images/logo.png" alt="Joybringers Charity">
+  </div>
+  <h1>Award Night</h1>
+  <h2>Sponsorship &amp; Exhibitor Booking</h2>
+  <div class="sp-event-strip">
+    <div class="sp-event-chip"><i class="fas fa-calendar-alt"></i> Saturday 28 November 2026</div>
+    <div class="sp-event-chip"><i class="fas fa-clock"></i> By 1:00 PM</div>
+    <div class="sp-event-chip"><i class="fas fa-map-marker-alt"></i> The Light Box, Newcastle</div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="sp-container">
+
+  <!-- Benefits -->
+  <div class="sp-benefits">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#006526;margin-bottom:12px;">Sponsors will receive</div>
+    <div class="sp-benefit-item"><i class="fas fa-check-circle"></i> Logo/name recognition in event materials and digital platforms</div>
+    <div class="sp-benefit-item"><i class="fas fa-check-circle"></i> Acknowledgement during the event</div>
+    <div class="sp-benefit-item"><i class="fas fa-check-circle"></i> Social media appreciation and visibility</div>
+    <div class="sp-benefit-item"><i class="fas fa-check-circle"></i> Exposure before, during and after the Award Night</div>
+    <div class="sp-benefit-item"><i class="fas fa-check-circle"></i> A chance to showcase your support for our community</div>
+  </div>
+
+  <!-- Step 1: Package -->
+  <div class="sp-section-title"><i class="fas fa-tag"></i> Step 1 — Choose Your Package</div>
+
+  <div class="sp-packages" id="sp-packages">
+
+    <!-- Headline -->
+    <div class="sp-pkg headline" data-pkg="Headline Sponsor" data-amount="350" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">👑</div>
+      <div class="sp-pkg-name">Headline Sponsor</div>
+      <div class="sp-pkg-desc">Main sponsor of the Award Night with top recognition across all event materials.</div>
+      <div class="sp-pkg-price">£350</div>
+    </div>
+
+    <!-- Gold -->
+    <div class="sp-pkg" data-pkg="Gold Sponsor" data-amount="250" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🥇</div>
+      <div class="sp-pkg-name">Gold Sponsor</div>
+      <div class="sp-pkg-desc">Logo/name on event materials, social media recognition and event acknowledgement.</div>
+      <div class="sp-pkg-price">£250</div>
+    </div>
+
+    <!-- Silver -->
+    <div class="sp-pkg" data-pkg="Silver Sponsor" data-amount="150" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🥈</div>
+      <div class="sp-pkg-name">Silver Sponsor</div>
+      <div class="sp-pkg-desc">Name/logo in the programme and social media mention.</div>
+      <div class="sp-pkg-price">£150</div>
+    </div>
+
+    <!-- Bronze -->
+    <div class="sp-pkg" data-pkg="Bronze Sponsor" data-amount="75" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🥉</div>
+      <div class="sp-pkg-name">Bronze Sponsor</div>
+      <div class="sp-pkg-desc">Name listed in the programme and public appreciation.</div>
+      <div class="sp-pkg-price">£75</div>
+    </div>
+
+    <!-- Award Category -->
+    <div class="sp-pkg" data-pkg="Award Category Sponsor" data-amount="100" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🏆</div>
+      <div class="sp-pkg-name">Award Category Sponsor</div>
+      <div class="sp-pkg-desc">Sponsor one award category (e.g. Youth Achievement Award, Volunteer of the Year).</div>
+      <div class="sp-pkg-price">£100</div>
+    </div>
+
+    <!-- Table -->
+    <div class="sp-pkg" data-pkg="Table Sponsor" data-amount="100" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🪑</div>
+      <div class="sp-pkg-name">Table Sponsor</div>
+      <div class="sp-pkg-desc">Sponsor a table for young people, volunteers, families or community guests.</div>
+      <div class="sp-pkg-price">£100</div>
+    </div>
+
+    <!-- Gift/Prize -->
+    <div class="sp-pkg" data-pkg="Gift/Prize Sponsor" data-amount="custom" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🎁</div>
+      <div class="sp-pkg-name">Gift / Prize Sponsor</div>
+      <div class="sp-pkg-desc">Donate gifts, vouchers, trophies, certificates or prizes.</div>
+      <div class="sp-pkg-price">Any Value <small>(you choose)</small></div>
+    </div>
+
+    <!-- Refreshment -->
+    <div class="sp-pkg" data-pkg="Refreshment Sponsor" data-amount="custom" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">☕</div>
+      <div class="sp-pkg-name">Refreshment Sponsor</div>
+      <div class="sp-pkg-desc">Support food, drinks, snacks or catering for the event.</div>
+      <div class="sp-pkg-price">Any Value <small>(you choose)</small></div>
+    </div>
+
+    <!-- Marketplace Stand -->
+    <div class="sp-pkg marketplace" data-pkg="Community Marketplace Stand" data-amount="marketplace" onclick="selectPkg(this)">
+      <div class="sp-pkg-check"></div>
+      <div class="sp-pkg-icon">🛍️</div>
+      <div class="sp-pkg-name">Community Marketplace Stand</div>
+      <div class="sp-pkg-desc">Table + 2 chairs to display and sell your products or services. Connect with guests and the community.</div>
+      <div class="sp-pkg-price">£50 <small>per table</small></div>
+    </div>
+
+  </div>
+
+  <!-- Custom amount (Gift/Prize or Refreshment) -->
+  <div class="sp-custom-box" id="sp-custom-box">
+    <div class="sp-custom-label"><i class="fas fa-sterling-sign mr-1"></i> Enter your contribution amount</div>
+    <div class="sp-amount-input-wrap">
+      <span>£</span>
+      <input type="number" id="sp-custom-amount" min="1" step="1" placeholder="0" oninput="updateSummary()">
+    </div>
+    <p style="font-size:0.75rem;color:#6b7280;margin:8px 0 0;">You can also bring an in-kind donation on the day — see note below.</p>
+  </div>
+
+  <!-- Marketplace table count -->
+  <div class="sp-table-count" id="sp-table-count">
+    <div class="sp-custom-label" style="color:#0d9488;"><i class="fas fa-store mr-1"></i> How many tables do you need?</div>
+    <div class="sp-qty">
+      <button onclick="changeQty(-1)">−</button>
+      <div class="sp-qty-num" id="sp-qty-num">1</div>
+      <button onclick="changeQty(1)">+</button>
+    </div>
+    <div class="sp-qty-cost" id="sp-qty-cost">1 table × £50 = <strong>£50</strong></div>
+  </div>
+
+  <!-- Award category name -->
+  <div class="sp-award-field" id="sp-award-field">
+    <label class="sp-label" style="color:#92400e;"><i class="fas fa-trophy mr-1"></i> Which award category would you like to sponsor?</label>
+    <input type="text" class="sp-input" id="sp-award-name" placeholder="e.g. Youth Achievement Award, Volunteer of the Year…">
+  </div>
+
+  <!-- In-kind note -->
+  <div class="sp-inkind" id="sp-inkind-note" style="display:none;">
+    <strong><i class="fas fa-gift mr-1"></i> We also welcome in-kind donations.</strong>
+    We gladly accept gifts, vouchers, food, drinks, trophies, printing, photography, videography, raffle prizes or any other goods or services. If you prefer to make an item donation rather than a cash payment, please email us at <a href="mailto:info@joybringerscharity.org" style="color:#92400e;font-weight:600;">info@joybringerscharity.org</a> to arrange.
+  </div>
+
+  <!-- Summary bar -->
+  <div class="sp-summary" id="sp-summary" style="display:none;">
+    <div>
+      <div class="sp-summary-label">Selected</div>
+      <div class="sp-summary-pkg" id="sp-summary-pkg">—</div>
+    </div>
+    <div class="sp-summary-amount" id="sp-summary-amount">£0</div>
+  </div>
+
+  <!-- Step 2: Your Details -->
+  <div class="sp-section-title" style="margin-top:8px;"><i class="fas fa-user"></i> Step 2 — Your Details</div>
+
+  <div class="sp-card">
+    <div class="sp-row" style="margin-bottom:14px;">
+      <div>
+        <label class="sp-label">First Name <span style="color:#e53e3e;">*</span></label>
+        <input type="text" class="sp-input" id="sp-first" placeholder="Jane">
+      </div>
+      <div>
+        <label class="sp-label">Last Name <span style="color:#e53e3e;">*</span></label>
+        <input type="text" class="sp-input" id="sp-last" placeholder="Smith">
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label class="sp-label">Organisation / Business Name <span style="color:#9ca3af;font-weight:400;">(optional)</span></label>
+      <input type="text" class="sp-input" id="sp-org" placeholder="e.g. Smith & Sons Ltd">
+    </div>
+    <div class="sp-row" style="margin-bottom:14px;">
+      <div>
+        <label class="sp-label">Email Address <span style="color:#e53e3e;">*</span></label>
+        <input type="email" class="sp-input" id="sp-email" placeholder="jane@example.com">
+      </div>
+      <div>
+        <label class="sp-label">Phone Number <span style="color:#9ca3af;font-weight:400;">(optional)</span></label>
+        <input type="tel" class="sp-input" id="sp-phone" placeholder="07700 900 000">
+      </div>
+    </div>
+    <div>
+      <label class="sp-label">Notes <span style="color:#9ca3af;font-weight:400;">(optional)</span></label>
+      <textarea class="sp-input" id="sp-notes" rows="2" placeholder="Any questions, logo details, dietary requirements, etc."></textarea>
+    </div>
+  </div>
+
+  <!-- Step 3: Payment -->
+  <div class="sp-section-title"><i class="fas fa-credit-card"></i> Step 3 — Payment</div>
+
+  <div class="sp-card">
+    <div id="sp-form-error"></div>
+
+    <div id="sp-stripe-ec-wrapper">
+      <div class="sp-pay-divider">Pay with</div>
+      <div id="sp-stripe-express-checkout"></div>
+      <div id="sp-stripe-error"></div>
+      <div class="sp-pay-divider">or pay by card</div>
+    </div>
+
+    <button class="sp-pay-btn" id="sp-pay-btn" onclick="startCardPayment()">
+      <i class="fas fa-lock"></i> Pay Securely
+    </button>
+
+    <!-- Inline card form (shown after clicking Pay by Card) -->
+    <div id="sp-card-section" style="display:none;margin-top:16px;">
+      <div id="sp-card-element" style="border:1.5px solid #d1d5db;border-radius:8px;padding:12px 14px;background:#fff;"></div>
+      <div id="sp-card-error" style="display:none;color:#b91c1c;font-size:0.82rem;margin-top:8px;"></div>
+      <button class="sp-pay-btn" id="sp-card-pay-btn" style="margin-top:14px;" onclick="submitCardPayment()">
+        <i class="fas fa-lock"></i> <span id="sp-card-btn-label">Confirm Payment</span>
+      </button>
+    </div>
+
+    <p style="font-size:0.72rem;color:#9ca3af;text-align:center;margin-top:14px;margin-bottom:0;">
+      <i class="fas fa-shield-alt mr-1"></i>Secured by Stripe. Joybringers Charity (Reg. No. 1212606).
+    </p>
+  </div>
+
+  <!-- Success -->
+  <div id="sp-success">
+    <div class="sp-success-icon"><i class="fas fa-check"></i></div>
+    <h3 style="color:#003d14;font-weight:800;margin-bottom:8px;">Thank You!</h3>
+    <p style="color:#555;" id="sp-success-msg">Your sponsorship has been received. We will be in touch shortly with confirmation and next steps.</p>
+    <a href="/" style="display:inline-block;margin-top:16px;background:#006526;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;">Back to Website</a>
+  </div>
+
+</div><!-- /sp-container -->
+
+<script>
+const STRIPE_PK = 'pk_live_51OdSZ1RsdZmrgsOqKujzj9WPRTahCQjhVGw3FGsM7pzk7RCjIJ4U6zkxoqJHdsH3mj8ORuMNpINgcSOiqEZYRMle00421Pww11';
+let stripeClient = null;
+let stripeEls    = null;
+let cardElement  = null;
+let cardPaymentMode = false;
+
+let selectedPkg    = null;   // dataset from clicked card
+let selectedAmount = 0;
+let tableQty       = 1;
+
+function selectPkg(el) {
+  document.querySelectorAll('.sp-pkg').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPkg = el.dataset;
+
+  const kind = el.dataset.amount;
+
+  // Show/hide conditional panels
+  document.getElementById('sp-custom-box').classList.toggle('visible',   kind === 'custom');
+  document.getElementById('sp-table-count').classList.toggle('visible',  kind === 'marketplace');
+  document.getElementById('sp-award-field').classList.toggle('visible',  el.dataset.pkg === 'Award Category Sponsor');
+  document.getElementById('sp-inkind-note').style.display = kind === 'custom' ? 'block' : 'none';
+
+  updateSummary();
+  reinitStripe();
+}
+
+function changeQty(delta) {
+  tableQty = Math.max(1, tableQty + delta);
+  document.getElementById('sp-qty-num').textContent = tableQty;
+  document.getElementById('sp-qty-cost').innerHTML =
+    `${tableQty} table${tableQty > 1 ? 's' : ''} × £50 = <strong>£${tableQty * 50}</strong>`;
+  updateSummary();
+  reinitStripe();
+}
+
+function getAmount() {
+  if (!selectedPkg) return 0;
+  const kind = selectedPkg.amount;
+  if (kind === 'marketplace') return tableQty * 50;
+  if (kind === 'custom') return parseFloat(document.getElementById('sp-custom-amount').value) || 0;
+  return parseFloat(kind) || 0;
+}
+
+function updateSummary() {
+  selectedAmount = getAmount();
+  const bar = document.getElementById('sp-summary');
+  if (!selectedPkg || selectedAmount <= 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  document.getElementById('sp-summary-pkg').textContent    = selectedPkg.pkg;
+  document.getElementById('sp-summary-amount').textContent = '£' + selectedAmount.toFixed(2).replace(/\.00$/, '');
+  // update card button label
+  document.getElementById('sp-card-btn-label').textContent = `Confirm Payment — £${selectedAmount.toFixed(2).replace(/\.00$/, '')}`;
+}
+
+/* ── Stripe Express Checkout ─────────────────────────────────── */
+function reinitStripe() {
+  selectedAmount = getAmount();
+  if (selectedAmount <= 0) return;
+
+  // Destroy old elements instance if exists
+  if (stripeEls) {
+    try { stripeEls.update({ amount: Math.round(selectedAmount * 100) }); return; }
+    catch(e) { /* re-init below */ }
+  }
+
+  stripeClient = stripeClient || Stripe(STRIPE_PK);
+  stripeEls = stripeClient.elements({
+    mode:       'payment',
+    amount:     Math.round(selectedAmount * 100),
+    currency:   'gbp',
+    appearance: { theme: 'stripe', variables: { colorPrimary: '#006526' } }
+  });
+
+  const ecEl = stripeEls.create('expressCheckout', {
+    buttonType:   { applePay: 'buy', googlePay: 'buy' },
+    buttonTheme:  { applePay: 'black', googlePay: 'black' },
+    buttonHeight: 44
+  });
+
+  ecEl.on('ready', ({ availablePaymentMethods }) => {
+    document.getElementById('sp-stripe-ec-wrapper').style.display =
+      availablePaymentMethods ? 'block' : 'none';
+  });
+
+  ecEl.on('confirm', async (event) => {
+    const err = validateForm();
+    if (err) { showFormError(err); return; }
+    hideFormError();
+    await processPayment('express', event);
+  });
+
+  ecEl.mount('#sp-stripe-express-checkout');
+}
+
+/* ── Card payment ─────────────────────────────────────────────── */
+function startCardPayment() {
+  const err = validateForm();
+  if (err) { showFormError(err); return; }
+  if (selectedAmount <= 0) { showFormError('Please select a package first.'); return; }
+  hideFormError();
+
+  if (!cardPaymentMode) {
+    cardPaymentMode = true;
+    stripeClient = stripeClient || Stripe(STRIPE_PK);
+    if (!stripeEls) {
+      stripeEls = stripeClient.elements({
+        mode: 'payment', amount: Math.round(selectedAmount * 100), currency: 'gbp',
+        appearance: { theme: 'stripe', variables: { colorPrimary: '#006526' } }
+      });
+    }
+    cardElement = stripeEls.create('card', { style: { base: { fontSize: '16px', color: '#1a1a1a' } } });
+    cardElement.mount('#sp-card-element');
+    cardElement.on('change', e => {
+      const el = document.getElementById('sp-card-error');
+      el.textContent   = e.error ? e.error.message : '';
+      el.style.display = e.error ? 'block' : 'none';
+    });
+    document.getElementById('sp-card-section').style.display = 'block';
+    document.getElementById('sp-pay-btn').style.display = 'none';
+  }
+}
+
+async function submitCardPayment() {
+  const btn = document.getElementById('sp-card-pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+  await processPayment('card', null);
+  btn.disabled = false;
+  btn.innerHTML = `<i class="fas fa-lock"></i> <span id="sp-card-btn-label">Confirm Payment — £${selectedAmount.toFixed(2).replace(/\.00$/, '')}</span>`;
+}
+
+/* ── Core payment handler ─────────────────────────────────────── */
+async function processPayment(method, ecEvent) {
+  try {
+    const r = await fetch('/api/stripe-intent', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ amount: selectedAmount, donation_type: 'sponsorship' })
+    });
+    const { clientSecret, error: apiErr } = await r.json();
+    if (apiErr) throw new Error(apiErr);
+
+    const { error, paymentIntent } = await stripeClient.confirmPayment({
+      elements:      stripeEls,
+      clientSecret,
+      confirmParams: { return_url: window.location.href },
+      redirect:      'if_required'
+    });
+
+    if (error) {
+      if (method === 'express') showStripeError(error.message);
+      else {
+        document.getElementById('sp-card-error').textContent   = error.message;
+        document.getElementById('sp-card-error').style.display = 'block';
+      }
+      return;
+    }
+
+    if (paymentIntent?.status === 'succeeded') {
+      showSuccess();
+    }
+  } catch(e) {
+    showStripeError('Payment failed. Please try again or contact info@joybringerscharity.org');
+  }
+}
+
+/* ── Validation ──────────────────────────────────────────────── */
+function validateForm() {
+  if (!selectedPkg)        return 'Please select a sponsorship package.';
+  if (selectedAmount <= 0) return 'Please enter a valid amount.';
+  if (!document.getElementById('sp-first').value.trim()) return 'Please enter your first name.';
+  if (!document.getElementById('sp-last').value.trim())  return 'Please enter your last name.';
+  const email = document.getElementById('sp-email').value.trim();
+  if (!email || !email.includes('@'))                     return 'Please enter a valid email address.';
+  return null;
+}
+
+function showFormError(msg) {
+  const el = document.getElementById('sp-form-error');
+  el.textContent   = '⚠ ' + msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function hideFormError() { document.getElementById('sp-form-error').style.display = 'none'; }
+function showStripeError(msg) {
+  const el = document.getElementById('sp-stripe-error');
+  el.textContent   = msg;
+  el.style.display = 'block';
+}
+
+function showSuccess() {
+  const name = document.getElementById('sp-first').value.trim();
+  document.getElementById('sp-success-msg').textContent =
+    `Thank you${name ? ', ' + name : ''}! Your ${selectedPkg?.pkg || 'sponsorship'} payment of £${selectedAmount.toFixed(2).replace(/\.00$/, '')} has been received. We'll be in touch shortly with confirmation and next steps.`;
+  document.querySelector('.sp-container').innerHTML = document.getElementById('sp-success').outerHTML;
+  document.getElementById('sp-success').style.display = 'block';
+}
+</script>
+</body>
+</html>
