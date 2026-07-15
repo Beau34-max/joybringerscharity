@@ -1050,6 +1050,13 @@ img.shadow-sm {
 .jb-footer-cookie-btn { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3); color:rgba(255,255,255,.9); padding:5px 14px; border-radius:20px; font-size:.75rem; font-weight:600; cursor:pointer; margin-left:14px; transition:all .18s; }
 .jb-footer-cookie-btn:hover { background:rgba(255,255,255,.22); color:#fff; }
 
+/* ── Accreditation badges ── */
+.jb-accred-strip { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px; padding:20px 0; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1); }
+.jb-accred-badge { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:10px; padding:12px 18px; }
+.jb-accred-badge i { color:#86efac; font-size:1.4rem; flex-shrink:0; }
+.jb-accred-badge strong { display:block; font-size:0.82rem; color:#fff; font-weight:700; line-height:1.3; }
+.jb-accred-badge span { display:block; font-size:0.68rem; color:rgba(255,255,255,0.5); margin-top:1px; }
+
 /* Social icon circles (footer) */
 .footer-social a { display:inline-flex; align-items:center; justify-content:center; margin:0 5px; width:38px; height:38px; border-radius:50%; color:#fff; font-size:16px; transition:.3s; }
 .footer-social a:hover { opacity:.82; transform:translateY(-2px); }
