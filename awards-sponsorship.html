@@ -465,7 +465,7 @@ function reinitStripe() {
     const err = validateForm();
     if (err) { showFormError(err); return; }
     hideFormError();
-    await processPayment('express', event);
+    await doExpressPayment();
   });
 
   ecEl.mount('#sp-stripe-express-checkout');
@@ -499,18 +499,13 @@ function startCardPayment() {
   }
 }
 
-async function submitCardPayment() {
-  const btn = document.getElementById('sp-card-pay-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
-  await processPayment('card', null);
-  btn.disabled = false;
-  btn.innerHTML = `<i class="fas fa-lock"></i> <span id="sp-card-btn-label">Confirm Payment — £${selectedAmount.toFixed(2).replace(/\.00$/, '')}</span>`;
-}
-
-/* ── Core payment handler ─────────────────────────────────────── */
-async function processPayment(method, ecEvent) {
+/* ── Express Checkout payment (Apple Pay / Google Pay / Link) ──── */
+async function doExpressPayment() {
   try {
+    // Deferred-intent pattern requires elements.submit() before confirmPayment
+    const { error: submitErr } = await stripeEls.submit();
+    if (submitErr) { showStripeError(submitErr.message); return; }
+
     const r = await fetch('/api/stripe-intent', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -526,21 +521,47 @@ async function processPayment(method, ecEvent) {
       redirect:      'if_required'
     });
 
-    if (error) {
-      if (method === 'express') showStripeError(error.message);
-      else {
-        document.getElementById('sp-card-error').textContent   = error.message;
-        document.getElementById('sp-card-error').style.display = 'block';
-      }
-      return;
-    }
+    if (error) { showStripeError(error.message); return; }
+    if (paymentIntent?.status === 'succeeded') showSuccess();
+  } catch(e) {
+    console.error('[EC Payment]', e);
+    showStripeError('Payment failed. Please try again or contact info@joybringerscharity.org');
+  }
+}
 
-    if (paymentIntent?.status === 'succeeded') {
+/* ── Card payment (legacy card element → confirmCardPayment) ───── */
+async function submitCardPayment() {
+  const btn = document.getElementById('sp-card-pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+
+  try {
+    const r = await fetch('/api/stripe-intent', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ amount: selectedAmount, donation_type: 'sponsorship' })
+    });
+    const { clientSecret, error: apiErr } = await r.json();
+    if (apiErr) throw new Error(apiErr);
+
+    const { error, paymentIntent } = await stripeClient.confirmCardPayment(clientSecret, {
+      payment_method: { card: cardElement }
+    });
+
+    if (error) {
+      document.getElementById('sp-card-error').textContent   = error.message;
+      document.getElementById('sp-card-error').style.display = 'block';
+    } else if (paymentIntent?.status === 'succeeded') {
       showSuccess();
     }
   } catch(e) {
-    showStripeError('Payment failed. Please try again or contact info@joybringerscharity.org');
+    console.error('[Card Payment]', e);
+    document.getElementById('sp-card-error').textContent   = 'Payment failed. Please try again or contact info@joybringerscharity.org';
+    document.getElementById('sp-card-error').style.display = 'block';
   }
+
+  btn.disabled = false;
+  btn.innerHTML = `<i class="fas fa-lock"></i> <span id="sp-card-btn-label">Confirm Payment — £${selectedAmount.toFixed(2).replace(/\.00$/, '')}</span>`;
 }
 
 /* ── Validation ──────────────────────────────────────────────── */
