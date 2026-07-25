@@ -121,7 +121,7 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).style.display = 'block';
   const link = document.querySelector(`[data-tab="${tabId}"]`);
   if (link) link.classList.add('active');
-  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', settings: 'Settings' };
+  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', settings: 'Settings' };
   document.getElementById('page-title').textContent = titles[tabId] || tabId;
   // close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
@@ -131,6 +131,7 @@ function switchTab(tabId) {
   if (tabId === 'photos')    { renderGallery('events'); renderGallery('partners'); }
   if (tabId === 'content')   loadContentTab();
   if (tabId === 'dataentry') loadDataEntryTab();
+  if (tabId === 'visitors')  initVisitorTab();
 }
 
 /* ── Role-based UI restriction ───────────────────────────── */
@@ -1174,4 +1175,122 @@ async function deleteAsset(id) {
   } catch (err) {
     showAlert('danger', err.message);
   }
+}
+
+/* ════════════════════════════════════════════════════════════
+   VISITOR LOG
+   ════════════════════════════════════════════════════════════ */
+
+let allVisitorRows = [];
+
+function initVisitorTab() {
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('v-date-from').value = today;
+  document.getElementById('v-date-to').value   = today;
+  loadVisitors();
+}
+
+async function loadVisitors() {
+  const from = document.getElementById('v-date-from').value;
+  const to   = document.getElementById('v-date-to').value;
+  const tbody = document.getElementById('visitor-table-body');
+  tbody.innerHTML = '<tr><td colspan="10" class="text-muted text-center py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading…</td></tr>';
+
+  try {
+    const data = await apiCall('list_visitors_range', { date_from: from, date_to: to });
+    allVisitorRows = Array.isArray(data) ? data : [];
+    renderVisitorTable(allVisitorRows);
+    updateVisitorStats(allVisitorRows);
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="10" class="text-danger text-center py-4">${err.message}</td></tr>`;
+  }
+}
+
+function renderVisitorTable(rows) {
+  const tbody = document.getElementById('visitor-table-body');
+  document.getElementById('v-count').textContent = `${rows.length} record${rows.length !== 1 ? 's' : ''}`;
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="text-muted text-center py-4">No visitor records for this date range.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(v => {
+    const inTime  = v.signed_in_at  ? new Date(v.signed_in_at).toLocaleTimeString('en-GB',  { hour: '2-digit', minute: '2-digit' }) : '—';
+    const outTime = v.signed_out_at ? new Date(v.signed_out_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '—';
+    const inDate  = v.signed_in_at  ? new Date(v.signed_in_at).toLocaleDateString('en-GB',  { day: 'numeric', month: 'short' }) : '';
+    const isIn    = !v.signed_out_at;
+    const statusBadge = isIn
+      ? '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle"><i class="fas fa-circle-dot" style="font-size:8px"></i> In Building</span>'
+      : '<span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">Signed Out</span>';
+    const signOutBtn = isIn
+      ? `<button class="btn btn-outline-danger btn-sm" onclick="adminSignOut('${v.id}', '${v.first_name} ${v.last_name}')"><i class="fas fa-sign-out-alt"></i></button>`
+      : '';
+    return `<tr>
+      <td><strong>${v.first_name} ${v.last_name}</strong></td>
+      <td class="text-muted small">${v.organisation || '—'}</td>
+      <td>${v.host_name}</td>
+      <td><span class="badge bg-light text-dark border">${v.purpose}</span></td>
+      <td class="small">${v.dbs_status || '—'}</td>
+      <td><code>${v.badge_id || '—'}</code></td>
+      <td class="small">${inDate} ${inTime}</td>
+      <td class="small">${outTime}</td>
+      <td>${statusBadge}</td>
+      <td>${signOutBtn}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateVisitorStats(rows) {
+  const today    = new Date().toISOString().slice(0, 10);
+  const todayRows = rows.filter(v => v.signed_in_at && v.signed_in_at.startsWith(today));
+  const inBldg   = rows.filter(v => !v.signed_out_at);
+  const signedOut = rows.filter(v =>  v.signed_out_at);
+  const now      = new Date();
+  const monthRows = rows.filter(v => {
+    const d = new Date(v.signed_in_at);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  });
+  document.getElementById('vstat-today').textContent    = todayRows.length;
+  document.getElementById('vstat-in').textContent       = inBldg.length;
+  document.getElementById('vstat-month').textContent    = monthRows.length;
+  document.getElementById('vstat-signedout').textContent = signedOut.length;
+}
+
+function filterVisitorTable() {
+  const q = document.getElementById('v-search').value.toLowerCase();
+  const filtered = allVisitorRows.filter(v =>
+    `${v.first_name} ${v.last_name} ${v.organisation || ''} ${v.host_name} ${v.purpose}`.toLowerCase().includes(q)
+  );
+  renderVisitorTable(filtered);
+}
+
+async function adminSignOut(id, name) {
+  if (!confirm(`Sign out ${name}?\n\nThis will record their departure time.`)) return;
+  try {
+    await apiCall('admin_signout_visitor', { id });
+    showAlert('success', `${name} has been signed out.`);
+    loadVisitors();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+function exportVisitorsCsv() {
+  if (!allVisitorRows.length) { showAlert('warning', 'No records to export.'); return; }
+  const headers = ['First Name','Last Name','Organisation','Host','Purpose','DBS Status','Badge','Signed In','Signed Out'];
+  const rows = allVisitorRows.map(v => [
+    v.first_name, v.last_name, v.organisation || '', v.host_name, v.purpose,
+    v.dbs_status || '', v.badge_id || '',
+    v.signed_in_at  ? new Date(v.signed_in_at).toLocaleString('en-GB')  : '',
+    v.signed_out_at ? new Date(v.signed_out_at).toLocaleString('en-GB') : ''
+  ].map(c => `"${String(c).replace(/"/g, '""')}"`).join(','));
+
+  const csv  = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = document.getElementById('v-date-from').value;
+  a.href     = url;
+  a.download = `joybringers-visitors-${date}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }

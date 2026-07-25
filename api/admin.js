@@ -40,6 +40,7 @@ const ATTENDANCE_TABLE = 'event_attendance';
 const GRANTS_TABLE     = 'grants_income';
 const FOODBANK_TABLE   = 'foodbank_distribution';
 const ASSETS_TABLE     = 'assets';
+const VISITOR_TABLE    = 'visitor_logs';
 
 /* ── helpers ─────────────────────────────────────────────── */
 
@@ -206,10 +207,39 @@ module.exports = async function handler(req, res) {
   const RECORD_TABLES = {
     attendance: ATTENDANCE_TABLE,
     grant:      GRANTS_TABLE,
-    grants:     GRANTS_TABLE, // 'list_grants' is plural; add/delete_grant are singular
+    grants:     GRANTS_TABLE,
     foodbank:   FOODBANK_TABLE,
-    asset:      ASSETS_TABLE
+    asset:      ASSETS_TABLE,
+    visitor:    VISITOR_TABLE,
+    visitors:   VISITOR_TABLE
   };
+
+  /* ── Visitor-specific actions ──────────────────────────────── */
+  if (action === 'list_visitors_range') {
+    if (!process.env.SUPABASE_SERVICE_KEY)
+      return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const { date_from, date_to } = body;
+    const from = date_from || new Date().toISOString().slice(0, 10);
+    const to   = date_to   || from;
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${VISITOR_TABLE}?signed_in_at=gte.${from}T00:00:00&signed_in_at=lte.${to}T23:59:59&order=signed_in_at.desc&limit=500`,
+      { headers: sbHeaders() }
+    );
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
+  if (action === 'admin_signout_visitor') {
+    if (!process.env.SUPABASE_SERVICE_KEY)
+      return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${VISITOR_TABLE}?id=eq.${body.id}`, {
+      method:  'PATCH',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body:    JSON.stringify({ signed_out_at: new Date().toISOString() })
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
   const recordType = action.replace(/^(add|list|delete|update)_/, '');
   const table       = RECORD_TABLES[recordType];
 
