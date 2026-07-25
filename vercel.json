@@ -1,10 +1,13 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/",
       "has": [{ "type": "host", "value": "sign.joybringerscharity.org" }],
-      "destination": "/visitor-signin.html"
-    },
+      "destination": "/visitor-signin",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     { "source": "/.well-known/apple-developer-merchantid-domain-association", "destination": "/api/apple-pay-domain" },
     { "source": "/visitor-signin", "destination": "/visitor-signin.html" },
     { "source": "/volunteer-expenses", "destination": "/volunteer-expenses.html" },
