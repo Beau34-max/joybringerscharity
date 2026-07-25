@@ -608,7 +608,12 @@
         </div>
         <div class="field-group">
           <label>Organisation / Company <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
-          <input type="text" id="f-org" placeholder="e.g. Newcastle City Council" autocomplete="off">
+          <select id="f-org">
+            <option value="">— None / External —</option>
+            <option value="Joybringers Charity">Joybringers Charity</option>
+            <option value="COSENG LIMITED">COSENG LIMITED</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         <div class="form-nav">
           <button class="btn-cancel" onclick="goWelcome()"><i class="fas fa-arrow-left"></i> Back</button>
@@ -626,6 +631,7 @@
           <label>Who are you here to see? <span class="req">*</span></label>
           <input type="text" id="f-host" list="host-list" placeholder="Enter staff member's name" autocomplete="off">
           <datalist id="host-list">
+            <option value="CEO">
             <option value="Reception">
             <option value="Manager">
             <option value="Coordinator">
