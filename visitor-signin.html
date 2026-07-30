@@ -333,6 +333,10 @@
       display: inline-block;
       margin-bottom: 16px;
     }
+    .badge-type.staff-type { background: #b45309; }
+    .visitor-card-badge { font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 20px; margin-right: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .badge-visitor { background: var(--green-l); color: var(--green); }
+    .badge-staff   { background: #fef3c7; color: #b45309; }
     .badge-name { font-size: 2rem; font-weight: 800; color: var(--green-d); line-height: 1.15; }
     .badge-org  { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
     .badge-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
@@ -630,7 +634,10 @@
       </div>
       <div class="mode-btns">
         <button class="mode-btn mode-btn-primary" onclick="startSignIn()">
-          <i class="fas fa-sign-in-alt"></i> Sign In
+          <i class="fas fa-user"></i> Visitor Sign In
+        </button>
+        <button class="mode-btn mode-btn-primary" style="background:#b45309;box-shadow:0 4px 20px rgba(180,83,9,0.35);" onclick="startStaff()">
+          <i class="fas fa-id-card"></i> Staff / Volunteer
         </button>
         <button class="mode-btn mode-btn-outline" onclick="startSignOut()">
           <i class="fas fa-sign-out-alt"></i> Sign Out
@@ -788,7 +795,7 @@
   <div class="screen" id="screen-badge">
     <div class="badge-body">
       <div class="badge-card">
-        <span class="badge-type">Joybringers Visitor</span>
+        <span class="badge-type" id="badge-type-label">Joybringers Visitor</span>
         <div class="badge-name" id="badge-name">—</div>
         <div class="badge-org" id="badge-org"></div>
         <hr class="badge-divider">
@@ -806,6 +813,147 @@
       </div>
       <div class="badge-countdown" id="badge-countdown">Returning to welcome screen in 30s…</div>
       <button class="btn-done" onclick="goWelcome()"><i class="fas fa-home"></i> Done</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STAFF / VOLUNTEER SIGN IN ═══════════════ -->
+  <div class="screen" id="screen-staff">
+    <div class="form-body">
+
+      <!-- Progress -->
+      <div class="progress-row">
+        <div class="step-dot current" id="s-dot-1">1</div>
+        <div class="step-line" id="s-line-1"></div>
+        <div class="step-dot" id="s-dot-2">2</div>
+        <div class="step-line" id="s-line-2"></div>
+        <div class="step-dot" id="s-dot-3">3</div>
+      </div>
+
+      <!-- S-STEP 1: Your details -->
+      <div class="step-panel active" id="s-step-1">
+        <div>
+          <div class="step-heading">Your Details</div>
+          <div class="step-sub">Search your name to sign in faster, or fill in your details below</div>
+        </div>
+        <div class="name-search-section">
+          <div class="name-search-label"><i class="fas fa-search"></i> Returning? Search your name</div>
+          <div class="name-search-row">
+            <input type="text" id="s-name-search" placeholder="e.g. James Williams" autocomplete="off"
+              oninput="debouncedStaffSearch()" onkeydown="if(event.key==='Enter') runStaffSearch()">
+            <button class="btn-search-go" onclick="runStaffSearch()">Search</button>
+          </div>
+          <div id="s-search-results" class="search-results"></div>
+        </div>
+        <div class="search-or-divider">Or fill in your details below</div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="s-first" placeholder="e.g. James" autocomplete="off">
+          </div>
+          <div class="field-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="s-last" placeholder="e.g. Williams" autocomplete="off">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="s-email" placeholder="e.g. james@joybringerscharity.org" autocomplete="off" inputmode="email">
+        </div>
+        <div class="field-group">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="s-phone" placeholder="e.g. 07700 900000" autocomplete="off" inputmode="tel">
+        </div>
+        <div class="field-group">
+          <label>Organisation <span class="req">*</span></label>
+          <select id="s-org">
+            <option value="">— Select organisation —</option>
+            <option value="Joybringers Charity">Joybringers Charity</option>
+            <option value="COSENG LIMITED">COSENG LIMITED</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Role / Position <span class="req">*</span></label>
+          <select id="s-role">
+            <option value="">— Select your role —</option>
+            <option>Staff Member</option>
+            <option>Volunteer</option>
+            <option>Children's Worker</option>
+            <option>Youth Worker</option>
+            <option>Administrator</option>
+            <option>Coordinator</option>
+            <option>Trustee</option>
+            <option>Intern</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="goWelcome()"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn-next" onclick="sGoStep(2)">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- S-STEP 2: DBS + Reporting -->
+      <div class="step-panel" id="s-step-2">
+        <div>
+          <div class="step-heading">Safeguarding</div>
+          <div class="step-sub">DBS check and reporting line</div>
+        </div>
+        <div class="field-group">
+          <label>DBS Certificate Status <span class="req">*</span></label>
+          <select id="s-dbs">
+            <option value="">— Select DBS status —</option>
+            <option value="Enhanced DBS">Enhanced DBS (children / vulnerable adults)</option>
+            <option value="Standard DBS">Standard DBS</option>
+            <option value="Basic DBS">Basic DBS</option>
+            <option value="Awaiting clearance">Awaiting DBS clearance</option>
+            <option value="N/A">N/A — not required</option>
+          </select>
+          <div class="dbs-note" style="display:flex;margin-top:6px;"><i class="fas fa-circle-info" style="margin-top:1px;flex-shrink:0;margin-right:8px;"></i> Volunteers and staff working with children must hold a valid Enhanced DBS.</div>
+        </div>
+        <div class="field-group">
+          <label>Reporting to / Line Manager <span class="req">*</span></label>
+          <input type="text" id="s-host" list="s-host-list" placeholder="Enter name" autocomplete="off">
+          <datalist id="s-host-list">
+            <option value="CEO">
+            <option value="Manager">
+            <option value="Coordinator">
+            <option value="Volunteer Manager">
+          </datalist>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="sGoStep(1)"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn-next" onclick="sGoStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- S-STEP 3: Confirmation -->
+      <div class="step-panel" id="s-step-3">
+        <div>
+          <div class="step-heading">Confirmation</div>
+          <div class="step-sub">Please read and confirm the following before signing in</div>
+        </div>
+        <div class="check-group">
+          <label class="check-item">
+            <input type="checkbox" id="s-chk-safeguarding">
+            <span class="check-item-text"><strong>Safeguarding:</strong> I confirm I have read and understood the Joybringers Safeguarding Policy and agree to abide by it during my time on the premises.</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="s-chk-gdpr">
+            <span class="check-item-text"><strong>Data Consent:</strong> I consent to my details being stored securely for safeguarding and security purposes in accordance with UK GDPR.</span>
+          </label>
+        </div>
+        <div class="gdpr-box">
+          <strong>Privacy Notice:</strong> Your name, organisation, role and contact details will be stored securely by Joybringers Charity (Reg. 1212606). Data is retained for <strong>12 months</strong> then securely deleted. Contact <strong>info@joybringerscharity.org</strong> to request access, correction or deletion.
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="sGoStep(2)"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn-submit" id="s-btn-submit" onclick="submitStaff()">
+            <span id="s-submit-label"><i class="fas fa-check"></i> Sign In</span>
+            <div class="spinner" id="s-spinner"></div>
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -918,6 +1066,7 @@ function goWelcome() {
   clearTimeout(badgeCountdownTimer);
   clearTimeout(signoutSuccessTimer);
   resetForm();
+  resetStaffForm();
   showScreen('screen-welcome');
 }
 
@@ -931,17 +1080,31 @@ let pendingSignOutId = null;
 
 function resetForm() {
   ['f-name-search','f-first','f-last','f-org','f-host','f-purpose','f-dbs'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+    const el = document.getElementById(id); if (el) el.value = '';
   });
   ['chk-safeguarding','chk-badge','chk-gdpr'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.checked = false;
+    const el = document.getElementById(id); if (el) el.checked = false;
   });
-  const res = document.getElementById('f-search-results');
-  if (res) res.innerHTML = '';
+  const res = document.getElementById('f-search-results'); if (res) res.innerHTML = '';
   document.getElementById('dbs-section').classList.remove('visible');
   goToStep(1, false);
+}
+
+function resetStaffForm() {
+  ['s-name-search','s-first','s-last','s-email','s-phone','s-org','s-role','s-dbs','s-host'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  ['s-chk-safeguarding','s-chk-gdpr'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.checked = false;
+  });
+  const res = document.getElementById('s-search-results'); if (res) res.innerHTML = '';
+  sCurrentStep = 1;
+  document.querySelectorAll('#screen-staff .step-panel').forEach((p, i) => p.classList.toggle('active', i === 0));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`s-dot-${i}`); const line = document.getElementById(`s-line-${i}`);
+    if (dot) { dot.classList.remove('done','current'); if (i === 1) dot.classList.add('current'); }
+    if (line) line.classList.remove('done');
+  }
 }
 
 /* ── Progress stepper ─────────────────────────────── */
@@ -989,6 +1152,164 @@ function onPurposeChange() {
   const showDbs = p === 'Volunteering' || p === 'Contractor / Tradesperson';
   document.getElementById('dbs-section').classList.toggle('visible', showDbs);
   if (!showDbs) document.getElementById('f-dbs').value = '';
+}
+
+/* ── STAFF / VOLUNTEER FLOW ───────────────────────── */
+let sCurrentStep = 1;
+
+function startStaff() { resetStaffForm(); showScreen('screen-staff'); }
+
+function sGoStep(n) {
+  const err = sValidateStep(sCurrentStep);
+  if (err) { showToast(err, 'error'); return; }
+  sCurrentStep = n;
+  document.querySelectorAll('#screen-staff .step-panel').forEach((p, i) => p.classList.toggle('active', i + 1 === n));
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`s-dot-${i}`); const line = document.getElementById(`s-line-${i}`);
+    dot.classList.remove('done','current');
+    if (i < n) dot.classList.add('done');
+    if (i === n) dot.classList.add('current');
+    if (line) line.classList.toggle('done', i < n);
+  }
+}
+
+function sValidateStep(n) {
+  if (n === 1) {
+    if (!sVal('s-first')) return 'Please enter your first name.';
+    if (!sVal('s-last'))  return 'Please enter your last name.';
+    if (!sVal('s-email')) return 'Please enter your email address.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sVal('s-email'))) return 'Please enter a valid email address.';
+    if (!sVal('s-phone')) return 'Please enter your phone number.';
+    if (!sVal('s-org'))   return 'Please select your organisation.';
+    if (!sVal('s-role'))  return 'Please select your role.';
+  }
+  if (n === 2) {
+    if (!sVal('s-dbs'))  return 'Please select your DBS certificate status.';
+    if (!sVal('s-host')) return 'Please enter who you are reporting to.';
+  }
+  return null;
+}
+
+function sVal(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+/* ── Staff name search ───────────────────────────── */
+let _staffSearchTimer = null;
+const _staffSearchCache = {};
+
+function debouncedStaffSearch() {
+  clearTimeout(_staffSearchTimer);
+  const q = document.getElementById('s-name-search').value.trim();
+  if (q.length < 2) { document.getElementById('s-search-results').innerHTML = ''; return; }
+  _staffSearchTimer = setTimeout(runStaffSearch, 500);
+}
+
+async function runStaffSearch() {
+  const q = document.getElementById('s-name-search').value.trim();
+  if (!q) return;
+  const resultsEl = document.getElementById('s-search-results');
+  resultsEl.innerHTML = '<div class="search-hint"><i class="fas fa-spinner fa-spin"></i> Searching…</div>';
+  try {
+    const { data } = await db
+      .from('visitor_logs')
+      .select('first_name, last_name, organisation, staff_role, email, phone, signed_in_at')
+      .eq('visitor_type', 'staff')
+      .or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%`)
+      .order('signed_in_at', { ascending: false })
+      .limit(50);
+    if (!data || data.length === 0) {
+      resultsEl.innerHTML = '<div class="search-hint">No previous record found — please fill in your details below.</div>';
+      return;
+    }
+    const seen = new Set();
+    const unique = data.filter(r => {
+      const key = `${r.first_name}|${r.last_name}`.toLowerCase();
+      if (seen.has(key)) return false; seen.add(key); return true;
+    }).slice(0, 5);
+    _staffSearchCache['s'] = unique;
+    resultsEl.innerHTML = unique.map((r, i) => `
+      <div class="search-result-item" onclick="fillStaffFromSearch(${i})">
+        <div>
+          <div class="search-result-name">${r.first_name} ${r.last_name}</div>
+          ${r.organisation ? `<div class="search-result-email">${r.organisation}${r.staff_role ? ' · ' + r.staff_role : ''}</div>` : ''}
+        </div>
+        <i class="fas fa-chevron-right" style="color:var(--muted)"></i>
+      </div>`).join('');
+  } catch {
+    resultsEl.innerHTML = '<div class="search-hint">Search unavailable — please fill in below.</div>';
+  }
+}
+
+function fillStaffFromSearch(index) {
+  const r = (_staffSearchCache['s'] || [])[index];
+  if (!r) return;
+  document.getElementById('s-first').value = r.first_name || '';
+  document.getElementById('s-last').value  = r.last_name  || '';
+  document.getElementById('s-email').value = r.email      || '';
+  document.getElementById('s-phone').value = r.phone      || '';
+  if (r.organisation) document.getElementById('s-org').value  = r.organisation;
+  if (r.staff_role)   document.getElementById('s-role').value = r.staff_role;
+  document.getElementById('s-search-results').innerHTML =
+    '<div class="search-hint success"><i class="fas fa-check-circle"></i> Details filled in — check them and press Next.</div>';
+}
+
+async function submitStaff() {
+  if (!document.getElementById('s-chk-safeguarding').checked)
+    return showToast('Please confirm you have read the safeguarding policy.', 'error');
+  if (!document.getElementById('s-chk-gdpr').checked)
+    return showToast('Please consent to data storage to proceed.', 'error');
+
+  const btn = document.getElementById('s-btn-submit');
+  const lbl = document.getElementById('s-submit-label');
+  const spn = document.getElementById('s-spinner');
+  btn.disabled = true; lbl.style.display = 'none'; spn.style.display = 'block';
+
+  const alreadyIn = await checkAlreadySignedIn(sVal('s-first'), sVal('s-last'), 'staff');
+  if (alreadyIn) {
+    btn.disabled = false; lbl.style.display = 'inline'; spn.style.display = 'none';
+    showAlreadyInModal(sVal('s-first'));
+    return;
+  }
+
+  const badgeId = generateBadgeId('JBS');
+  const now     = new Date();
+  const record  = {
+    first_name:   sVal('s-first'),
+    last_name:    sVal('s-last'),
+    email:        sVal('s-email'),
+    phone:        sVal('s-phone'),
+    organisation: sVal('s-org'),
+    host_name:    sVal('s-host'),
+    purpose:      sVal('s-role'),
+    dbs_status:   sVal('s-dbs'),
+    staff_role:   sVal('s-role'),
+    badge_id:     badgeId,
+    signed_in_at: now.toISOString(),
+    visitor_type: 'staff',
+  };
+
+  try {
+    const { error } = await db.from('visitor_logs').insert(record);
+    if (error) throw error;
+
+    const typeLabel = document.getElementById('badge-type-label');
+    typeLabel.textContent = 'Staff / Volunteer';
+    typeLabel.className   = 'badge-type staff-type';
+    document.getElementById('badge-name').textContent    = `${record.first_name} ${record.last_name}`;
+    document.getElementById('badge-org').textContent     = record.organisation;
+    document.getElementById('badge-host').textContent    = record.host_name;
+    document.getElementById('badge-purpose').textContent = record.staff_role;
+    document.getElementById('badge-time').textContent    =
+      now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('badge-number').textContent  = badgeId;
+
+    showScreen('screen-badge');
+    startBadgeCountdown();
+  } catch (e) {
+    console.error(e);
+    showToast('Could not save sign-in. Please try again or see reception.', 'error');
+  } finally {
+    btn.disabled = false; lbl.style.display = 'inline'; spn.style.display = 'none';
+  }
 }
 
 /* ── Step 1 name search ───────────────────────────── */
@@ -1051,16 +1372,17 @@ function fillFromSearchResult(index) {
 }
 
 /* ── Duplicate sign-in guard ──────────────────────── */
-async function checkAlreadySignedIn(firstName, lastName) {
+async function checkAlreadySignedIn(firstName, lastName, visitorType) {
   const today = new Date().toISOString().slice(0, 10);
-  const { data } = await db
+  let query = db
     .from('visitor_logs')
     .select('id')
     .ilike('first_name', firstName)
     .ilike('last_name', lastName)
     .gte('signed_in_at', `${today}T00:00:00`)
-    .is('signed_out_at', null)
-    .limit(1);
+    .is('signed_out_at', null);
+  if (visitorType) query = query.eq('visitor_type', visitorType);
+  const { data } = await query.limit(1);
   return data && data.length > 0;
 }
 
@@ -1092,7 +1414,7 @@ async function submitSignIn() {
   label.style.display  = 'none';
   spinner.style.display = 'block';
 
-  const alreadyIn = await checkAlreadySignedIn(val('f-first'), val('f-last'));
+  const alreadyIn = await checkAlreadySignedIn(val('f-first'), val('f-last'), 'visitor');
   if (alreadyIn) {
     btn.disabled = false; label.style.display = 'inline'; spinner.style.display = 'none';
     showAlreadyInModal(val('f-first'));
@@ -1113,6 +1435,7 @@ async function submitSignIn() {
     dbs_status:   dbsStatus,
     badge_id:     badgeId,
     signed_in_at: now.toISOString(),
+    visitor_type: 'visitor',
   };
 
   try {
@@ -1120,6 +1443,9 @@ async function submitSignIn() {
     if (error) throw error;
 
     // Show badge
+    const typeLabel = document.getElementById('badge-type-label');
+    typeLabel.textContent = 'Joybringers Visitor';
+    typeLabel.className   = 'badge-type';
     document.getElementById('badge-name').textContent =
       `${record.first_name} ${record.last_name}`;
     document.getElementById('badge-org').textContent =
@@ -1153,9 +1479,9 @@ function startBadgeCountdown() {
   tick();
 }
 
-function generateBadgeId() {
+function generateBadgeId(prefix = 'JB') {
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  let id = 'JB';
+  let id = prefix;
   for (let i = 0; i < 3; i++) id += chars[Math.floor(Math.random() * chars.length)];
   return id;
 }
@@ -1186,7 +1512,7 @@ async function runSignOutSearch() {
   try {
     const { data, error } = await db
       .from('visitor_logs')
-      .select('id, first_name, last_name, organisation, host_name, purpose, signed_in_at')
+      .select('id, first_name, last_name, organisation, host_name, purpose, staff_role, visitor_type, signed_in_at')
       .gte('signed_in_at', `${today}T00:00:00`)
       .lte('signed_in_at', `${today}T23:59:59`)
       .is('signed_out_at', null)
@@ -1197,14 +1523,22 @@ async function runSignOutSearch() {
       listEl.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><div>No match found — check your spelling or ask for help.</div></div>';
       return;
     }
-    listEl.innerHTML = data.map(v => `
+    listEl.innerHTML = data.map(v => {
+      const isStaff  = v.visitor_type === 'staff';
+      const badgeCls = isStaff ? 'badge-staff' : 'badge-visitor';
+      const badgeLbl = isStaff ? 'Staff' : 'Visitor';
+      const meta     = isStaff
+        ? `${v.staff_role || v.purpose}${v.host_name ? ' · Reporting to ' + v.host_name : ''}${v.organisation ? ' · ' + v.organisation : ''}`
+        : `Visiting ${v.host_name} · ${v.purpose}${v.organisation ? ' · ' + v.organisation : ''}`;
+      return `
       <div class="visitor-card" onclick="promptSignOut('${v.id}','${esc(v.first_name + ' ' + v.last_name)}','${esc(v.host_name)}','${esc(v.purpose)}','${v.signed_in_at}')">
         <div class="visitor-card-info">
-          <div class="visitor-card-name">${v.first_name} ${v.last_name}</div>
-          <div class="visitor-card-meta">Visiting ${v.host_name} · ${v.purpose}${v.organisation ? ' · ' + v.organisation : ''}</div>
+          <div class="visitor-card-name"><span class="visitor-card-badge ${badgeCls}">${badgeLbl}</span>${v.first_name} ${v.last_name}</div>
+          <div class="visitor-card-meta">${meta}</div>
         </div>
         <div class="visitor-card-time">${formatTime(v.signed_in_at)}<small>signed in</small></div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   } catch (e) {
     console.error(e);
     listEl.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--red)"></i><div>Could not search. Please try again.</div></div>';
