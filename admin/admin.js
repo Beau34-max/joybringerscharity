@@ -1341,7 +1341,7 @@ async function addUser(e) {
   } catch (err) {
     showAlert('danger', err.message);
   } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Add Member';
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Invite';
   }
 }
 
