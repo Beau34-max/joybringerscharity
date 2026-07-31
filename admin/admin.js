@@ -1347,8 +1347,8 @@ async function addUser(e) {
 
 function showInviteModal(token, name, customMsg) {
   const link = `${window.location.origin}/admin/set-password?token=${token}`;
-  document.getElementById('invite-modal-name').textContent = name;
-  document.getElementById('invite-modal-desc').textContent = customMsg || `Share this link with ${name} — they click it to set their own password and log in. The link can only be used once.`;
+  document.getElementById('invite-modal-desc').innerHTML = customMsg
+    || `Share this link with <strong>${name}</strong> — they click it to set their own password and log in. The link can only be used once.`;
   document.getElementById('invite-link-box').value = link;
   document.getElementById('invite-copied-msg').style.display = 'none';
   new bootstrap.Modal(document.getElementById('inviteLinkModal')).show();
