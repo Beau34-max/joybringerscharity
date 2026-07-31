@@ -92,6 +92,50 @@ function hashPassword(password) {
   return crypto.createHmac('sha256', secret).update(password).digest('hex');
 }
 
+async function sendInviteEmail(toEmail, toName, inviterName, inviteLink) {
+  const apiKey  = process.env.SENDGRID_API_KEY;
+  const fromEmail = process.env.INVITE_FROM_EMAIL || 'admin@joybringerscharity.org';
+  if (!apiKey) return { ok: false, reason: 'no_key' };
+
+  const html = `
+    <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:520px;margin:auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb">
+      <div style="background:#006526;padding:32px 24px;text-align:center">
+        <h1 style="color:#fff;font-size:22px;margin:0">Joybringers Admin Panel</h1>
+      </div>
+      <div style="padding:32px 24px">
+        <h2 style="font-size:20px;color:#111;margin:0 0 12px">You've been invited!</h2>
+        <p style="color:#444;line-height:1.6;margin:0 0 24px">
+          <strong>${inviterName}</strong> has invited you to join the Joybringers Admin team.
+          Click the button below to set up your account and choose your own password.
+        </p>
+        <div style="text-align:center;margin:0 0 24px">
+          <a href="${inviteLink}" style="display:inline-block;background:#006526;color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:600;font-size:16px">Set Up My Account</a>
+        </div>
+        <p style="color:#888;font-size:13px;line-height:1.5;margin:0">
+          This link can only be used once. If you weren't expecting this invite you can ignore it.
+          <br>If the button doesn't work, paste this link into your browser:<br>
+          <a href="${inviteLink}" style="color:#006526;word-break:break-all">${inviteLink}</a>
+        </p>
+      </div>
+    </div>`;
+
+  try {
+    const r = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        personalizations: [{ to: [{ email: toEmail, name: toName }] }],
+        from: { email: fromEmail, name: 'Joybringers Admin' },
+        subject: "You've been invited to the Joybringers Admin Panel",
+        content: [{ type: 'text/html', value: html }]
+      })
+    });
+    return { ok: r.status === 202 };
+  } catch {
+    return { ok: false, reason: 'network' };
+  }
+}
+
 const ghBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
 
 function setCors(res) {
@@ -334,7 +378,11 @@ module.exports = async function handler(req, res) {
       const msg = (Array.isArray(data) ? data[0] : data)?.message || 'Could not create user.';
       return res.status(r.status).json({ error: msg.includes('unique') ? 'A user with that email already exists.' : msg });
     }
-    return res.status(201).json({ ...(Array.isArray(data) ? data[0] : data), invite_token });
+    const created = Array.isArray(data) ? data[0] : data;
+    const origin = req.headers.origin || req.headers.host ? `https://${req.headers.host}` : 'https://www.joybringerscharity.org';
+    const inviteLink = `${origin}/admin/set-password?token=${invite_token}`;
+    const emailResult = await sendInviteEmail(email, name, session.email, inviteLink);
+    return res.status(201).json({ ...created, invite_token, email_sent: emailResult.ok });
   }
 
   if (action === 'delete_user') {
@@ -357,7 +405,12 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({ invite_token })
     });
     if (!r.ok) return res.status(r.status).json({ error: 'Could not generate invite link.' });
-    return res.status(200).json({ invite_token });
+    const origin = req.headers.origin || req.headers.host ? `https://${req.headers.host}` : 'https://www.joybringerscharity.org';
+    const inviteLink = `${origin}/admin/set-password?token=${invite_token}`;
+    const emailResult = body.email && body.name
+      ? await sendInviteEmail(body.email, body.name, session.email, inviteLink)
+      : { ok: false };
+    return res.status(200).json({ invite_token, email_sent: emailResult.ok });
   }
 
   if (action === 'reset_password') {

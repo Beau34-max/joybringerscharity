@@ -1309,8 +1309,8 @@ async function loadUsers() {
         <td class="text-muted small">${u.created_at ? new Date(u.created_at).toLocaleDateString('en-GB') : ''}</td>
         <td class="text-end text-nowrap">
           ${u.invite_pending
-            ? `<button class="btn btn-outline-secondary btn-sm" onclick="resendInvite(${i})"><i class="fas fa-link"></i> Get Link</button>`
-            : `<button class="btn btn-outline-secondary btn-sm" onclick="sendResetLink(${i})">Reset PW</button>`
+            ? `<button class="btn btn-outline-secondary btn-sm" onclick="resendInvite(${i})"><i class="fas fa-envelope"></i> Resend</button>`
+            : `<button class="btn btn-outline-secondary btn-sm" onclick="sendResetLink(${i})"><i class="fas fa-envelope"></i> Reset PW</button>`
           }
           <button class="btn btn-outline-danger btn-sm ms-1" onclick="removeUser(${i})">Remove</button>
         </td>
@@ -1327,13 +1327,17 @@ async function addUser(e) {
   const email     = document.getElementById('new-user-email').value.trim();
   const user_role = document.getElementById('new-user-role').value;
   const btn = document.getElementById('add-user-btn');
-  btn.disabled = true; btn.innerHTML = 'Adding…';
+  btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Sending…';
   try {
     const result = await apiCall('create_user', { name, email, user_role });
     document.getElementById('add-user-form').reset();
     document.getElementById('add-user-form-wrap').style.display = 'none';
     loadUsers();
-    showInviteModal(result.invite_token, name);
+    if (result.email_sent) {
+      showAlert('success', `Invite email sent to <strong>${email}</strong> — ${name} will receive a link to set their own password.`);
+    } else {
+      showInviteModal(result.invite_token, name, `Email could not be sent — share this link with ${name} directly:`);
+    }
   } catch (err) {
     showAlert('danger', err.message);
   } finally {
@@ -1341,9 +1345,10 @@ async function addUser(e) {
   }
 }
 
-function showInviteModal(token, name) {
+function showInviteModal(token, name, customMsg) {
   const link = `${window.location.origin}/admin/set-password?token=${token}`;
   document.getElementById('invite-modal-name').textContent = name;
+  document.getElementById('invite-modal-desc').textContent = customMsg || `Share this link with ${name} — they click it to set their own password and log in. The link can only be used once.`;
   document.getElementById('invite-link-box').value = link;
   document.getElementById('invite-copied-msg').style.display = 'none';
   new bootstrap.Modal(document.getElementById('inviteLinkModal')).show();
@@ -1372,10 +1377,14 @@ async function removeUser(i) {
 async function sendResetLink(i) {
   const u = (window._adminUsers || [])[i];
   if (!u) return;
-  if (!confirm(`Generate a new invite link for ${u.name} so they can reset their own password?`)) return;
+  if (!confirm(`Send ${u.name} a link to reset their password? A new invite email will be sent to ${u.email}.`)) return;
   try {
-    const result = await apiCall('resend_invite', { id: u.id });
-    showInviteModal(result.invite_token, u.name);
+    const result = await apiCall('resend_invite', { id: u.id, email: u.email, name: u.name });
+    if (result.email_sent) {
+      showAlert('success', `Password reset link sent to <strong>${u.email}</strong>.`);
+    } else {
+      showInviteModal(result.invite_token, u.name, `Email could not be sent — share this link with ${u.name} directly:`);
+    }
   } catch (err) {
     showAlert('danger', err.message);
   }
@@ -1385,8 +1394,12 @@ async function resendInvite(i) {
   const u = (window._adminUsers || [])[i];
   if (!u) return;
   try {
-    const result = await apiCall('resend_invite', { id: u.id });
-    showInviteModal(result.invite_token, u.name);
+    const result = await apiCall('resend_invite', { id: u.id, email: u.email, name: u.name });
+    if (result.email_sent) {
+      showAlert('success', `Invite email resent to <strong>${u.email}</strong>.`);
+    } else {
+      showInviteModal(result.invite_token, u.name, `Email could not be sent — share this link with ${u.name} directly:`);
+    }
   } catch (err) {
     showAlert('danger', err.message);
   }
