@@ -93,8 +93,8 @@ function hashPassword(password) {
 }
 
 async function sendInviteEmail(toEmail, toName, inviterName, inviteLink) {
-  const apiKey  = process.env.SENDGRID_API_KEY;
-  const fromEmail = process.env.INVITE_FROM_EMAIL || 'admin@joybringerscharity.org';
+  const apiKey    = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.INVITE_FROM_EMAIL || 'Joybringers Admin <admin@joybringerscharity.org>';
   if (!apiKey) return { ok: false, reason: 'no_key' };
 
   const html = `
@@ -112,25 +112,25 @@ async function sendInviteEmail(toEmail, toName, inviterName, inviteLink) {
           <a href="${inviteLink}" style="display:inline-block;background:#006526;color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:600;font-size:16px">Set Up My Account</a>
         </div>
         <p style="color:#888;font-size:13px;line-height:1.5;margin:0">
-          This link can only be used once. If you weren't expecting this invite you can ignore it.
-          <br>If the button doesn't work, paste this link into your browser:<br>
+          This link can only be used once. If you weren't expecting this invite you can ignore it.<br><br>
+          If the button doesn't work, paste this link into your browser:<br>
           <a href="${inviteLink}" style="color:#006526;word-break:break-all">${inviteLink}</a>
         </p>
       </div>
     </div>`;
 
   try {
-    const r = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: toEmail, name: toName }] }],
-        from: { email: fromEmail, name: 'Joybringers Admin' },
+        from: fromEmail,
+        to: [toEmail],
         subject: "You've been invited to the Joybringers Admin Panel",
-        content: [{ type: 'text/html', value: html }]
+        html
       })
     });
-    return { ok: r.status === 202 };
+    return { ok: r.ok };
   } catch {
     return { ok: false, reason: 'network' };
   }
