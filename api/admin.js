@@ -163,6 +163,44 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: 'Incorrect email or password.' });
   }
 
+  /* ── INVITE ACTIONS (no session required) ──────────────── */
+  if (action === 'verify_invite') {
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'Not configured.' });
+    const { token } = body;
+    if (!token) return res.status(400).json({ error: 'Token required.' });
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/admin_users?invite_token=eq.${encodeURIComponent(token)}&select=name,email&limit=1`,
+      { headers: sbHeaders() }
+    );
+    const users = r.ok ? await r.json() : [];
+    if (!Array.isArray(users) || !users.length) {
+      return res.status(404).json({ error: 'This invite link is invalid or has already been used.' });
+    }
+    return res.status(200).json({ name: users[0].name, email: users[0].email });
+  }
+
+  if (action === 'complete_invite') {
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'Not configured.' });
+    const { token, password } = body;
+    if (!token || !password) return res.status(400).json({ error: 'Token and password are required.' });
+    if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+    const r1 = await fetch(
+      `${SUPABASE_URL}/rest/v1/admin_users?invite_token=eq.${encodeURIComponent(token)}&select=id&limit=1`,
+      { headers: sbHeaders() }
+    );
+    const users = r1.ok ? await r1.json() : [];
+    if (!Array.isArray(users) || !users.length) {
+      return res.status(404).json({ error: 'This invite link is invalid or has already been used.' });
+    }
+    const r2 = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?id=eq.${users[0].id}`, {
+      method: 'PATCH',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body: JSON.stringify({ password_hash: hashPassword(password), invite_token: null, active: true })
+    });
+    if (!r2.ok) return res.status(r2.status).json({ error: 'Could not set password. Please try again.' });
+    return res.status(200).json({ ok: true });
+  }
+
   /* ── ALL OTHER ACTIONS REQUIRE A VALID SESSION ─────────── */
   const authHeader   = req.headers['authorization'] || '';
   const sessionToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
@@ -265,21 +303,27 @@ module.exports = async function handler(req, res) {
     if (role !== 'admin') return res.status(403).json({ error: 'Only admins can manage team members.' });
     if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/admin_users?select=id,name,email,role,active,created_at,created_by&order=created_at.asc`,
+      `${SUPABASE_URL}/rest/v1/admin_users?select=id,name,email,role,active,created_at,created_by,invite_token,password_hash&order=created_at.asc`,
       { headers: sbHeaders() }
     );
     const data = await r.json();
-    return res.status(r.status).json(data);
+    if (!r.ok) return res.status(r.status).json(data);
+    const sanitized = data.map(u => ({
+      id: u.id, name: u.name, email: u.email, role: u.role, active: u.active,
+      created_at: u.created_at, created_by: u.created_by,
+      invite_pending: !!u.invite_token && !u.password_hash
+    }));
+    return res.status(200).json(sanitized);
   }
 
   if (action === 'create_user') {
     if (role !== 'admin') return res.status(403).json({ error: 'Only admins can add team members.' });
     if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
-    const { name, email, user_role, password } = body;
-    if (!name || !email || !user_role || !password) return res.status(400).json({ error: 'Name, email, role and password are all required.' });
+    const { name, email, user_role } = body;
+    if (!name || !email || !user_role) return res.status(400).json({ error: 'Name, email and role are required.' });
     if (!['admin', 'editor', 'data_entry'].includes(user_role)) return res.status(400).json({ error: 'Invalid role.' });
-    if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters.' });
-    const record = { name, email, role: user_role, password_hash: hashPassword(password), active: true, created_by: session.email };
+    const invite_token = crypto.randomBytes(32).toString('hex');
+    const record = { name, email, role: user_role, invite_token, active: false, created_by: session.email };
     const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users`, {
       method: 'POST',
       headers: { ...sbHeaders(), Prefer: 'return=representation' },
@@ -290,7 +334,7 @@ module.exports = async function handler(req, res) {
       const msg = (Array.isArray(data) ? data[0] : data)?.message || 'Could not create user.';
       return res.status(r.status).json({ error: msg.includes('unique') ? 'A user with that email already exists.' : msg });
     }
-    return res.status(201).json(data);
+    return res.status(201).json({ ...(Array.isArray(data) ? data[0] : data), invite_token });
   }
 
   if (action === 'delete_user') {
@@ -301,6 +345,19 @@ module.exports = async function handler(req, res) {
       headers: sbHeaders()
     });
     return res.status(r.status).json({ ok: r.ok });
+  }
+
+  if (action === 'resend_invite') {
+    if (role !== 'admin') return res.status(403).json({ error: 'Only admins can resend invites.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const invite_token = crypto.randomBytes(32).toString('hex');
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?id=eq.${body.id}`, {
+      method: 'PATCH',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body: JSON.stringify({ invite_token })
+    });
+    if (!r.ok) return res.status(r.status).json({ error: 'Could not generate invite link.' });
+    return res.status(200).json({ invite_token });
   }
 
   if (action === 'reset_password') {

@@ -1291,6 +1291,7 @@ async function loadUsers() {
   wrap.innerHTML = '<div class="text-center text-muted py-3 small">Loading team members…</div>';
   try {
     const users = await apiCall('list_users');
+    window._adminUsers = users || [];
     if (!Array.isArray(users) || !users.length) {
       wrap.innerHTML = '<p class="text-muted small text-center py-3 mb-0">No team members added yet — use the button above to invite someone.</p>';
       return;
@@ -1301,14 +1302,17 @@ async function loadUsers() {
       <thead class="table-light"><tr>
         <th>Name</th><th>Email</th><th>Role</th><th>Added</th><th></th>
       </tr></thead>
-      <tbody>${users.map(u => `<tr>
-        <td>${u.name}</td>
+      <tbody>${users.map((u, i) => `<tr>
+        <td>${u.name}${u.invite_pending ? ' <span class="badge bg-warning text-dark ms-1">Invite pending</span>' : ''}</td>
         <td class="text-muted">${u.email}</td>
         <td><span class="badge ${roleBadge[u.role] || 'bg-secondary'}">${roleLabel[u.role] || u.role}</span></td>
         <td class="text-muted small">${u.created_at ? new Date(u.created_at).toLocaleDateString('en-GB') : ''}</td>
-        <td class="text-end">
-          <button class="btn btn-outline-secondary btn-sm" onclick="resetUserPassword(${JSON.stringify(u.id)},${JSON.stringify(u.name)})">Reset PW</button>
-          <button class="btn btn-outline-danger btn-sm ms-1" onclick="removeUser(${JSON.stringify(u.id)},${JSON.stringify(u.name)})">Remove</button>
+        <td class="text-end text-nowrap">
+          ${u.invite_pending
+            ? `<button class="btn btn-outline-secondary btn-sm" onclick="resendInvite(${i})"><i class="fas fa-link"></i> Get Link</button>`
+            : `<button class="btn btn-outline-secondary btn-sm" onclick="sendResetLink(${i})">Reset PW</button>`
+          }
+          <button class="btn btn-outline-danger btn-sm ms-1" onclick="removeUser(${i})">Remove</button>
         </td>
       </tr>`).join('')}</tbody>
     </table>`;
@@ -1319,21 +1323,17 @@ async function loadUsers() {
 
 async function addUser(e) {
   e.preventDefault();
-  const name     = document.getElementById('new-user-name').value.trim();
-  const email    = document.getElementById('new-user-email').value.trim();
+  const name      = document.getElementById('new-user-name').value.trim();
+  const email     = document.getElementById('new-user-email').value.trim();
   const user_role = document.getElementById('new-user-role').value;
-  const password = document.getElementById('new-user-password').value;
-  const password2 = document.getElementById('new-user-password2').value;
-  if (password !== password2) { showAlert('danger', 'Passwords do not match.'); return; }
-  if (password.length < 8)   { showAlert('danger', 'Password must be at least 8 characters.'); return; }
   const btn = document.getElementById('add-user-btn');
   btn.disabled = true; btn.innerHTML = 'Adding…';
   try {
-    await apiCall('create_user', { name, email, user_role, password });
-    showAlert('success', `${name} added successfully — they can now log in.`);
+    const result = await apiCall('create_user', { name, email, user_role });
     document.getElementById('add-user-form').reset();
     document.getElementById('add-user-form-wrap').style.display = 'none';
     loadUsers();
+    showInviteModal(result.invite_token, name);
   } catch (err) {
     showAlert('danger', err.message);
   } finally {
@@ -1341,24 +1341,52 @@ async function addUser(e) {
   }
 }
 
-async function removeUser(id, name) {
-  if (!confirm(`Remove ${name} from the team? They will no longer be able to log in.`)) return;
+function showInviteModal(token, name) {
+  const link = `${window.location.origin}/admin/set-password?token=${token}`;
+  document.getElementById('invite-modal-name').textContent = name;
+  document.getElementById('invite-link-box').value = link;
+  document.getElementById('invite-copied-msg').style.display = 'none';
+  new bootstrap.Modal(document.getElementById('inviteLinkModal')).show();
+}
+
+function copyInviteLink() {
+  const box = document.getElementById('invite-link-box');
+  navigator.clipboard.writeText(box.value).then(() => {
+    document.getElementById('invite-copied-msg').style.display = '';
+  });
+}
+
+async function removeUser(i) {
+  const u = (window._adminUsers || [])[i];
+  if (!u) return;
+  if (!confirm(`Remove ${u.name} from the team? They will no longer be able to log in.`)) return;
   try {
-    await apiCall('delete_user', { id });
-    showAlert('success', `${name} has been removed.`);
+    await apiCall('delete_user', { id: u.id });
+    showAlert('success', `${u.name} has been removed.`);
     loadUsers();
   } catch (err) {
     showAlert('danger', err.message);
   }
 }
 
-async function resetUserPassword(id, name) {
-  const newPw = prompt(`Set a new password for ${name}:\n(minimum 8 characters)`);
-  if (!newPw) return;
-  if (newPw.length < 8) { showAlert('danger', 'Password must be at least 8 characters.'); return; }
+async function sendResetLink(i) {
+  const u = (window._adminUsers || [])[i];
+  if (!u) return;
+  if (!confirm(`Generate a new invite link for ${u.name} so they can reset their own password?`)) return;
   try {
-    await apiCall('reset_password', { id, password: newPw });
-    showAlert('success', `Password updated for ${name}.`);
+    const result = await apiCall('resend_invite', { id: u.id });
+    showInviteModal(result.invite_token, u.name);
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+async function resendInvite(i) {
+  const u = (window._adminUsers || [])[i];
+  if (!u) return;
+  try {
+    const result = await apiCall('resend_invite', { id: u.id });
+    showInviteModal(result.invite_token, u.name);
   } catch (err) {
     showAlert('danger', err.message);
   }

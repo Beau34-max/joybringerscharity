@@ -864,15 +864,15 @@
               <div id="add-user-form-wrap" style="display:none;padding:1rem 1rem 0.5rem;border-bottom:1px solid #dee2e6">
                 <form id="add-user-form" onsubmit="addUser(event)" autocomplete="off">
                   <div class="row g-2">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <label class="form-label small fw-semibold mb-1">Full Name</label>
                       <input type="text" class="form-control form-control-sm" id="new-user-name" required placeholder="e.g. Sarah Johnson">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <label class="form-label small fw-semibold mb-1">Email Address</label>
                       <input type="email" class="form-control form-control-sm" id="new-user-email" required placeholder="e.g. sarah@example.com">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                       <label class="form-label small fw-semibold mb-1">Role</label>
                       <select class="form-select form-select-sm" id="new-user-role">
                         <option value="admin">Full Admin</option>
@@ -880,17 +880,10 @@
                         <option value="data_entry">Data Entry</option>
                       </select>
                     </div>
-                    <div class="col-md-4">
-                      <label class="form-label small fw-semibold mb-1">Password</label>
-                      <input type="password" class="form-control form-control-sm" id="new-user-password" required placeholder="Min 8 characters" autocomplete="new-password">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label small fw-semibold mb-1">Confirm Password</label>
-                      <input type="password" class="form-control form-control-sm" id="new-user-password2" required placeholder="Repeat password" autocomplete="new-password">
-                    </div>
-                    <div class="col-12 d-flex gap-2 pb-2">
+                    <div class="col-12 d-flex flex-wrap gap-2 align-items-center pb-2">
                       <button type="submit" class="btn btn-sm btn-success" id="add-user-btn"><i class="fas fa-user-plus"></i> Add Member</button>
                       <button type="button" class="btn btn-sm btn-secondary" onclick="toggleAddUserForm()">Cancel</button>
+                      <span class="text-muted small">An invite link will appear — share it with them to set their password.</span>
                     </div>
                   </div>
                 </form>
@@ -910,6 +903,29 @@
     </div>
 
   </main>
+</div>
+
+<!-- ===================== INVITE LINK MODAL ===================== -->
+<div class="modal fade" id="inviteLinkModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#006526;color:white">
+        <h5 class="modal-title"><i class="fas fa-link"></i> Invite Link</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-3">Share this link with <strong id="invite-modal-name"></strong> — they click it to set their own password and log in. The link can only be used once.</p>
+        <div class="input-group">
+          <input type="text" class="form-control form-control-sm font-monospace" id="invite-link-box" readonly>
+          <button class="btn btn-outline-secondary" onclick="copyInviteLink()" type="button"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div id="invite-copied-msg" class="text-success small mt-2" style="display:none"><i class="fas fa-check"></i> Copied to clipboard!</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Done</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ===================== EVENT MODAL ===================== -->
