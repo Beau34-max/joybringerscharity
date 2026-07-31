@@ -87,6 +87,11 @@ function sbHeaders() {
   };
 }
 
+function hashPassword(password) {
+  const secret = process.env.SESSION_SECRET || 'change-me-please';
+  return crypto.createHmac('sha256', secret).update(password).digest('hex');
+}
+
 const ghBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
 
 function setCors(res) {
@@ -140,7 +145,22 @@ module.exports = async function handler(req, res) {
         role: 'data_entry'
       });
     }
-    return res.status(401).json({ error: 'Incorrect password.' });
+    // Check admin_users Supabase table (users invited via the Settings panel)
+    if (process.env.SUPABASE_SERVICE_KEY && body.email) {
+      const r = await fetch(
+        `${SUPABASE_URL}/rest/v1/admin_users?email=eq.${encodeURIComponent(body.email)}&active=eq.true&select=id,email,role,password_hash&limit=1`,
+        { headers: sbHeaders() }
+      );
+      const users = r.ok ? await r.json() : [];
+      if (Array.isArray(users) && users.length > 0) {
+        const user = users[0];
+        if (user.password_hash && user.password_hash === hashPassword(body.password)) {
+          return res.status(200).json({ token: makeSession(user.email, user.role), role: user.role });
+        }
+      }
+    }
+
+    return res.status(401).json({ error: 'Incorrect email or password.' });
   }
 
   /* ── ALL OTHER ACTIONS REQUIRE A VALID SESSION ─────────── */
@@ -240,6 +260,62 @@ module.exports = async function handler(req, res) {
     const data = await r.json();
     return res.status(r.status).json(data);
   }
+  /* ── User Management (admin-only) ─────────────────────────── */
+  if (action === 'list_users') {
+    if (role !== 'admin') return res.status(403).json({ error: 'Only admins can manage team members.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/admin_users?select=id,name,email,role,active,created_at,created_by&order=created_at.asc`,
+      { headers: sbHeaders() }
+    );
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
+  if (action === 'create_user') {
+    if (role !== 'admin') return res.status(403).json({ error: 'Only admins can add team members.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const { name, email, user_role, password } = body;
+    if (!name || !email || !user_role || !password) return res.status(400).json({ error: 'Name, email, role and password are all required.' });
+    if (!['admin', 'editor', 'data_entry'].includes(user_role)) return res.status(400).json({ error: 'Invalid role.' });
+    if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+    const record = { name, email, role: user_role, password_hash: hashPassword(password), active: true, created_by: session.email };
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users`, {
+      method: 'POST',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body: JSON.stringify(record)
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      const msg = (Array.isArray(data) ? data[0] : data)?.message || 'Could not create user.';
+      return res.status(r.status).json({ error: msg.includes('unique') ? 'A user with that email already exists.' : msg });
+    }
+    return res.status(201).json(data);
+  }
+
+  if (action === 'delete_user') {
+    if (role !== 'admin') return res.status(403).json({ error: 'Only admins can remove team members.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?id=eq.${body.id}`, {
+      method: 'DELETE',
+      headers: sbHeaders()
+    });
+    return res.status(r.status).json({ ok: r.ok });
+  }
+
+  if (action === 'reset_password') {
+    if (role !== 'admin') return res.status(403).json({ error: 'Only admins can reset passwords.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    if (!body.password || body.password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?id=eq.${body.id}`, {
+      method: 'PATCH',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body: JSON.stringify({ password_hash: hashPassword(body.password) })
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
   const recordType = action.replace(/^(add|list|delete|update)_/, '');
   const table       = RECORD_TABLES[recordType];
 

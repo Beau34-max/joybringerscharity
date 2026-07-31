@@ -132,6 +132,7 @@ function switchTab(tabId) {
   if (tabId === 'content')   loadContentTab();
   if (tabId === 'dataentry') loadDataEntryTab();
   if (tabId === 'visitors')  initVisitorTab();
+  if (tabId === 'settings')  loadUsers();
 }
 
 /* ── Role-based UI restriction ───────────────────────────── */
@@ -1269,6 +1270,95 @@ async function adminSignOut(id, name) {
     await apiCall('admin_signout_visitor', { id });
     showAlert('success', `${name} has been signed out.`);
     loadVisitors();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+/* ── User Management (Settings tab) ─────────────────────── */
+
+function toggleAddUserForm() {
+  const wrap = document.getElementById('add-user-form-wrap');
+  const hidden = wrap.style.display === 'none';
+  wrap.style.display = hidden ? '' : 'none';
+  if (hidden) document.getElementById('new-user-name').focus();
+  else document.getElementById('add-user-form').reset();
+}
+
+async function loadUsers() {
+  const wrap = document.getElementById('users-table-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '<div class="text-center text-muted py-3 small">Loading team members…</div>';
+  try {
+    const users = await apiCall('list_users');
+    if (!Array.isArray(users) || !users.length) {
+      wrap.innerHTML = '<p class="text-muted small text-center py-3 mb-0">No team members added yet — use the button above to invite someone.</p>';
+      return;
+    }
+    const roleLabel = { admin: 'Full Admin', editor: 'Editor', data_entry: 'Data Entry' };
+    const roleBadge = { admin: 'bg-danger', editor: 'bg-primary', data_entry: 'bg-secondary' };
+    wrap.innerHTML = `<table class="table table-sm mb-0">
+      <thead class="table-light"><tr>
+        <th>Name</th><th>Email</th><th>Role</th><th>Added</th><th></th>
+      </tr></thead>
+      <tbody>${users.map(u => `<tr>
+        <td>${u.name}</td>
+        <td class="text-muted">${u.email}</td>
+        <td><span class="badge ${roleBadge[u.role] || 'bg-secondary'}">${roleLabel[u.role] || u.role}</span></td>
+        <td class="text-muted small">${u.created_at ? new Date(u.created_at).toLocaleDateString('en-GB') : ''}</td>
+        <td class="text-end">
+          <button class="btn btn-outline-secondary btn-sm" onclick="resetUserPassword(${JSON.stringify(u.id)},${JSON.stringify(u.name)})">Reset PW</button>
+          <button class="btn btn-outline-danger btn-sm ms-1" onclick="removeUser(${JSON.stringify(u.id)},${JSON.stringify(u.name)})">Remove</button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch (err) {
+    wrap.innerHTML = `<p class="text-danger small text-center py-3 mb-0">${err.message}</p>`;
+  }
+}
+
+async function addUser(e) {
+  e.preventDefault();
+  const name     = document.getElementById('new-user-name').value.trim();
+  const email    = document.getElementById('new-user-email').value.trim();
+  const user_role = document.getElementById('new-user-role').value;
+  const password = document.getElementById('new-user-password').value;
+  const password2 = document.getElementById('new-user-password2').value;
+  if (password !== password2) { showAlert('danger', 'Passwords do not match.'); return; }
+  if (password.length < 8)   { showAlert('danger', 'Password must be at least 8 characters.'); return; }
+  const btn = document.getElementById('add-user-btn');
+  btn.disabled = true; btn.innerHTML = 'Adding…';
+  try {
+    await apiCall('create_user', { name, email, user_role, password });
+    showAlert('success', `${name} added successfully — they can now log in.`);
+    document.getElementById('add-user-form').reset();
+    document.getElementById('add-user-form-wrap').style.display = 'none';
+    loadUsers();
+  } catch (err) {
+    showAlert('danger', err.message);
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Add Member';
+  }
+}
+
+async function removeUser(id, name) {
+  if (!confirm(`Remove ${name} from the team? They will no longer be able to log in.`)) return;
+  try {
+    await apiCall('delete_user', { id });
+    showAlert('success', `${name} has been removed.`);
+    loadUsers();
+  } catch (err) {
+    showAlert('danger', err.message);
+  }
+}
+
+async function resetUserPassword(id, name) {
+  const newPw = prompt(`Set a new password for ${name}:\n(minimum 8 characters)`);
+  if (!newPw) return;
+  if (newPw.length < 8) { showAlert('danger', 'Password must be at least 8 characters.'); return; }
+  try {
+    await apiCall('reset_password', { id, password: newPw });
+    showAlert('success', `Password updated for ${name}.`);
   } catch (err) {
     showAlert('danger', err.message);
   }

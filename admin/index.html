@@ -855,13 +855,54 @@
             </div>
           </div>
 
-          <div class="card">
-            <div class="card-header"><i class="fas fa-users"></i> Staff Accounts &amp; Roles</div>
-            <div class="card-body small text-muted">
-              <p class="mb-2"><strong>Full Admin</strong> — sees everything and is the only role that can delete anything (events, photos, data entry records). Logs in with <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code>.</p>
-              <p class="mb-2"><strong>Editor</strong> — can add and edit Events, Photos, Website Content, and Data Entry, same as Full Admin — but cannot delete anything, and cannot see this Settings tab. Set up by adding <code>EDITOR_EMAIL</code> / <code>EDITOR_PASSWORD</code> in Vercel.</p>
-              <p class="mb-2"><strong>Data Entry Staff</strong> — only sees the <strong>Data Entry</strong> tab (attendance, grants, foodbank, assets). Cannot edit events, photos, content, settings, or delete anything. Set up with <code>STAFF_EMAIL</code> / <code>STAFF_PASSWORD</code>.</p>
-              <p class="mb-0">All roles log in at the same page — the password typed decides which role they get.</p>
+          <div class="card" id="team-members-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span><i class="fas fa-users"></i> Team Members</span>
+              <button class="btn btn-sm btn-success" onclick="toggleAddUserForm()"><i class="fas fa-plus"></i> Add Member</button>
+            </div>
+            <div class="card-body p-0">
+              <div id="add-user-form-wrap" style="display:none;padding:1rem 1rem 0.5rem;border-bottom:1px solid #dee2e6">
+                <form id="add-user-form" onsubmit="addUser(event)" autocomplete="off">
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <label class="form-label small fw-semibold mb-1">Full Name</label>
+                      <input type="text" class="form-control form-control-sm" id="new-user-name" required placeholder="e.g. Sarah Johnson">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label small fw-semibold mb-1">Email Address</label>
+                      <input type="email" class="form-control form-control-sm" id="new-user-email" required placeholder="e.g. sarah@example.com">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small fw-semibold mb-1">Role</label>
+                      <select class="form-select form-select-sm" id="new-user-role">
+                        <option value="admin">Full Admin</option>
+                        <option value="editor" selected>Editor</option>
+                        <option value="data_entry">Data Entry</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small fw-semibold mb-1">Password</label>
+                      <input type="password" class="form-control form-control-sm" id="new-user-password" required placeholder="Min 8 characters" autocomplete="new-password">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small fw-semibold mb-1">Confirm Password</label>
+                      <input type="password" class="form-control form-control-sm" id="new-user-password2" required placeholder="Repeat password" autocomplete="new-password">
+                    </div>
+                    <div class="col-12 d-flex gap-2 pb-2">
+                      <button type="submit" class="btn btn-sm btn-success" id="add-user-btn"><i class="fas fa-user-plus"></i> Add Member</button>
+                      <button type="button" class="btn btn-sm btn-secondary" onclick="toggleAddUserForm()">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div id="users-table-wrap">
+                <div class="text-center text-muted py-3 small">Loading team members…</div>
+              </div>
+            </div>
+            <div class="card-footer small text-muted py-2">
+              <strong>Full Admin</strong> — full access, can delete, sees Settings &nbsp;·&nbsp;
+              <strong>Editor</strong> — add/edit events, photos, content &nbsp;·&nbsp;
+              <strong>Data Entry</strong> — attendance, grants, foodbank, assets only
             </div>
           </div>
         </div>
