@@ -242,6 +242,17 @@
       "featured": false,
       "paidEvent": false,
       "regOverrideOpen": false
+    },
+    {
+      "title": "Banquet & Awards Ceremony2",
+      "date": "2026-08-06",
+      "time": "01:00 PM",
+      "venue": "The Light Box, Quorum Business Park, Benton Ln, Newcastle upon Tyne NE12 8BT",
+      "description": "na",
+      "image": "",
+      "featured": false,
+      "paidEvent": false,
+      "regOverrideOpen": false
     }
   ]
 }
