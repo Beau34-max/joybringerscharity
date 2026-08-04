@@ -25,6 +25,7 @@
     { "source": "/cookies", "destination": "/cookies.html" },
     { "source": "/thank-you", "destination": "/thank-you.html" },
     { "source": "/thankyou", "destination": "/thankyou.html" },
-    { "source": "/terms", "destination": "/terms.html" }
+    { "source": "/terms",   "destination": "/terms.html" },
+    { "source": "/checkin", "destination": "/checkin.html" }
   ]
 }

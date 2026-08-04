@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Event Check-In — Joybringers</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root { --jb: #006526; --jb-light: #f0f7f2; --jb-mid: #d1fae5; }
+    * { box-sizing: border-box; }
+    body { background: var(--jb-light); min-height: 100vh; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+
+    .jb-header {
+      background: var(--jb);
+      color: #fff;
+      text-align: center;
+      padding: 28px 16px 22px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .jb-header h1 { font-size: 1.35rem; font-weight: 800; margin: 0 0 3px; letter-spacing: .3px; }
+    .jb-header p  { opacity: .85; margin: 0; font-size: .88rem; }
+
+    .page-wrap { max-width: 480px; margin: 0 auto; padding: 20px 14px 40px; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 12px rgba(0,0,0,.07);
+      padding: 22px 20px;
+      margin-bottom: 14px;
+    }
+
+    .step-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--jb);
+      margin-bottom: 6px;
+    }
+
+    .card label { font-weight: 600; font-size: .95rem; margin-bottom: 8px; display: block; }
+
+    .jb-select, .jb-input {
+      width: 100%;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: .97rem;
+      transition: border .15s;
+      background: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .jb-select:focus, .jb-input:focus { outline: none; border-color: var(--jb); }
+
+    /* search wrapper with icon */
+    .search-wrap { position: relative; }
+    .search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none; }
+    .search-wrap .jb-input { padding-left: 38px; }
+
+    /* result rows */
+    .result-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .result-row:active,
+    .result-row:hover { border-color: var(--jb); background: var(--jb-light); }
+    .result-ref  { font-family: monospace; font-size: .8rem; color: var(--jb); font-weight: 700; margin-right: 10px; white-space: nowrap; }
+    .result-name { font-weight: 600; font-size: .95rem; flex: 1; }
+    .result-fam  { font-size: .78rem; color: #6b7280; margin-top: 1px; }
+    .chevron     { color: #d1d5db; font-size: .8rem; margin-left: 8px; flex-shrink: 0; }
+
+    .already-tag {
+      display: inline-block;
+      background: var(--jb-mid);
+      color: #065f46;
+      font-size: .68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    /* check-in persons */
+    .person-row {
+      display: flex;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .person-row:last-child { border-bottom: none; }
+    .person-check {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--jb);
+      margin-right: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .person-info { flex: 1; }
+    .person-name { font-weight: 600; font-size: .95rem; }
+    .person-meta { font-size: .77rem; color: #6b7280; margin-top: 1px; }
+
+    .badge-child { background: #fef3c7; color: #92400e; font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+    .badge-adult { background: #e0e7ff; color: #3730a3; font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+
+    .btn-jb {
+      background: var(--jb);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 13px 24px;
+      width: 100%;
+      cursor: pointer;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-jb:hover   { background: #004d1e; }
+    .btn-jb:active  { background: #003a17; }
+    .btn-jb:disabled{ opacity: .6; cursor: not-allowed; }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: #6b7280;
+      font-size: .88rem;
+      cursor: pointer;
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      text-decoration: underline;
+    }
+
+    /* success */
+    .success-wrap { text-align: center; padding: 36px 20px; }
+    .success-icon { font-size: 4rem; color: var(--jb); margin-bottom: 14px; }
+    .success-wrap h3 { font-weight: 800; margin-bottom: 6px; }
+    .success-wrap p  { color: #6b7280; margin-bottom: 28px; font-size: .95rem; }
+
+    /* no-events message */
+    .empty-msg { text-align: center; padding: 40px 20px; color: #6b7280; }
+    .empty-msg i { font-size: 2.5rem; color: #d1d5db; margin-bottom: 12px; }
+
+    .booking-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .booking-ref  { font-family: monospace; font-size: 1.1rem; font-weight: 800; color: var(--jb); }
+    .booking-event{ font-size: .82rem; color: #6b7280; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+<div class="jb-header">
+  <h1><i class="fas fa-clipboard-check me-2"></i>Joybringers</h1>
+  <p>Event Attendance Check-In</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- Step 1 — Event -->
+  <div class="card" id="card-event">
+    <div class="step-label">Select your event</div>
+    <label for="event-select">Which event are you attending today?</label>
+    <select class="jb-select" id="event-select" onchange="onEventChange(this.value)">
+      <option value="">Loading events…</option>
+    </select>
+  </div>
+
+  <!-- Step 2 — Search -->
+  <div class="card" id="card-search" style="display:none">
+    <div class="step-label">Find your name</div>
+    <label for="search-input">Type your name or booking ref (JB-XXXX)</label>
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" class="jb-input" id="search-input"
+             placeholder="e.g. Smith or JB-0042"
+             oninput="onSearch(this.value)"
+             autocomplete="off" autocorrect="off"
+             autocapitalize="words" spellcheck="false">
+    </div>
+    <div id="search-results" class="mt-3"></div>
+  </div>
+
+  <!-- Step 3 — Check-in form -->
+  <div class="card" id="card-checkin" style="display:none">
+    <div class="step-label">Confirm who is here today</div>
+    <div class="booking-header">
+      <div>
+        <div class="booking-ref" id="ci-ref"></div>
+        <div class="booking-event" id="ci-event"></div>
+      </div>
+    </div>
+    <div id="ci-persons"></div>
+    <button class="btn-jb mt-4" id="btn-checkin" onclick="submitCheckin()">
+      <i class="fas fa-check-circle me-2"></i>Check In
+    </button>
+    <button class="btn-back" onclick="resetToSearch()">
+      <i class="fas fa-arrow-left me-1"></i>Back to search
+    </button>
+  </div>
+
+  <!-- Success -->
+  <div class="card" id="card-success" style="display:none">
+    <div class="success-wrap">
+      <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+      <h3>You're checked in!</h3>
+      <p id="success-msg">Your attendance has been recorded.</p>
+      <button class="btn-jb" onclick="resetToSearch()">Check In Someone Else</button>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+const API = '/api/checkin';
+let _participants = [];
+let _selected     = null;
+
+async function post(action, extra) {
+  const r = await fetch(API, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ action, ...extra })
+  });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || 'Something went wrong. Please try again.');
+  return j;
+}
+
+function show(id)  { document.getElementById(id).style.display = ''; }
+function hide(id)  { document.getElementById(id).style.display = 'none'; }
+
+// ─── Initialise: load events ──────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  const sel = document.getElementById('event-select');
+  try {
+    const events = await post('get_events');
+    if (!events.length) {
+      sel.innerHTML = '<option value="">No upcoming events found</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">— Select event —</option>' +
+      events.map(e => {
+        const d   = new Date(e.event_date + 'T12:00:00').toLocaleDateString('en-GB',
+                    { weekday: 'short', day: 'numeric', month: 'long' });
+        const val = `${e.event_name}|||${e.event_date}`;
+        return `<option value="${val.replace(/"/g,'&quot;')}">${e.event_name} — ${d}</option>`;
+      }).join('');
+
+    // Auto-select if only one event is on today
+    const today      = new Date().toISOString().slice(0, 10);
+    const todayEvts  = events.filter(e => e.event_date === today);
+    if (todayEvts.length === 1) {
+      sel.value = `${todayEvts[0].event_name}|||${todayEvts[0].event_date}`;
+      onEventChange(sel.value);
+    }
+  } catch (err) {
+    sel.innerHTML = `<option value="">Error loading events — refresh to try again</option>`;
+    console.error(err);
+  }
+});
+
+// ─── Event selected ────────────────────────────────────────────────────────────
+async function onEventChange(val) {
+  hide('card-search'); hide('card-checkin'); hide('card-success');
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('search-input').value = '';
+  _selected = null; _participants = [];
+  if (!val) return;
+
+  const [event_name, event_date] = val.split('|||');
+  show('card-search');
+  document.getElementById('search-input').focus();
+
+  // Load all participants for this event (names/refs only, sanitised server-side)
+  try {
+    _participants = await post('get_participants', { event_name, event_date });
+  } catch (err) {
+    _participants = [];
+    document.getElementById('search-results').innerHTML =
+      '<p class="text-danger small">Could not load participants. Please refresh.</p>';
+  }
+}
+
+// ─── Real-time name / ref search ───────────────────────────────────────────────
+function onSearch(q) {
+  const el   = document.getElementById('search-results');
+  const term = q.trim().toLowerCase();
+  if (!term || term.length < 2) { el.innerHTML = ''; return; }
+
+  const matches = _participants.filter(p => {
+    const full = `${p.first_name} ${p.last_name}`.toLowerCase();
+    const ref  = (p.reg_ref || '').toLowerCase();
+    const fam  = (p.family_members || []).map(f => (f.name || '').toLowerCase()).join(' ');
+    return full.includes(term) || ref.includes(term) || fam.includes(term);
+  });
+
+  if (!matches.length) {
+    el.innerHTML = `<p class="text-muted small text-center py-2 mb-0">
+      No results for "<strong>${q.trim()}</strong>". Try a different spelling or your booking ref.</p>`;
+    return;
+  }
+
+  el.innerHTML = matches.slice(0, 10).map(p => {
+    const pidx    = _participants.indexOf(p);
+    const famCnt  = (p.family_members || []).length;
+    const already = p.main_attended || (p.family_members || []).some(f => f.attended);
+    const famLine = famCnt
+      ? `<div class="result-fam">+ ${famCnt} family member${famCnt > 1 ? 's' : ''}</div>` : '';
+    const doneTag = already ? '<span class="already-tag"><i class="fas fa-check"></i> Checked in</span>' : '';
+    return `<div class="result-row" onclick="selectResult(${pidx})" role="button" tabindex="0"
+                 onkeydown="if(event.key==='Enter')selectResult(${pidx})">
+      <span class="result-ref">${p.reg_ref || '—'}</span>
+      <div style="flex:1">
+        <div class="result-name">${p.first_name} ${p.last_name}${doneTag}</div>
+        ${famLine}
+      </div>
+      <i class="fas fa-chevron-right chevron"></i>
+    </div>`;
+  }).join('');
+}
+
+// ─── Participant selected → show check-in form ────────────────────────────────
+function selectResult(pidx) {
+  _selected = _participants[pidx];
+  if (!_selected) return;
+
+  hide('card-search');
+  document.getElementById('ci-ref').textContent   = _selected.reg_ref  || '—';
+  document.getElementById('ci-event').textContent = _selected.event_name;
+
+  // Build flat list: main registrant first, then family members
+  const persons = [
+    {
+      name:     `${_selected.first_name} ${_selected.last_name}`,
+      type:     'main',
+      age_group: null,
+      attended:  !!_selected.main_attended,
+      idx:      -1
+    },
+    ...(_selected.family_members || []).map((fm, i) => ({ ...fm, idx: i }))
+  ];
+
+  document.getElementById('ci-persons').innerHTML = persons.map(p => {
+    const badge = p.type === 'child'
+      ? '<span class="badge-child">Child</span>'
+      : p.type !== 'main'
+        ? '<span class="badge-adult">Adult</span>'
+        : '';
+    const age = p.age_group ? `<span class="text-muted ms-1">· ${p.age_group}</span>` : '';
+    return `<label class="person-row" style="cursor:pointer;user-select:none">
+      <input type="checkbox" class="person-check ci-check" data-idx="${p.idx}" ${p.attended ? 'checked' : ''}>
+      <div class="person-info">
+        <div class="person-name">${p.name}</div>
+        <div class="person-meta">${badge}${age}</div>
+      </div>
+    </label>`;
+  }).join('');
+
+  const btn = document.getElementById('btn-checkin');
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Check In';
+
+  show('card-checkin');
+}
+
+// ─── Submit attendance ─────────────────────────────────────────────────────────
+async function submitCheckin() {
+  if (!_selected) return;
+
+  let main_attended   = false;
+  const family_attended = (_selected.family_members || []).map(() => false);
+
+  document.querySelectorAll('.ci-check').forEach(cb => {
+    const idx = parseInt(cb.dataset.idx, 10);
+    if (idx === -1)   main_attended       = cb.checked;
+    else if (idx >= 0) family_attended[idx] = cb.checked;
+  });
+
+  const btn = document.getElementById('btn-checkin');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving…';
+
+  try {
+    await post('checkin', { id: _selected.id, main_attended, family_attended });
+
+    // Update local cache so re-searches show the right state
+    const cached = _participants.find(p => p.id === _selected.id);
+    if (cached) {
+      cached.main_attended = main_attended;
+      (cached.family_members || []).forEach((fm, i) => { fm.attended = !!family_attended[i]; });
+    }
+
+    const checked = (main_attended ? 1 : 0) + family_attended.filter(Boolean).length;
+    document.getElementById('success-msg').textContent =
+      `${checked} person${checked !== 1 ? 's' : ''} marked as attended for ${_selected.event_name}.`;
+
+    hide('card-checkin');
+    show('card-success');
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Check In';
+    alert(err.message);
+  }
+}
+
+// ─── Navigation helpers ────────────────────────────────────────────────────────
+function resetToSearch() {
+  _selected = null;
+  hide('card-checkin');
+  hide('card-success');
+  document.getElementById('search-results').innerHTML = '';
+  show('card-search');
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-input').focus();
+}
+
+function resetAll() {
+  resetToSearch();
+}
+</script>
+
+</body>
+</html>

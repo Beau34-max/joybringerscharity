@@ -973,9 +973,11 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
 
   try {
     // ✅ CHANGE HERE: 1) Save to Supabase
-    const { error } = await window.supabaseClient
-      .from("event_registrations")  // ✅ CHANGE HERE: table name
-      .insert([payload]);
+    const { data: insertData, error } = await window.supabaseClient
+      .from("event_registrations")
+      .insert([payload])
+      .select('reg_ref')
+      .single();
 
     if (error) {
       console.error("Supabase error:", error);
@@ -1008,6 +1010,7 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
         event_location:    venueLine,
         joining_link_line: joiningLinkLine,
         number_of_persons: formData.get("number_of_persons"),
+        booking_ref:       insertData?.reg_ref || '',
       });
     } catch (err) {
       console.error("EmailJS error:", err);
