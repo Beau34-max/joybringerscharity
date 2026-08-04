@@ -1588,12 +1588,14 @@ let _exportRows = [];
 window._currentExportType = 'registrations';
 
 const EXPORT_SECTION_LABELS = {
-  registrations: 'Event Registrations',
-  attendance:    'Event Attendance',
-  grants:        'Grants & Income',
-  foodbank:      'Foodbank Distribution',
-  assets:        'Assets',
-  visitors:      'Visitors',
+  registrations:          'Event Registrations',
+  attendance:             'Event Attendance',
+  grants:                 'Grants & Income',
+  foodbank:               'Foodbank Distribution',
+  assets:                 'Assets',
+  visitors:               'Visitors',
+  volunteer_applications: 'Volunteer Applications',
+  volunteer_expenses:     'Volunteer Expenses',
 };
 
 async function loadExportTab() {

@@ -521,12 +521,14 @@ module.exports = async function handler(req, res) {
     if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
     const { type, date_from, date_to, event_name } = body;
     const tableMap = {
-      registrations: { table: 'event_registrations', dateCol: 'event_date' },
-      attendance:    { table: ATTENDANCE_TABLE,       dateCol: 'event_date' },
-      grants:        { table: GRANTS_TABLE,           dateCol: 'date_received' },
-      foodbank:      { table: FOODBANK_TABLE,         dateCol: 'distribution_date' },
-      assets:        { table: ASSETS_TABLE,           dateCol: 'date_acquired' },
-      visitors:      { table: VISITOR_TABLE,          dateCol: 'signed_in_at' },
+      registrations:         { table: 'event_registrations',    dateCol: 'event_date' },
+      attendance:            { table: ATTENDANCE_TABLE,          dateCol: 'event_date' },
+      grants:                { table: GRANTS_TABLE,              dateCol: 'date_received' },
+      foodbank:              { table: FOODBANK_TABLE,            dateCol: 'distribution_date' },
+      assets:                { table: ASSETS_TABLE,              dateCol: 'date_acquired' },
+      visitors:              { table: VISITOR_TABLE,             dateCol: 'signed_in_at' },
+      volunteer_applications:{ table: 'volunteer_applications',  dateCol: 'created_at' },
+      volunteer_expenses:    { table: 'volunteer_expenses',      dateCol: 'created_at' },
     };
     const entry = tableMap[type];
     if (!entry) return res.status(400).json({ error: 'Unknown export type.' });
