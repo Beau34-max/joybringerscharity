@@ -232,15 +232,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </div>
               <div class="col-md-6 form-group">
                 <label>How Many Person is attending *</label>
-                <select name="number_of_persons" class="form-control" required>
+                <select name="number_of_persons" id="number_of_persons" class="form-control" required onchange="onPersonCountChange(this.value)">
                   <option value="">Please Select</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>6+</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="6+">6+</option>
                 </select>
               </div>
 
@@ -329,25 +329,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
 
               <!-- ── FAMILY MEMBERS ────────────────────────────── -->
-              <div class="col-12 mt-3" id="family-members-section">
+              <div class="col-12 mt-3" id="family-members-section" style="display:none">
                 <hr class="my-2">
-                <h6 class="fw-semibold mb-1" style="color:#006526"><i class="fas fa-users"></i> Family Members <small class="text-muted font-weight-normal" style="font-size:0.85rem">(optional)</small></h6>
-                <p class="text-muted small mb-3">Registering a family? Add each child and any additional adults — attendance will be tracked individually per person.</p>
-
-                <div class="mb-3">
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <strong class="small">Children</strong>
-                    <button type="button" class="btn btn-sm btn-outline-success" onclick="addFamilyMember('child')"><i class="fas fa-plus"></i> Add Child</button>
-                  </div>
-                  <div id="reg-children-list"></div>
-                </div>
-
-                <div>
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <strong class="small">Additional Adults</strong>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addFamilyMember('adult')"><i class="fas fa-plus"></i> Add Adult</button>
-                  </div>
-                  <div id="reg-adults-list"></div>
+                <h6 class="fw-semibold mb-1" style="color:#006526"><i class="fas fa-users"></i> People Attending</h6>
+                <p class="text-muted small mb-3">Enter the name and age range for each additional person. Attendance is tracked individually.</p>
+                <div id="reg-family-list"></div>
+                <div class="mt-2">
+                  <button type="button" class="btn btn-sm btn-outline-success mr-2" onclick="addFamilyMember('child')"><i class="fas fa-plus"></i> Add Child</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addFamilyMember('adult')"><i class="fas fa-plus"></i> Add Adult</button>
                 </div>
               </div>
 
@@ -878,33 +867,52 @@ function toggleAllergyQuestionForEvent(locationText) {
 /* ── Family member helpers ─────────────────────────── */
 const AGE_GROUPS = ['0–6','7–11','12–15','16–17','18–25','26 & Above'];
 
-function addFamilyMember(type) {
-  const listId = type === 'child' ? 'reg-children-list' : 'reg-adults-list';
-  const list   = document.getElementById(listId);
-  const n      = list.children.length + 1;
-  const label  = type === 'child' ? `Child ${n}` : `Adult ${n}`;
-  const div    = document.createElement('div');
-  div.className = 'fm-row d-flex align-items-center mb-2';
-  div.dataset.type = type;
-  div.innerHTML = `
-    <input type="text" class="form-control form-control-sm fm-name mr-2" placeholder="${label} Name" style="flex:1" required>
-    <select class="form-control form-control-sm fm-age mr-2" style="width:130px">
-      ${AGE_GROUPS.map(g => `<option value="${g}">${g}</option>`).join('')}
-    </select>
-    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.fm-row').remove(); updatePersonCount();"
-            title="Remove" style="padding:2px 8px">&times;</button>`;
-  list.appendChild(div);
-  updatePersonCount();
+function onPersonCountChange(val) {
+  const list    = document.getElementById('reg-family-list');
+  const section = document.getElementById('family-members-section');
+  list.innerHTML = '';
+  const n = val === '6+' ? 6 : parseInt(val);
+  if (!n || n <= 1) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  for (let i = 2; i <= n; i++) _addPersonRow(i, 'adult');
 }
 
-function updatePersonCount() {
-  const count = 1 + document.querySelectorAll('.fm-row').length;
-  const el = document.querySelector('[name="number_of_persons"]');
-  if (el && el.tagName === 'INPUT') el.value = count;
+function _addPersonRow(num, type) {
+  const list  = document.getElementById('reg-family-list');
+  const label = type === 'child' ? `Child` : `Person ${num}`;
+  const div   = document.createElement('div');
+  div.className    = 'fm-row d-flex align-items-center mb-2';
+  div.dataset.type = type;
+  div.innerHTML = `
+    <span class="text-muted small mr-2" style="min-width:68px;white-space:nowrap">${label}</span>
+    <input type="text" class="form-control form-control-sm fm-name mr-2" placeholder="Full Name" style="flex:1" required>
+    <select class="form-control form-control-sm fm-age mr-2" style="width:120px">
+      ${AGE_GROUPS.map(g => `<option value="${g}">${g}</option>`).join('')}
+    </select>
+    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.fm-row').remove(); syncPersonCount();"
+            style="padding:2px 8px">&times;</button>`;
+  list.appendChild(div);
+}
+
+function addFamilyMember(type) {
+  const list = document.getElementById('reg-family-list');
+  const n    = list.children.length + 2;
+  _addPersonRow(n, type);
+  document.getElementById('family-members-section').style.display = '';
+  syncPersonCount();
+}
+
+function syncPersonCount() {
+  const total  = 1 + document.querySelectorAll('#reg-family-list .fm-row').length;
+  const select = document.getElementById('number_of_persons');
+  if (!select) return;
+  const match = [...select.options].find(o => o.value === String(total));
+  if (match)        select.value = match.value;
+  else if (total >= 6) select.value = '6+';
 }
 
 function getFamilyMembers() {
-  return [...document.querySelectorAll('.fm-row')].map(row => ({
+  return [...document.querySelectorAll('#reg-family-list .fm-row')].map(row => ({
     name:      row.querySelector('.fm-name').value.trim(),
     type:      row.dataset.type,
     age_group: row.querySelector('.fm-age').value,
@@ -1025,6 +1033,8 @@ if (ticketType === "paid_family") payUrl = STRIPE_FAMILY_LINK;
 setTimeout(() => {
   $('#registerModal').modal('hide');
   form.reset();
+  document.getElementById('reg-family-list').innerHTML = '';
+  document.getElementById('family-members-section').style.display = 'none';
 
   // ✅ re-enable button (safety)
   btn.disabled = false;
