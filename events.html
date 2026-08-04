@@ -328,6 +328,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   </select>
                 </div>
 
+              <!-- ── FAMILY MEMBERS ────────────────────────────── -->
+              <div class="col-12 mt-3" id="family-members-section">
+                <hr class="my-2">
+                <h6 class="fw-semibold mb-1" style="color:#006526"><i class="fas fa-users"></i> Family Members <small class="text-muted font-weight-normal" style="font-size:0.85rem">(optional)</small></h6>
+                <p class="text-muted small mb-3">Registering a family? Add each child and any additional adults — attendance will be tracked individually per person.</p>
+
+                <div class="mb-3">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <strong class="small">Children</strong>
+                    <button type="button" class="btn btn-sm btn-outline-success" onclick="addFamilyMember('child')"><i class="fas fa-plus"></i> Add Child</button>
+                  </div>
+                  <div id="reg-children-list"></div>
+                </div>
+
+                <div>
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <strong class="small">Additional Adults</strong>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addFamilyMember('adult')"><i class="fas fa-plus"></i> Add Adult</button>
+                  </div>
+                  <div id="reg-adults-list"></div>
+                </div>
+              </div>
+
             </div>
           </div>
         <div class="modal-footer">
@@ -852,6 +875,44 @@ function toggleAllergyQuestionForEvent(locationText) {
 </script>
 
 <script>
+/* ── Family member helpers ─────────────────────────── */
+const AGE_GROUPS = ['0–6','7–11','12–15','16–17','18–25','26 & Above'];
+
+function addFamilyMember(type) {
+  const listId = type === 'child' ? 'reg-children-list' : 'reg-adults-list';
+  const list   = document.getElementById(listId);
+  const n      = list.children.length + 1;
+  const label  = type === 'child' ? `Child ${n}` : `Adult ${n}`;
+  const div    = document.createElement('div');
+  div.className = 'fm-row d-flex align-items-center mb-2';
+  div.dataset.type = type;
+  div.innerHTML = `
+    <input type="text" class="form-control form-control-sm fm-name mr-2" placeholder="${label} Name" style="flex:1" required>
+    <select class="form-control form-control-sm fm-age mr-2" style="width:130px">
+      ${AGE_GROUPS.map(g => `<option value="${g}">${g}</option>`).join('')}
+    </select>
+    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.fm-row').remove(); updatePersonCount();"
+            title="Remove" style="padding:2px 8px">&times;</button>`;
+  list.appendChild(div);
+  updatePersonCount();
+}
+
+function updatePersonCount() {
+  const count = 1 + document.querySelectorAll('.fm-row').length;
+  const el = document.querySelector('[name="number_of_persons"]');
+  if (el && el.tagName === 'INPUT') el.value = count;
+}
+
+function getFamilyMembers() {
+  return [...document.querySelectorAll('.fm-row')].map(row => ({
+    name:      row.querySelector('.fm-name').value.trim(),
+    type:      row.dataset.type,
+    age_group: row.querySelector('.fm-age').value,
+    attended:  false
+  })).filter(m => m.name);
+}
+/* ── End family member helpers ─────────────────────── */
+
 document.getElementById("eventRegisterForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
@@ -895,7 +956,10 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
     is_paid_event: isPaidEvent,
     ticket_type: isPaidEvent ? (formData.get("ticket_type") || null) : null,
 
-    source: "joybringerscharity.org/events"
+    source: "joybringerscharity.org/events",
+    family_members: getFamilyMembers(),
+    number_of_persons: String(1 + getFamilyMembers().length),
+    main_attended: false
   };
 
   try {

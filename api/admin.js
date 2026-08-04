@@ -476,6 +476,46 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  if (action === 'get_event_list_for_attendance') {
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/event_registrations?select=event_name,event_date&order=event_date.desc&limit=5000`, { headers: sbHeaders() });
+    const data = r.ok ? await r.json() : [];
+    const map = {};
+    for (const row of (Array.isArray(data) ? data : [])) {
+      const key = `${row.event_name}|||${row.event_date}`;
+      if (!map[key]) map[key] = { event_name: row.event_name, event_date: row.event_date, count: 0 };
+      map[key].count++;
+    }
+    return res.status(200).json(Object.values(map).sort((a, b) => b.event_date?.localeCompare(a.event_date)));
+  }
+
+  if (action === 'get_registrations_for_event') {
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const { event_name, event_date } = body;
+    if (!event_name) return res.status(400).json({ error: 'event_name is required.' });
+    let url = `${SUPABASE_URL}/rest/v1/event_registrations?event_name=eq.${encodeURIComponent(event_name)}&order=created_at.asc&limit=2000`;
+    if (event_date) url += `&event_date=eq.${encodeURIComponent(event_date)}`;
+    const r = await fetch(url, { headers: sbHeaders() });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
+  if (action === 'save_attendance') {
+    if (!['admin', 'editor'].includes(role)) return res.status(403).json({ error: 'Access denied.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const { updates } = body;
+    if (!Array.isArray(updates) || !updates.length) return res.status(400).json({ error: 'No updates provided.' });
+    const results = await Promise.all(updates.map(async ({ id, main_attended, family_members }) => {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/event_registrations?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { ...sbHeaders(), Prefer: 'return=minimal' },
+        body: JSON.stringify({ main_attended: !!main_attended, family_members: family_members || [] })
+      });
+      return { id, ok: r.ok };
+    }));
+    return res.status(200).json(results);
+  }
+
   if (action === 'export_data') {
     if (!['admin', 'editor'].includes(role)) return res.status(403).json({ error: 'Access denied.' });
     if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });

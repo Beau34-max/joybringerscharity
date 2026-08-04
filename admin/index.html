@@ -96,6 +96,9 @@
       <a href="#" class="sidebar-link" data-tab="visitors" onclick="switchTab('visitors');return false;">
         <i class="fas fa-id-badge"></i> Visitors
       </a>
+      <a href="#" class="sidebar-link" data-tab="attendance" data-roles="admin,editor" onclick="switchTab('attendance');return false;">
+        <i class="fas fa-clipboard-check"></i> Attendance
+      </a>
       <a href="#" class="sidebar-link" data-tab="exports" data-roles="admin,editor" onclick="switchTab('exports');return false;">
         <i class="fas fa-file-export"></i> Export Data
       </a>
@@ -820,6 +823,54 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ============ ATTENDANCE TAB ============ -->
+    <div id="tab-attendance" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-clipboard-check text-success"></i> Event Attendance</h2>
+          <p class="text-muted mb-0 small">Mark which registered participants actually attended each event.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body py-3">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small mb-1">Select Event</label>
+              <select class="form-select" id="att-event-select">
+                <option value="">Loading events…</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-success w-100" onclick="loadEventRegistrations()">
+                <i class="fas fa-users"></i> Load Participants
+              </button>
+            </div>
+            <div class="col-md-3" id="att-save-wrap" style="display:none">
+              <button class="btn btn-primary w-100" onclick="saveAttendance()">
+                <i class="fas fa-save"></i> Save Attendance
+              </button>
+            </div>
+          </div>
+          <div class="row g-3 mt-1" id="att-filter-row" style="display:none">
+            <div class="col-md-4">
+              <input type="text" class="form-control form-control-sm" id="att-search"
+                     placeholder="Search name…" oninput="filterAttendanceTable()">
+            </div>
+            <div class="col-auto d-flex align-items-center gap-2">
+              <span class="text-muted small fw-semibold" id="att-stats"></span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="markAllAttended(true)">Mark All Present</button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="markAllAttended(false)">Clear All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="att-participants-wrap">
+        <p class="text-muted text-center py-4">Select an event above to load participants.</p>
       </div>
     </div>
 

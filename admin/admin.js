@@ -121,19 +121,19 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).style.display = 'block';
   const link = document.querySelector(`[data-tab="${tabId}"]`);
   if (link) link.classList.add('active');
-  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', exports: 'Export Data', settings: 'Settings' };
+  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', attendance: 'Event Attendance', exports: 'Export Data', settings: 'Settings' };
   document.getElementById('page-title').textContent = titles[tabId] || tabId;
-  // close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-backdrop').classList.remove('open');
 
-  if (tabId === 'events')    loadEvents();
-  if (tabId === 'photos')    { renderGallery('events'); renderGallery('partners'); }
-  if (tabId === 'content')   loadContentTab();
-  if (tabId === 'dataentry') loadDataEntryTab();
-  if (tabId === 'visitors')  initVisitorTab();
-  if (tabId === 'exports')   loadExportTab();
-  if (tabId === 'settings')  loadUsers();
+  if (tabId === 'events')     loadEvents();
+  if (tabId === 'photos')     { renderGallery('events'); renderGallery('partners'); }
+  if (tabId === 'content')    loadContentTab();
+  if (tabId === 'dataentry')  loadDataEntryTab();
+  if (tabId === 'visitors')   initVisitorTab();
+  if (tabId === 'attendance') loadAttendanceTab();
+  if (tabId === 'exports')    loadExportTab();
+  if (tabId === 'settings')   loadUsers();
 }
 
 /* ── Role-based UI restriction ───────────────────────────── */
@@ -1407,6 +1407,180 @@ async function resendInvite(i) {
 }
 
 /* ════════════════════════════════════════════════════════════
+   EVENT ATTENDANCE
+   ════════════════════════════════════════════════════════════ */
+
+let _attendanceData = [];
+let _regDataById    = {};
+
+async function loadAttendanceTab() {
+  const sel = document.getElementById('att-event-select');
+  sel.innerHTML = '<option value="">Loading…</option>';
+  document.getElementById('att-save-wrap').style.display   = 'none';
+  document.getElementById('att-filter-row').style.display  = 'none';
+  document.getElementById('att-participants-wrap').innerHTML =
+    '<p class="text-muted text-center py-4">Select an event above to load participants.</p>';
+  try {
+    const events = await apiCall('get_event_list_for_attendance');
+    if (!Array.isArray(events) || !events.length) {
+      sel.innerHTML = '<option value="">No registrations found</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">Select an event…</option>' +
+      events.map(e => {
+        const key   = `${e.event_name}|||${e.event_date}`;
+        const label = `${e.event_name} — ${fmtDate(e.event_date)} (${e.count} registration${e.count !== 1 ? 's' : ''})`;
+        return `<option value="${key.replace(/"/g, '&quot;')}">${label}</option>`;
+      }).join('');
+  } catch (err) {
+    sel.innerHTML = `<option value="">Error: ${err.message}</option>`;
+  }
+}
+
+async function loadEventRegistrations() {
+  const sel = document.getElementById('att-event-select');
+  if (!sel.value) { showAlert('warning', 'Please select an event first.'); return; }
+  const [event_name, event_date] = sel.value.split('|||');
+  const wrap = document.getElementById('att-participants-wrap');
+  wrap.innerHTML = '<div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading…</div>';
+  document.getElementById('att-save-wrap').style.display  = 'none';
+  document.getElementById('att-filter-row').style.display = 'none';
+  try {
+    const regs = await apiCall('get_registrations_for_event', { event_name, event_date });
+    _regDataById    = {};
+    _attendanceData = [];
+    for (const reg of (Array.isArray(regs) ? regs : [])) {
+      _regDataById[reg.id] = reg;
+      _attendanceData.push({
+        regId: reg.id, regRef: reg.reg_ref || '—',
+        name: `${reg.first_name} ${reg.last_name}`,
+        type: 'Main', age_group: reg.age_range || '—',
+        email: reg.email, personIndex: -1,
+        attended: !!reg.main_attended
+      });
+      (reg.family_members || []).forEach((fm, i) => {
+        _attendanceData.push({
+          regId: reg.id, regRef: reg.reg_ref || '—',
+          name: fm.name, type: fm.type === 'child' ? 'Child' : 'Adult',
+          age_group: fm.age_group || '—', email: '',
+          personIndex: i, attended: !!fm.attended
+        });
+      });
+    }
+    renderAttendanceTable(_attendanceData);
+    document.getElementById('att-save-wrap').style.display  = '';
+    document.getElementById('att-filter-row').style.display = '';
+  } catch (err) {
+    wrap.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+  }
+}
+
+function renderAttendanceTable(rows) {
+  const wrap    = document.getElementById('att-participants-wrap');
+  const attended = rows.filter(r => r.attended).length;
+  document.getElementById('att-stats').textContent =
+    `${attended} / ${rows.length} attended`;
+
+  if (!rows.length) {
+    wrap.innerHTML = '<div class="card"><div class="card-body text-center text-muted py-4">No registrations found for this event.</div></div>';
+    return;
+  }
+
+  const TYPE_BADGE = {
+    Main:  'bg-primary',
+    Child: 'bg-warning text-dark',
+    Adult: 'bg-secondary'
+  };
+
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0" id="att-table">
+            <thead class="table-light">
+              <tr><th>Ref</th><th>Name</th><th>Type</th><th>Age Group</th><th>Email</th><th class="text-center">Attended</th></tr>
+            </thead>
+            <tbody>
+              ${rows.map((r, i) => `
+                <tr class="${r.attended ? 'table-success' : ''}" data-idx="${i}">
+                  <td class="text-nowrap"><code>${r.regRef}</code></td>
+                  <td class="fw-semibold">${r.name}</td>
+                  <td><span class="badge ${TYPE_BADGE[r.type] || 'bg-secondary'}">${r.type}</span></td>
+                  <td class="text-nowrap">${r.age_group}</td>
+                  <td class="text-muted small">${r.email || '—'}</td>
+                  <td class="text-center">
+                    <input type="checkbox" class="form-check-input att-check" data-idx="${i}"
+                           ${r.attended ? 'checked' : ''} onchange="toggleAttendance(${i}, this.checked)">
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleAttendance(idx, checked) {
+  _attendanceData[idx].attended = checked;
+  const tr = document.querySelector(`tr[data-idx="${idx}"]`);
+  if (tr) tr.className = checked ? 'table-success' : '';
+  const attended = _attendanceData.filter(r => r.attended).length;
+  document.getElementById('att-stats').textContent =
+    `${attended} / ${_attendanceData.length} attended`;
+}
+
+function markAllAttended(val) {
+  _attendanceData.forEach((r, i) => {
+    r.attended = val;
+    const cb = document.querySelector(`.att-check[data-idx="${i}"]`);
+    const tr = document.querySelector(`tr[data-idx="${i}"]`);
+    if (cb) cb.checked = val;
+    if (tr) tr.className = val ? 'table-success' : '';
+  });
+  const attended = val ? _attendanceData.length : 0;
+  document.getElementById('att-stats').textContent =
+    `${attended} / ${_attendanceData.length} attended`;
+}
+
+function filterAttendanceTable() {
+  const q = document.getElementById('att-search').value.toLowerCase();
+  const filtered = q
+    ? _attendanceData.filter(r => r.name.toLowerCase().includes(q) || r.email.toLowerCase().includes(q))
+    : _attendanceData;
+  renderAttendanceTable(filtered);
+}
+
+async function saveAttendance() {
+  const byReg = {};
+  for (const row of _attendanceData) {
+    if (!byReg[row.regId]) {
+      const orig = _regDataById[row.regId];
+      byReg[row.regId] = {
+        id: row.regId,
+        main_attended: false,
+        family_members: JSON.parse(JSON.stringify(orig.family_members || []))
+      };
+    }
+    if (row.personIndex === -1) {
+      byReg[row.regId].main_attended = row.attended;
+    } else {
+      if (byReg[row.regId].family_members[row.personIndex]) {
+        byReg[row.regId].family_members[row.personIndex].attended = row.attended;
+      }
+    }
+  }
+  showLoading('Saving attendance…');
+  try {
+    await apiCall('save_attendance', { updates: Object.values(byReg) });
+    hideLoading();
+    showAlert('success', '<i class="fas fa-check-circle"></i> Attendance saved successfully.');
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
    EXPORT DATA
    ════════════════════════════════════════════════════════════ */
 
@@ -1455,7 +1629,8 @@ async function loadExportSection(type) {
       date_to:     to   || null,
       event_name:  (type === 'registrations' || type === 'attendance') && eventName ? eventName : null
     });
-    _exportRows = Array.isArray(data) ? data : [];
+    const raw = Array.isArray(data) ? data : [];
+    _exportRows = type === 'registrations' ? flattenRegistrations(raw) : raw;
     renderExportTable(type, _exportRows);
   } catch (err) {
     wrap.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
@@ -1506,6 +1681,43 @@ function renderExportTable(type, rows) {
         </div>
       </div>
     </div>`;
+}
+
+function flattenRegistrations(rows) {
+  const flat = [];
+  for (const r of rows) {
+    flat.push({
+      ref:          r.reg_ref  || '—',
+      name:         `${r.first_name} ${r.last_name}`,
+      type:         'Main Registrant',
+      age_group:    r.age_range || '—',
+      email:        r.email    || '',
+      phone:        r.phone    || '',
+      gender:       r.gender   || '',
+      event_name:   r.event_name,
+      event_date:   r.event_date,
+      location:     r.location || '',
+      hear_about_us: r.hear_about_us || '',
+      attended:     r.main_attended ? 'Yes' : 'No',
+    });
+    for (const fm of (r.family_members || [])) {
+      flat.push({
+        ref:          r.reg_ref  || '—',
+        name:         fm.name,
+        type:         fm.type === 'child' ? 'Child' : 'Additional Adult',
+        age_group:    fm.age_group || '—',
+        email:        '',
+        phone:        '',
+        gender:       '',
+        event_name:   r.event_name,
+        event_date:   r.event_date,
+        location:     '',
+        hear_about_us: '',
+        attended:     fm.attended ? 'Yes' : 'No',
+      });
+    }
+  }
+  return flat;
 }
 
 function setExportRange(preset) {
