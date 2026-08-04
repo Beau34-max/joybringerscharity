@@ -911,13 +911,14 @@ function syncPersonCount() {
   else if (total >= 6) select.value = '6+';
 }
 
+const CHILD_AGE_GROUPS = ['0–6','7–11','12–15','0-6','7-11','12-15'];
+function typeFromAge(ag) { return CHILD_AGE_GROUPS.includes(ag) ? 'child' : 'adult'; }
+
 function getFamilyMembers() {
-  return [...document.querySelectorAll('#reg-family-list .fm-row')].map(row => ({
-    name:      row.querySelector('.fm-name').value.trim(),
-    type:      row.dataset.type,
-    age_group: row.querySelector('.fm-age').value,
-    attended:  false
-  })).filter(m => m.name);
+  return [...document.querySelectorAll('#reg-family-list .fm-row')].map(row => {
+    const age_group = row.querySelector('.fm-age').value;
+    return { name: row.querySelector('.fm-name').value.trim(), type: typeFromAge(age_group), age_group, attended: false };
+  }).filter(m => m.name);
 }
 /* ── End family member helpers ─────────────────────── */
 
