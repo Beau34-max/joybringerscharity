@@ -121,7 +121,7 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).style.display = 'block';
   const link = document.querySelector(`[data-tab="${tabId}"]`);
   if (link) link.classList.add('active');
-  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', settings: 'Settings' };
+  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', exports: 'Export Data', settings: 'Settings' };
   document.getElementById('page-title').textContent = titles[tabId] || tabId;
   // close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
@@ -132,6 +132,7 @@ function switchTab(tabId) {
   if (tabId === 'content')   loadContentTab();
   if (tabId === 'dataentry') loadDataEntryTab();
   if (tabId === 'visitors')  initVisitorTab();
+  if (tabId === 'exports')   loadExportTab();
   if (tabId === 'settings')  loadUsers();
 }
 
@@ -1403,6 +1404,80 @@ async function resendInvite(i) {
   } catch (err) {
     showAlert('danger', err.message);
   }
+}
+
+/* ════════════════════════════════════════════════════════════
+   EXPORT DATA
+   ════════════════════════════════════════════════════════════ */
+
+async function loadExportTab() {
+  setExportRange('month');
+  const sel = document.getElementById('exp-event-filter');
+  try {
+    const rows = await apiCall('list_attendance');
+    const names = [...new Set((rows || []).map(r => r.event_name).filter(Boolean))].sort();
+    sel.innerHTML = '<option value="">All events</option>' +
+      names.map(n => `<option value="${n.replace(/"/g, '&quot;')}">${n}</option>`).join('');
+  } catch (_) {}
+}
+
+function setExportRange(preset) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const y = now.getFullYear(), m = now.getMonth();
+  let from, to;
+  if (preset === 'month') {
+    from = `${y}-${pad(m + 1)}-01`;
+    to   = `${y}-${pad(m + 1)}-${pad(new Date(y, m + 1, 0).getDate())}`;
+  } else if (preset === 'year') {
+    from = `${y}-01-01`;
+    to   = `${y}-12-31`;
+  } else {
+    from = '2020-01-01';
+    to   = `${y}-12-31`;
+  }
+  document.getElementById('exp-date-from').value = from;
+  document.getElementById('exp-date-to').value   = to;
+}
+
+async function runExport(type) {
+  const from      = document.getElementById('exp-date-from').value;
+  const to        = document.getElementById('exp-date-to').value;
+  const eventName = document.getElementById('exp-event-filter').value;
+  if (!from || !to) { showAlert('warning', 'Please select a date range.'); return; }
+  showLoading('Preparing export…');
+  try {
+    const data = await apiCall('export_data', { type, date_from: from, date_to: to, event_name: eventName || null });
+    hideLoading();
+    if (!Array.isArray(data) || !data.length) {
+      showAlert('warning', 'No records found for that date range.');
+      return;
+    }
+    downloadCsv(`joybringers-${type}-${from}-to-${to}.csv`, data);
+    showAlert('success', `<i class="fas fa-check-circle"></i> Exported ${data.length} record${data.length !== 1 ? 's' : ''}.`);
+  } catch (err) {
+    hideLoading();
+    showAlert('danger', err.message);
+  }
+}
+
+function downloadCsv(filename, rows) {
+  if (!rows.length) return;
+  const exclude = ['id', 'created_at', 'entered_by'];
+  const keys = Object.keys(rows[0]).filter(k => !exclude.includes(k));
+  const header = keys.map(k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+  const isTimestamp = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v);
+  const lines = rows.map(r => keys.map(k => {
+    let v = r[k] ?? '';
+    if (isTimestamp(v)) v = new Date(v).toLocaleString('en-GB');
+    return `"${String(v).replace(/"/g, '""')}"`;
+  }).join(','));
+  const csv  = '﻿' + [header.join(','), ...lines].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
 }
 
 function exportVisitorsCsv() {

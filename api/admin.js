@@ -476,5 +476,30 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  if (action === 'export_data') {
+    if (!['admin', 'editor'].includes(role)) return res.status(403).json({ error: 'Access denied.' });
+    if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
+    const { type, date_from, date_to, event_name } = body;
+    const tableMap = {
+      attendance: { table: ATTENDANCE_TABLE, dateCol: 'event_date' },
+      grants:     { table: GRANTS_TABLE,     dateCol: 'date_received' },
+      foodbank:   { table: FOODBANK_TABLE,   dateCol: 'distribution_date' },
+      assets:     { table: ASSETS_TABLE,     dateCol: 'date_acquired' },
+      visitors:   { table: VISITOR_TABLE,    dateCol: 'signed_in_at' },
+    };
+    const entry = tableMap[type];
+    if (!entry) return res.status(400).json({ error: 'Unknown export type.' });
+    let url = `${SUPABASE_URL}/rest/v1/${entry.table}?order=${entry.dateCol}.asc&limit=10000`;
+    if (date_from) url += `&${entry.dateCol}=gte.${encodeURIComponent(date_from)}`;
+    if (date_to) {
+      const toVal = entry.dateCol === 'signed_in_at' ? `${date_to}T23:59:59` : date_to;
+      url += `&${entry.dateCol}=lte.${encodeURIComponent(toVal)}`;
+    }
+    if (type === 'attendance' && event_name) url += `&event_name=eq.${encodeURIComponent(event_name)}`;
+    const r = await fetch(url, { headers: sbHeaders() });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  }
+
   return res.status(400).json({ error: `Unknown action: ${action}` });
 };
