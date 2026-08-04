@@ -828,114 +828,56 @@
       <div class="tab-header">
         <div>
           <h2 class="mb-1"><i class="fas fa-file-export text-success"></i> Export Data</h2>
-          <p class="text-muted mb-0 small">Download records as CSV for reporting, grants, or audits.</p>
+          <p class="text-muted mb-0 small">View and download records as CSV.</p>
         </div>
       </div>
 
-      <!-- Date Range -->
-      <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-calendar-range"></i> Date Range &amp; Filters</div>
-        <div class="card-body">
-          <div class="row g-3 align-items-end">
+      <!-- Section switcher + filters -->
+      <div class="card mb-3">
+        <div class="card-body py-3">
+          <div class="d-flex flex-wrap gap-2 mb-3" id="exports-nav">
+            <button class="btn btn-success btn-sm"          id="exp-tab-registrations" onclick="switchExportSection('registrations')"><i class="fas fa-clipboard-check"></i> Event Registrations</button>
+            <button class="btn btn-outline-secondary btn-sm" id="exp-tab-attendance"    onclick="switchExportSection('attendance')"><i class="fas fa-user-check"></i> Attendance</button>
+            <button class="btn btn-outline-secondary btn-sm" id="exp-tab-grants"        onclick="switchExportSection('grants')"><i class="fas fa-hand-holding-dollar"></i> Grants &amp; Income</button>
+            <button class="btn btn-outline-secondary btn-sm" id="exp-tab-foodbank"      onclick="switchExportSection('foodbank')"><i class="fas fa-shopping-basket"></i> Foodbank</button>
+            <button class="btn btn-outline-secondary btn-sm" id="exp-tab-assets"        onclick="switchExportSection('assets')"><i class="fas fa-box-open"></i> Assets</button>
+            <button class="btn btn-outline-secondary btn-sm" id="exp-tab-visitors"      onclick="switchExportSection('visitors')"><i class="fas fa-id-badge"></i> Visitors</button>
+          </div>
+          <div class="row g-2 align-items-end">
             <div class="col-md-3">
-              <label class="form-label fw-semibold small">From</label>
-              <input type="date" class="form-control" id="exp-date-from">
+              <label class="form-label small fw-semibold mb-1">From</label>
+              <input type="date" class="form-control form-control-sm" id="exp-date-from">
             </div>
             <div class="col-md-3">
-              <label class="form-label fw-semibold small">To</label>
-              <input type="date" class="form-control" id="exp-date-to">
+              <label class="form-label small fw-semibold mb-1">To</label>
+              <input type="date" class="form-control form-control-sm" id="exp-date-to">
             </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold small">Quick presets</label>
-              <div class="d-flex gap-2 flex-wrap">
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold mb-1">Quick presets</label>
+              <div class="d-flex gap-1 flex-wrap">
                 <button class="btn btn-outline-secondary btn-sm" onclick="setExportRange('month')">This Month</button>
                 <button class="btn btn-outline-secondary btn-sm" onclick="setExportRange('year')">This Year</button>
                 <button class="btn btn-outline-secondary btn-sm" onclick="setExportRange('all')">All Time</button>
               </div>
             </div>
+            <div class="col-md-2">
+              <button class="btn btn-success btn-sm w-100" onclick="loadExportSection(window._currentExportType)">
+                <i class="fas fa-search"></i> Load
+              </button>
+            </div>
           </div>
-          <div class="row g-3 mt-1">
+          <div class="row g-2 mt-1" id="exp-event-filter-row" style="display:none">
             <div class="col-md-6">
-              <label class="form-label fw-semibold small">Filter by Event Name <small class="text-muted fw-normal">(attendance only, optional)</small></label>
-              <select class="form-select" id="exp-event-filter">
-                <option value="">All events</option>
-              </select>
+              <label class="form-label small fw-semibold mb-1">Filter by Event Name <small class="text-muted fw-normal">(optional)</small></label>
+              <input type="text" class="form-control form-control-sm" id="exp-event-filter" placeholder="e.g. Summer Bootcamp">
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Export Cards -->
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100">
-            <div class="card-header"><i class="fas fa-user-check text-success"></i> Event Attendance</div>
-            <div class="card-body">
-              <p class="text-muted small mb-0">Event name, date, attendees count, volunteer, notes.</p>
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-success w-100" onclick="runExport('attendance')">
-                <i class="fas fa-download"></i> Export Attendance CSV
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100">
-            <div class="card-header"><i class="fas fa-hand-holding-dollar text-success"></i> Grants &amp; Income</div>
-            <div class="card-body">
-              <p class="text-muted small mb-0">Grantor, amount, payment method, date received, reference, volunteer, notes.</p>
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-success w-100" onclick="runExport('grants')">
-                <i class="fas fa-download"></i> Export Grants CSV
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100">
-            <div class="card-header"><i class="fas fa-shopping-basket text-success"></i> Foodbank Distribution</div>
-            <div class="card-body">
-              <p class="text-muted small mb-0">Distribution date, people count, households, volunteer, notes.</p>
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-success w-100" onclick="runExport('foodbank')">
-                <i class="fas fa-download"></i> Export Foodbank CSV
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100">
-            <div class="card-header"><i class="fas fa-box-open text-success"></i> Assets</div>
-            <div class="card-body">
-              <p class="text-muted small mb-0">Asset name, category, acquisition type, value, date, source, condition, volunteer, notes.</p>
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-success w-100" onclick="runExport('assets')">
-                <i class="fas fa-download"></i> Export Assets CSV
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100">
-            <div class="card-header"><i class="fas fa-id-badge text-success"></i> Visitors</div>
-            <div class="card-body">
-              <p class="text-muted small mb-0">Visitor name, organisation, host, purpose, DBS, sign-in/out times.</p>
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-success w-100" onclick="runExport('visitors')">
-                <i class="fas fa-download"></i> Export Visitors CSV
-              </button>
-            </div>
-          </div>
-        </div>
+      <!-- Results table -->
+      <div id="exports-section-wrap">
+        <p class="text-muted text-center py-4">Loading…</p>
       </div>
     </div>
 

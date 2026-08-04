@@ -481,11 +481,12 @@ module.exports = async function handler(req, res) {
     if (!process.env.SUPABASE_SERVICE_KEY) return res.status(503).json({ error: 'SUPABASE_SERVICE_KEY not set.' });
     const { type, date_from, date_to, event_name } = body;
     const tableMap = {
-      attendance: { table: ATTENDANCE_TABLE, dateCol: 'event_date' },
-      grants:     { table: GRANTS_TABLE,     dateCol: 'date_received' },
-      foodbank:   { table: FOODBANK_TABLE,   dateCol: 'distribution_date' },
-      assets:     { table: ASSETS_TABLE,     dateCol: 'date_acquired' },
-      visitors:   { table: VISITOR_TABLE,    dateCol: 'signed_in_at' },
+      registrations: { table: 'event_registrations', dateCol: 'event_date' },
+      attendance:    { table: ATTENDANCE_TABLE,       dateCol: 'event_date' },
+      grants:        { table: GRANTS_TABLE,           dateCol: 'date_received' },
+      foodbank:      { table: FOODBANK_TABLE,         dateCol: 'distribution_date' },
+      assets:        { table: ASSETS_TABLE,           dateCol: 'date_acquired' },
+      visitors:      { table: VISITOR_TABLE,          dateCol: 'signed_in_at' },
     };
     const entry = tableMap[type];
     if (!entry) return res.status(400).json({ error: 'Unknown export type.' });
@@ -495,7 +496,9 @@ module.exports = async function handler(req, res) {
       const toVal = entry.dateCol === 'signed_in_at' ? `${date_to}T23:59:59` : date_to;
       url += `&${entry.dateCol}=lte.${encodeURIComponent(toVal)}`;
     }
-    if (type === 'attendance' && event_name) url += `&event_name=eq.${encodeURIComponent(event_name)}`;
+    if ((type === 'registrations' || type === 'attendance') && event_name) {
+      url += `&event_name=ilike.%25${encodeURIComponent(event_name)}%25`;
+    }
     const r = await fetch(url, { headers: sbHeaders() });
     const data = await r.json();
     return res.status(r.status).json(data);

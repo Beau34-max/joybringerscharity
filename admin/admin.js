@@ -1410,15 +1410,102 @@ async function resendInvite(i) {
    EXPORT DATA
    ════════════════════════════════════════════════════════════ */
 
+let _exportRows = [];
+window._currentExportType = 'registrations';
+
+const EXPORT_SECTION_LABELS = {
+  registrations: 'Event Registrations',
+  attendance:    'Event Attendance',
+  grants:        'Grants & Income',
+  foodbank:      'Foodbank Distribution',
+  assets:        'Assets',
+  visitors:      'Visitors',
+};
+
 async function loadExportTab() {
   setExportRange('month');
-  const sel = document.getElementById('exp-event-filter');
+  window._currentExportType = 'registrations';
+  switchExportSection('registrations');
+}
+
+function switchExportSection(type) {
+  window._currentExportType = type;
+  document.querySelectorAll('#exports-nav button').forEach(btn => {
+    const active = btn.id === `exp-tab-${type}`;
+    btn.className = active ? 'btn btn-success btn-sm' : 'btn btn-outline-secondary btn-sm';
+  });
+  const showFilter = type === 'registrations' || type === 'attendance';
+  document.getElementById('exp-event-filter-row').style.display = showFilter ? '' : 'none';
+  if (!showFilter) document.getElementById('exp-event-filter').value = '';
+  loadExportSection(type);
+}
+
+async function loadExportSection(type) {
+  if (!type) return;
+  window._currentExportType = type;
+  const from      = document.getElementById('exp-date-from').value;
+  const to        = document.getElementById('exp-date-to').value;
+  const eventName = document.getElementById('exp-event-filter').value.trim();
+  const wrap      = document.getElementById('exports-section-wrap');
+  wrap.innerHTML  = '<div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading…</div>';
   try {
-    const rows = await apiCall('list_attendance');
-    const names = [...new Set((rows || []).map(r => r.event_name).filter(Boolean))].sort();
-    sel.innerHTML = '<option value="">All events</option>' +
-      names.map(n => `<option value="${n.replace(/"/g, '&quot;')}">${n}</option>`).join('');
-  } catch (_) {}
+    const data = await apiCall('export_data', {
+      type,
+      date_from:   from || null,
+      date_to:     to   || null,
+      event_name:  (type === 'registrations' || type === 'attendance') && eventName ? eventName : null
+    });
+    _exportRows = Array.isArray(data) ? data : [];
+    renderExportTable(type, _exportRows);
+  } catch (err) {
+    wrap.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+  }
+}
+
+function renderExportTable(type, rows) {
+  const wrap   = document.getElementById('exports-section-wrap');
+  const label  = EXPORT_SECTION_LABELS[type] || type;
+  const exclude = ['id', 'created_at', 'entered_by', 'updated_at'];
+  const from   = document.getElementById('exp-date-from').value;
+  const to     = document.getElementById('exp-date-to').value;
+
+  const header = `
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span><i class="fas fa-list-ul"></i> ${label}
+          <span class="text-muted fw-normal ms-1">(${rows.length} record${rows.length !== 1 ? 's' : ''})</span>
+        </span>
+        ${rows.length ? `<button class="btn btn-success btn-sm" onclick="runExport('${type}')">
+          <i class="fas fa-download"></i> Export CSV</button>` : ''}
+      </div>`;
+
+  if (!rows.length) {
+    wrap.innerHTML = header + '<div class="card-body text-center text-muted py-4">No records found for this date range.</div></div>';
+    return;
+  }
+
+  const keys    = Object.keys(rows[0]).filter(k => !exclude.includes(k));
+  const headers = keys.map(k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+  const isTs    = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v);
+
+  const tRows = rows.map(r => `<tr>${keys.map(k => {
+    let v = r[k] ?? '—';
+    if (isTs(String(v))) v = new Date(v).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+    return `<td class="text-nowrap">${v}</td>`;
+  }).join('')}</tr>`).join('');
+
+  wrap.innerHTML = header + `
+      <div class="card-body p-0">
+        <div class="table-responsive" style="max-height:520px;overflow-y:auto">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light" style="position:sticky;top:0;z-index:1">
+              <tr>${headers.map(h => `<th class="text-nowrap">${h}</th>`).join('')}</tr>
+            </thead>
+            <tbody>${tRows}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
 }
 
 function setExportRange(preset) {
@@ -1440,36 +1527,23 @@ function setExportRange(preset) {
   document.getElementById('exp-date-to').value   = to;
 }
 
-async function runExport(type) {
-  const from      = document.getElementById('exp-date-from').value;
-  const to        = document.getElementById('exp-date-to').value;
-  const eventName = document.getElementById('exp-event-filter').value;
-  if (!from || !to) { showAlert('warning', 'Please select a date range.'); return; }
-  showLoading('Preparing export…');
-  try {
-    const data = await apiCall('export_data', { type, date_from: from, date_to: to, event_name: eventName || null });
-    hideLoading();
-    if (!Array.isArray(data) || !data.length) {
-      showAlert('warning', 'No records found for that date range.');
-      return;
-    }
-    downloadCsv(`joybringers-${type}-${from}-to-${to}.csv`, data);
-    showAlert('success', `<i class="fas fa-check-circle"></i> Exported ${data.length} record${data.length !== 1 ? 's' : ''}.`);
-  } catch (err) {
-    hideLoading();
-    showAlert('danger', err.message);
-  }
+function runExport(type) {
+  if (!_exportRows.length) { showAlert('warning', 'No records to export.'); return; }
+  const from = document.getElementById('exp-date-from').value;
+  const to   = document.getElementById('exp-date-to').value;
+  downloadCsv(`joybringers-${type}-${from}-to-${to}.csv`, _exportRows);
+  showAlert('success', `<i class="fas fa-check-circle"></i> Exported ${_exportRows.length} record${_exportRows.length !== 1 ? 's' : ''}.`);
 }
 
 function downloadCsv(filename, rows) {
   if (!rows.length) return;
-  const exclude = ['id', 'created_at', 'entered_by'];
-  const keys = Object.keys(rows[0]).filter(k => !exclude.includes(k));
+  const exclude = ['id', 'created_at', 'entered_by', 'updated_at'];
+  const keys   = Object.keys(rows[0]).filter(k => !exclude.includes(k));
   const header = keys.map(k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
-  const isTimestamp = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v);
-  const lines = rows.map(r => keys.map(k => {
+  const isTs   = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v);
+  const lines  = rows.map(r => keys.map(k => {
     let v = r[k] ?? '';
-    if (isTimestamp(v)) v = new Date(v).toLocaleString('en-GB');
+    if (isTs(String(v))) v = new Date(v).toLocaleString('en-GB');
     return `"${String(v).replace(/"/g, '""')}"`;
   }).join(','));
   const csv  = '﻿' + [header.join(','), ...lines].join('\n');
