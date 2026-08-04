@@ -1130,6 +1130,37 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Programme Type</label>
+              <select class="form-select" id="event-programme-type" onchange="toggleKnowledgeOption(this.value)">
+                <option value="general">General Event</option>
+                <option value="training">Training Programme</option>
+                <option value="workshop">Workshop</option>
+                <option value="community">Community Event</option>
+              </select>
+            </div>
+
+            <div class="col-md-6" id="event-knowledge-option" style="display:none">
+              <label class="form-label fw-semibold d-block">&nbsp;</label>
+              <div class="option-card h-auto">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="event-requires-knowledge">
+                  <label class="form-check-label fw-semibold" for="event-requires-knowledge">
+                    <i class="fas fa-graduation-cap text-primary"></i> Ask knowledge level
+                  </label>
+                </div>
+                <p class="text-muted small mb-0 mt-1">Participants will be asked: Beginner / Intermediate / Advanced</p>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Pre-Event Information <small class="text-muted fw-normal">(what to bring / install / prepare)</small></label>
+              <textarea class="form-control" id="event-pre-event-info" rows="3"
+                        placeholder="e.g. Please bring a laptop. Wear comfortable clothing. No prior experience needed."></textarea>
+              <div class="form-text">Shown on the registration form and included in the confirmation email.</div>
+            </div>
+
           </div>
         </form>
       </div>

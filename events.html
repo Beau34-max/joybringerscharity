@@ -194,6 +194,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <input type="hidden" name="event_location" id="event_location">
   <input type="hidden" name="event_joining_link" id="event_joining_link">
   <input type="hidden" name="is_paid_event" id="is_paid_event" value="false">
+  <input type="hidden" id="hidden_pre_event_info">
+  <input type="hidden" id="hidden_requires_knowledge">
 
 
         <div class="modal-body">
@@ -203,6 +205,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p class="mb-1"><strong>Time:</strong> <span id="modalEventTime"></span></p>
           <p class="mb-1"><strong>Venue:</strong> <span id="modalEventVenue"></span></p>
           <p class="mb-0" id="modalEventDescription"></p>
+        </div>
+
+        <!-- Pre-event information (shown only when admin has set it for this programme) -->
+        <div class="alert alert-info mb-3 d-none" id="pre-event-info-section" style="border-left:4px solid #006526;background:#f0f9ff">
+          <p class="mb-1 fw-semibold" style="color:#006526"><i class="fas fa-clipboard-list mr-1"></i> What to bring / prepare for this session</p>
+          <p class="mb-0 small" id="pre-event-info-text"></p>
+        </div>
+
+        <!-- Family recall banner (shown when previous family members are found) -->
+        <div class="alert alert-warning d-none mb-3" id="family-recall-banner" style="font-size:.9rem">
+          <strong><i class="fas fa-users mr-1"></i> We found your previous family members:</strong>
+          <span id="recall-names"></span><br>
+          <button type="button" class="btn btn-sm btn-success mr-2 mt-2" onclick="applyRecalledFamily()">Add them to this registration</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="$('#family-recall-banner').addClass('d-none')">No thanks</button>
         </div>
           <div class="container">
             <div class="row">
@@ -266,7 +282,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   <option>26 & Above</option>
                 </select>
               </div>
-              
+
+              <div class="col-md-6 form-group d-none" id="knowledgeLevelGroup">
+                <label>Knowledge / Experience Level *</label>
+                <select name="knowledge_level" id="knowledge_level" class="form-control">
+                  <option value="">Please Select</option>
+                  <option value="Beginner">Beginner — little or no prior experience</option>
+                  <option value="Intermediate">Intermediate — some experience</option>
+                  <option value="Advanced">Advanced — confident and experienced</option>
+                </select>
+              </div>
+
               <div class="col-md-6 form-group" id="allergyQuestionGroup">
               <label>Any Allergy? *</label>
               <select name="has_allergy" id="has_allergy" class="form-control" required onchange="toggleAllergyDetails(this)">
@@ -595,7 +621,9 @@ function eventCard(e, isUpcoming) {
                 data-description="${e.description}"
                 data-joining-link="${e.joiningLink || ''}"
                 data-paid="${e.paidEvent === true}"
-                data-hide-age-range="${e.hideAgeRange === true}">
+                data-hide-age-range="${e.hideAgeRange === true}"
+                data-requires-knowledge="${e.requiresKnowledgeLevel === true}"
+                data-pre-event-info="${(e.preEventInfo || '').replace(/"/g, '&quot;')}">
                 <i class="fas fa-ticket-alt mr-1"></i>Register Now
               </button>
             </div>
@@ -729,11 +757,60 @@ $(document).ready(() => {
       ageRangeSelect.setAttribute('required', 'required');
     }
 
+    // Pre-event information
+    const preEventInfo     = b.data('preEventInfo') || '';
+    $('#hidden_pre_event_info').val(preEventInfo);
+    if (preEventInfo) {
+      $('#pre-event-info-text').text(preEventInfo);
+      $('#pre-event-info-section').removeClass('d-none');
+    } else {
+      $('#pre-event-info-section').addClass('d-none');
+    }
+
+    // Knowledge / experience level
+    const requiresKnowledge = b.data('requiresKnowledge') === true;
+    $('#hidden_requires_knowledge').val(requiresKnowledge ? 'true' : '');
+    const klGroup  = document.getElementById('knowledgeLevelGroup');
+    const klSelect = document.getElementById('knowledge_level');
+    if (requiresKnowledge) {
+      klGroup.classList.remove('d-none');
+      klSelect.setAttribute('required', 'required');
+    } else {
+      klGroup.classList.add('d-none');
+      klSelect.removeAttribute('required');
+      klSelect.value = '';
+    }
+
+    // Reset family recall
+    $('#family-recall-banner').addClass('d-none');
+    window._recalledFamily = null;
+
     $('#thankYouMessage').hide();
   });
 
   $('#registerModal').on('hidden.bs.modal', function() {
     history.replaceState(null, '', window.location.pathname);
+  });
+
+  // Family recall — when user enters their email, pre-populate previous family members
+  $('#eventRegisterForm').on('blur', '[name="email"]', async function() {
+    const email = $(this).val().trim();
+    if (!email || !email.includes('@')) return;
+    if (document.querySelectorAll('#reg-family-list .fm-row').length > 0) return; // already has members
+    try {
+      const res  = await fetch('/api/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'get_family_by_email', email })
+      });
+      const data = await res.json();
+      if (data.family_members && data.family_members.length > 0) {
+        window._recalledFamily = data.family_members;
+        const names = data.family_members.map(f => f.name).join(', ');
+        $('#recall-names').text(' ' + names);
+        $('#family-recall-banner').removeClass('d-none');
+      }
+    } catch (e) { /* silent fail */ }
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -760,7 +837,9 @@ if (requestedEventSlug) {
           data-time="${matchedEvent.time}"
           data-location="${matchedEvent.venue}"
           data-description="${matchedEvent.description}"
-          data-paid="${matchedEvent.paidEvent === true}">
+          data-paid="${matchedEvent.paidEvent === true}"
+          data-requires-knowledge="${matchedEvent.requiresKnowledgeLevel === true}"
+          data-pre-event-info="${(matchedEvent.preEventInfo || '').replace(/"/g, '&quot;')}">
         </button>
       `);
 
@@ -917,8 +996,36 @@ function typeFromAge(ag) { return CHILD_AGE_GROUPS.includes(ag) ? 'child' : 'adu
 function getFamilyMembers() {
   return [...document.querySelectorAll('#reg-family-list .fm-row')].map(row => {
     const age_group = row.querySelector('.fm-age').value;
-    return { name: row.querySelector('.fm-name').value.trim(), type: typeFromAge(age_group), age_group, attended: false };
+    const member    = { name: row.querySelector('.fm-name').value.trim(), type: typeFromAge(age_group), age_group, attended: false };
+    if (row.dataset.participantId) member.participant_id = row.dataset.participantId;
+    return member;
   }).filter(m => m.name);
+}
+
+function applyRecalledFamily() {
+  const members = window._recalledFamily || [];
+  members.forEach(fm => {
+    const list  = document.getElementById('reg-family-list');
+    const n     = list.children.length + 2;
+    const label = fm.type === 'child' ? 'Child' : `Person ${n}`;
+    const div   = document.createElement('div');
+    div.className           = 'fm-row d-flex align-items-center mb-2';
+    div.dataset.type        = fm.type || 'adult';
+    div.dataset.participantId = fm.participant_id || '';
+    div.innerHTML = `
+      <span class="text-muted small mr-2" style="min-width:68px;white-space:nowrap">${label}</span>
+      <input type="text" class="form-control form-control-sm fm-name mr-2" placeholder="Full Name" style="flex:1" value="${(fm.name || '').replace(/"/g,'&quot;')}" required>
+      <select class="form-control form-control-sm fm-age mr-2" style="width:120px">
+        ${AGE_GROUPS.map(g => `<option value="${g}"${g === fm.age_group ? ' selected' : ''}>${g}</option>`).join('')}
+      </select>
+      <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.fm-row').remove(); syncPersonCount();"
+              style="padding:2px 8px">&times;</button>`;
+    list.appendChild(div);
+  });
+  document.getElementById('family-members-section').style.display = members.length ? '' : 'none';
+  syncPersonCount();
+  $('#family-recall-banner').addClass('d-none');
+  window._recalledFamily = null;
 }
 /* ── End family member helpers ─────────────────────── */
 
@@ -965,6 +1072,7 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
     is_paid_event: isPaidEvent,
     ticket_type: isPaidEvent ? (formData.get("ticket_type") || null) : null,
 
+    knowledge_level:   formData.get("knowledge_level") || null,
     source: "joybringerscharity.org/events",
     family_members: getFamilyMembers(),
     number_of_persons: String(1 + getFamilyMembers().length),
@@ -1011,6 +1119,7 @@ document.getElementById("eventRegisterForm").addEventListener("submit", async fu
         joining_link_line: joiningLinkLine,
         number_of_persons: formData.get("number_of_persons"),
         booking_ref:       insertData?.reg_ref || '',
+        pre_event_info:    document.getElementById('hidden_pre_event_info').value || '',
       });
     } catch (err) {
       console.error("EmailJS error:", err);
@@ -1039,6 +1148,13 @@ setTimeout(() => {
   form.reset();
   document.getElementById('reg-family-list').innerHTML = '';
   document.getElementById('family-members-section').style.display = 'none';
+  document.getElementById('hidden_pre_event_info').value = '';
+  document.getElementById('hidden_requires_knowledge').value = '';
+  document.getElementById('pre-event-info-section').classList.add('d-none');
+  document.getElementById('knowledgeLevelGroup').classList.add('d-none');
+  document.getElementById('knowledge_level').removeAttribute('required');
+  $('#family-recall-banner').addClass('d-none');
+  window._recalledFamily = null;
 
   // ✅ re-enable button (safety)
   btn.disabled = false;

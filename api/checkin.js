@@ -98,5 +98,26 @@ module.exports = async (req, res) => {
     return res.status(200).json({ ok: true });
   }
 
+  // Returns previous family members for a given email so the form can pre-populate
+  if (action === 'get_family_by_email') {
+    const { email } = body;
+    if (!email || !email.includes('@')) return res.status(400).json({ error: 'Valid email required.' });
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/event_registrations?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&order=created_at.desc&limit=1&select=participant_id,family_members`,
+      { headers: sbHeaders() }
+    );
+    const rows = r.ok ? await r.json() : [];
+    if (!Array.isArray(rows) || !rows.length || !(rows[0].family_members || []).length) {
+      return res.status(200).json({ family_members: [] });
+    }
+    const safeFam = (rows[0].family_members || []).map(fm => ({
+      name:           fm.name,
+      type:           fm.type,
+      age_group:      fm.age_group,
+      participant_id: fm.participant_id || null
+    })).filter(fm => fm.name);
+    return res.status(200).json({ family_members: safeFam, participant_id: rows[0].participant_id || null });
+  }
+
   return res.status(400).json({ error: 'Unknown action.' });
 };

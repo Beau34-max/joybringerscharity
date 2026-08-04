@@ -337,13 +337,17 @@ function openEditModal(idx) {
   document.getElementById('event-date').value                = e.date         || '';
   document.getElementById('event-time').value                = e.time         || '';
   document.getElementById('event-venue').value               = e.venue        || '';
-  document.getElementById('event-joining-link').value        = e.joiningLink  || '';
-  document.getElementById('event-description').value         = e.description  || '';
+  document.getElementById('event-joining-link').value        = e.joiningLink        || '';
+  document.getElementById('event-description').value         = e.description         || '';
   document.getElementById('event-featured').checked          = !!e.featured;
   document.getElementById('event-paid').checked              = !!e.paidEvent;
   document.getElementById('event-reg-override').checked      = !!e.regOverrideOpen;
-  document.getElementById('event-current-image').value       = e.image        || '';
+  document.getElementById('event-current-image').value       = e.image               || '';
   document.getElementById('event-image').value               = '';
+  document.getElementById('event-programme-type').value      = e.programmeType       || 'general';
+  document.getElementById('event-requires-knowledge').checked = !!e.requiresKnowledgeLevel;
+  document.getElementById('event-pre-event-info').value      = e.preEventInfo        || '';
+  toggleKnowledgeOption(e.programmeType || 'general');
 
   const wrap = document.getElementById('event-image-preview-wrap');
   const img  = document.getElementById('event-image-preview');
@@ -359,19 +363,23 @@ function openEditModal(idx) {
 
 function duplicateEvent(idx) {
   const e = eventsData.items[idx];
-  document.getElementById('event-modal-title').textContent   = 'Duplicate Event';
-  document.getElementById('event-idx').value                 = '';  // no idx = creates new
-  document.getElementById('event-title').value               = e.title + ' (Copy)';
-  document.getElementById('event-date').value                = '';  // admin must set new date
-  document.getElementById('event-time').value                = e.time         || '';
-  document.getElementById('event-venue').value               = e.venue        || '';
-  document.getElementById('event-joining-link').value        = e.joiningLink  || '';
-  document.getElementById('event-description').value         = e.description  || '';
-  document.getElementById('event-featured').checked          = !!e.featured;
-  document.getElementById('event-paid').checked              = !!e.paidEvent;
-  document.getElementById('event-reg-override').checked      = !!e.regOverrideOpen;
-  document.getElementById('event-current-image').value       = e.image        || '';
-  document.getElementById('event-image').value               = '';
+  document.getElementById('event-modal-title').textContent    = 'Duplicate Event';
+  document.getElementById('event-idx').value                  = '';
+  document.getElementById('event-title').value                = e.title + ' (Copy)';
+  document.getElementById('event-date').value                 = '';
+  document.getElementById('event-time').value                 = e.time              || '';
+  document.getElementById('event-venue').value                = e.venue             || '';
+  document.getElementById('event-joining-link').value         = e.joiningLink       || '';
+  document.getElementById('event-description').value          = e.description       || '';
+  document.getElementById('event-featured').checked           = !!e.featured;
+  document.getElementById('event-paid').checked               = !!e.paidEvent;
+  document.getElementById('event-reg-override').checked       = !!e.regOverrideOpen;
+  document.getElementById('event-current-image').value        = e.image             || '';
+  document.getElementById('event-image').value                = '';
+  document.getElementById('event-programme-type').value       = e.programmeType     || 'general';
+  document.getElementById('event-requires-knowledge').checked = !!e.requiresKnowledgeLevel;
+  document.getElementById('event-pre-event-info').value       = e.preEventInfo      || '';
+  toggleKnowledgeOption(e.programmeType || 'general');
 
   const wrap = document.getElementById('event-image-preview-wrap');
   const img  = document.getElementById('event-image-preview');
@@ -383,6 +391,16 @@ function duplicateEvent(idx) {
     wrap.style.display = 'none';
   }
   new bootstrap.Modal(document.getElementById('eventModal')).show();
+}
+
+function toggleKnowledgeOption(type) {
+  const el = document.getElementById('event-knowledge-option');
+  if (type === 'training' || type === 'workshop') {
+    el.style.display = '';
+  } else {
+    el.style.display = 'none';
+    document.getElementById('event-requires-knowledge').checked = false;
+  }
 }
 
 function previewEventImage() {
@@ -421,18 +439,23 @@ async function saveEvent() {
       imagePath = target;
     }
 
-    const joiningLink = document.getElementById('event-joining-link').value.trim();
+    const joiningLink   = document.getElementById('event-joining-link').value.trim();
+    const programmeType = document.getElementById('event-programme-type').value || 'general';
+    const preEventInfo  = document.getElementById('event-pre-event-info').value.trim();
     const eventObj = {
       title,
-      date:            document.getElementById('event-date').value,
-      time:            document.getElementById('event-time').value,
-      venue:           document.getElementById('event-venue').value,
-      description:     document.getElementById('event-description').value,
-      image:           imagePath,
-      featured:        document.getElementById('event-featured').checked,
-      paidEvent:       document.getElementById('event-paid').checked,
-      regOverrideOpen: document.getElementById('event-reg-override').checked,
-      ...(joiningLink && { joiningLink })
+      date:                   document.getElementById('event-date').value,
+      time:                   document.getElementById('event-time').value,
+      venue:                  document.getElementById('event-venue').value,
+      description:            document.getElementById('event-description').value,
+      image:                  imagePath,
+      featured:               document.getElementById('event-featured').checked,
+      paidEvent:              document.getElementById('event-paid').checked,
+      regOverrideOpen:        document.getElementById('event-reg-override').checked,
+      programmeType,
+      ...(joiningLink  && { joiningLink }),
+      ...(document.getElementById('event-requires-knowledge').checked && { requiresKnowledgeLevel: true }),
+      ...(preEventInfo && { preEventInfo }),
     };
 
     if (idx !== '') eventsData.items[parseInt(idx)] = eventObj;
@@ -1689,33 +1712,37 @@ function flattenRegistrations(rows) {
   const flat = [];
   for (const r of rows) {
     flat.push({
-      ref:          r.reg_ref  || '—',
-      name:         `${r.first_name} ${r.last_name}`,
-      type:         'Main Registrant',
-      age_group:    r.age_range || '—',
-      email:        r.email    || '',
-      phone:        r.phone    || '',
-      gender:       r.gender   || '',
-      event_name:   r.event_name,
-      event_date:   r.event_date,
-      location:     r.location || '',
-      hear_about_us: r.hear_about_us || '',
-      attended:     r.main_attended ? 'Yes' : 'No',
+      participant_id: r.participant_id   || '—',
+      ref:            r.reg_ref          || '—',
+      name:           `${r.first_name} ${r.last_name}`,
+      type:           'Main Registrant',
+      age_group:      r.age_range        || '—',
+      knowledge_level: r.knowledge_level || '',
+      email:          r.email            || '',
+      phone:          r.phone            || '',
+      gender:         r.gender           || '',
+      event_name:     r.event_name,
+      event_date:     r.event_date,
+      location:       r.location         || '',
+      hear_about_us:  r.hear_about_us    || '',
+      attended:       r.main_attended ? 'Yes' : 'No',
     });
     for (const fm of (r.family_members || [])) {
       flat.push({
-        ref:          r.reg_ref  || '—',
-        name:         fm.name,
-        type:         fm.type === 'child' ? 'Child' : 'Additional Adult',
-        age_group:    fm.age_group || '—',
-        email:        '',
-        phone:        '',
-        gender:       '',
-        event_name:   r.event_name,
-        event_date:   r.event_date,
-        location:     '',
-        hear_about_us: '',
-        attended:     fm.attended ? 'Yes' : 'No',
+        participant_id: fm.participant_id || '—',
+        ref:            r.reg_ref         || '—',
+        name:           fm.name,
+        type:           fm.type === 'child' ? 'Child' : 'Additional Adult',
+        age_group:      fm.age_group      || '—',
+        knowledge_level: '',
+        email:          '',
+        phone:          '',
+        gender:         '',
+        event_name:     r.event_name,
+        event_date:     r.event_date,
+        location:       '',
+        hear_about_us:  '',
+        attended:       fm.attended ? 'Yes' : 'No',
       });
     }
   }
