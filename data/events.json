@@ -87,7 +87,10 @@
       "image": "images/co12.jpg",
       "featured": false,
       "paidEvent": false,
-      "regOverrideOpen": true
+      "regOverrideOpen": true,
+      "programmeType": "workshop",
+      "requiresKnowledgeLevel": true,
+      "preEventInfo": "Please bring camera or its accesories only if you have"
     },
     {
       "title": "Multi-Skilled Workshop (Ages 7-15, 16-25)",
