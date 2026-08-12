@@ -349,6 +349,40 @@
       ]
     },
     {
+      "id": "trustee-accounting",
+      "title": "Trustee — Accounting & Finance",
+      "category": "finance",
+      "catLabel": "Finance & Business",
+      "catColor": "#1e40af",
+      "icon": "fa-balance-scale",
+      "location": "Newcastle / Hybrid",
+      "commitment": "4–6 hrs/Week",
+      "tier": "trustee",
+      "urgent": true,
+      "summary": "Help govern Joybringers’ finances as a Board Trustee with accounting or financial expertise.",
+      "about": "We are seeking a Trustee with a strong background in accounting or finance to join our Board and provide strategic financial oversight. As a Trustee, you will play a vital governance role — scrutinising financial reports, ensuring sound financial management, and helping the charity remain sustainable for the long term.",
+      "responsibilities": [
+        "Review and scrutinise monthly and annual financial reports",
+        "Provide independent challenge and assurance on financial decisions",
+        "Attend and contribute to quarterly Board meetings",
+        "Support the Treasurer and Finance Committee where applicable",
+        "Ensure the charity meets its financial legal and regulatory obligations",
+        "Help develop financial strategy and long-term sustainability planning"
+      ],
+      "requirements": [
+        "Qualified accountant (ACA, ACCA, CIMA or equivalent) or strong financial background",
+        "Experience in financial reporting, audit, or treasury management",
+        "Commitment to Joybringers’ mission and values",
+        "Ability to attend quarterly Board meetings (in-person or online)"
+      ],
+      "gains": [
+        "Non-executive board experience with a registered charity",
+        "Exposure to charity governance and the Charity Commission framework",
+        "Opportunity to directly shape the financial future of a growing charity",
+        "Certificate of trusteeship and professional reference"
+      ]
+    },
+    {
       "id": "trustee-business-management",
       "title": "Trustee — Business Management & Development",
       "category": "finance",
@@ -834,40 +868,6 @@
         "Exposure to volunteer management best practices",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
-    },
-    {
-      "id": "trustee-accounting",
-      "title": "Trustee — Accounting & Finance",
-      "category": "finance",
-      "catLabel": "Finance & Business",
-      "catColor": "#1e40af",
-      "icon": "fa-balance-scale",
-      "location": "Newcastle / Hybrid",
-      "commitment": "4–6 hrs/Week",
-      "tier": "trustee",
-      "urgent": true,
-      "summary": "Help govern Joybringers’ finances as a Board Trustee with accounting or financial expertise.",
-      "about": "We are seeking a Trustee with a strong background in accounting or finance to join our Board and provide strategic financial oversight. As a Trustee, you will play a vital governance role — scrutinising financial reports, ensuring sound financial management, and helping the charity remain sustainable for the long term.",
-      "responsibilities": [
-        "Review and scrutinise monthly and annual financial reports",
-        "Provide independent challenge and assurance on financial decisions",
-        "Attend and contribute to quarterly Board meetings",
-        "Support the Treasurer and Finance Committee where applicable",
-        "Ensure the charity meets its financial legal and regulatory obligations",
-        "Help develop financial strategy and long-term sustainability planning"
-      ],
-      "requirements": [
-        "Qualified accountant (ACA, ACCA, CIMA or equivalent) or strong financial background",
-        "Experience in financial reporting, audit, or treasury management",
-        "Commitment to Joybringers’ mission and values",
-        "Ability to attend quarterly Board meetings (in-person or online)"
-      ],
-      "gains": [
-        "Non-executive board experience with a registered charity",
-        "Exposure to charity governance and the Charity Commission framework",
-        "Opportunity to directly shape the financial future of a growing charity",
-        "Certificate of trusteeship and professional reference"
       ]
     }
   ]
