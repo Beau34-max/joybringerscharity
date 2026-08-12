@@ -282,7 +282,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="vol-stat-label">Lives Touched</div>
         </div>
         <div class="col-6 col-md-3 vol-stat">
-          <div class="vol-stat-number">21</div>
+          <div class="vol-stat-number" id="open-roles-count">–</div>
           <div class="vol-stat-label">Open Roles</div>
         </div>
         <div class="col-6 col-md-3 vol-stat">
@@ -762,7 +762,13 @@ document.querySelectorAll('.vol-filter-btn').forEach(btn => {
 // Load roles from JSON and render
 fetch('/data/roles.json')
   .then(r => r.json())
-  .then(data => { ROLES = data.items || []; renderCards('all'); })
+  .then(data => {
+    ROLES = data.items || [];
+    const openCount = ROLES.filter(r => r.open !== false).length;
+    const el = document.getElementById('open-roles-count');
+    if (el) el.textContent = openCount;
+    renderCards('all');
+  })
   .catch(() => {
     document.getElementById('roles-grid').innerHTML =
       '<div class="col-12 text-center py-5 text-muted">Unable to load roles. Please refresh the page.</div>';
