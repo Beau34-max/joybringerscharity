@@ -32,7 +32,8 @@
         "Portfolio of real campaign work",
         "Reference letter from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "accountant",
@@ -66,7 +67,8 @@
         "Exposure to charity governance and trustee reporting",
         "Professional reference for accounting roles",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "digital-analyst",
@@ -100,7 +102,8 @@
         "Experience reporting to charity leadership",
         "Opportunity to shape digital strategy",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "hr-assistant",
@@ -134,7 +137,8 @@
         "Exposure to recruitment, onboarding, and HR policy",
         "Professional reference from HR leadership",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "admin-assistant",
@@ -168,7 +172,8 @@
         "Understanding of charity operations",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "secretary",
@@ -202,7 +207,8 @@
         "Exposure to trustee-level decision making",
         "Professional reference from the Chair or Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "compliance-manager",
@@ -236,7 +242,8 @@
         "Portfolio of real policy and governance work",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "project-manager",
@@ -270,7 +277,8 @@
         "Leadership of cross-functional volunteer teams",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "food-bank",
@@ -304,7 +312,8 @@
         "Food safety and handling knowledge",
         "Warm, supportive team environment",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "business-analyst",
@@ -338,7 +347,8 @@
         "Portfolio of real business improvement work",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "website-designer",
@@ -372,7 +382,8 @@
         "Cross-functional collaboration experience",
         "Professional reference for web development roles",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "fundraising-coordinator",
@@ -406,7 +417,8 @@
         "Experience working to income targets in the charity sector",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "it-workshop-assistant",
@@ -440,7 +452,8 @@
         "Enhanced DBS certificate",
         "Training in safeguarding and youth work",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "community-outreach",
@@ -474,7 +487,8 @@
         "Understanding of community development in the charity sector",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "counselling-support",
@@ -508,7 +522,8 @@
         "Experience in community mental health settings",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "marketing-manager",
@@ -542,7 +557,8 @@
         "Portfolio of campaign work across multiple channels",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "graphic-designer",
@@ -576,7 +592,8 @@
         "Collaboration with marketing and communications teams",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "parenting-facilitator",
@@ -610,7 +627,8 @@
         "Knowledge of evidence-based parenting approaches",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "language-tutor",
@@ -644,7 +662,8 @@
         "Enhanced DBS certificate",
         "Training in literacy support approaches",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "data-research-analyst",
@@ -678,7 +697,8 @@
         "Published impact reports for your portfolio",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     },
     {
       "id": "volunteer-recruitment",
@@ -712,7 +732,8 @@
         "Exposure to volunteer management best practices",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ]
+      ],
+      "open": true
     }
   ]
 }

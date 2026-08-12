@@ -1861,17 +1861,22 @@ function renderRolesList() {
   const tierLabel  = { trustee: 'Trustee', senior: 'Senior', volunteer: 'Volunteer' };
 
   document.getElementById('roles-list').innerHTML = filtered.map(r => {
-    const idx   = rolesData.items.indexOf(r);
-    const meta  = CAT_META[r.category] || { label: r.category, color: '#555' };
-    return `<div class="d-flex align-items-center justify-content-between gap-3 py-2 border-bottom">
+    const idx    = rolesData.items.indexOf(r);
+    const meta   = CAT_META[r.category] || { label: r.category, color: '#555' };
+    const isOpen = r.open !== false;
+    return `<div class="d-flex align-items-center justify-content-between gap-3 py-2 border-bottom ${isOpen ? '' : 'opacity-50'}">
       <div class="d-flex align-items-center gap-3 flex-wrap">
         <span class="badge rounded-pill" style="background:${meta.color}18;color:${meta.color};border:1px solid ${meta.color}35;font-size:0.75rem;">${meta.label}</span>
         <span class="fw-semibold">${r.title}</span>
         <span class="badge bg-${tierBadge[r.tier] || 'secondary'}">${tierLabel[r.tier] || r.tier}</span>
         ${r.urgent ? '<span class="badge bg-danger">Urgent</span>' : ''}
+        <span class="badge ${isOpen ? 'bg-success' : 'bg-secondary'}">${isOpen ? 'Open' : 'Closed'}</span>
         <small class="text-muted">${r.location || ''}</small>
       </div>
       <div class="d-flex gap-2 flex-shrink-0">
+        <button class="btn btn-sm ${isOpen ? 'btn-outline-success' : 'btn-outline-warning'}" title="${isOpen ? 'Close this role' : 'Reopen this role'}" onclick="toggleRoleOpen(${idx})">
+          <i class="fas ${isOpen ? 'fa-lock-open' : 'fa-lock'}"></i> ${isOpen ? 'Close' : 'Reopen'}
+        </button>
         <button class="btn btn-sm btn-outline-secondary" onclick="openEditRoleModal(${idx})"><i class="fas fa-edit"></i></button>
         <button class="btn btn-sm btn-outline-danger" onclick="deleteRole(${idx})"><i class="fas fa-trash"></i></button>
       </div>
@@ -1997,6 +2002,26 @@ async function deleteRole(idx) {
     showAlert('success', `Role "${r.title}" deleted.`);
   } catch (e) {
     showAlert('danger', `Delete failed: ${e.message}`);
+  } finally {
+    hideLoading();
+  }
+}
+
+async function toggleRoleOpen(idx) {
+  const r = rolesData.items[idx];
+  if (!r) return;
+  const nowOpen = r.open === false;
+
+  showLoading(nowOpen ? 'Reopening role...' : 'Closing role...');
+  try {
+    const { data, sha } = await apiReadJSON(ROLES_PATH);
+    const updated = data.items.map((item, i) => i === idx ? { ...item, open: nowOpen } : item);
+    await apiWriteJSON(ROLES_PATH, { items: updated }, sha, `Admin: ${nowOpen ? 'reopen' : 'close'} role "${r.title}"`);
+    rolesData.items = updated;
+    renderRolesList();
+    showAlert('success', `"${r.title}" is now ${nowOpen ? 'open' : 'closed'} for applications.`);
+  } catch (e) {
+    showAlert('danger', `Failed: ${e.message}`);
   } finally {
     hideLoading();
   }

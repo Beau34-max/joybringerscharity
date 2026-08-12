@@ -679,7 +679,8 @@ function remunerationHTML(tier) {
    RENDER CARDS
 ═══════════════════════════════════════════════════════ */
 function renderCards(filter) {
-  const filtered = (filter === 'all') ? ROLES : ROLES.filter(r => r.category === filter);
+  const open = ROLES.filter(r => r.open !== false);
+  const filtered = (filter === 'all') ? open : open.filter(r => r.category === filter);
   const grid = document.getElementById('roles-grid');
   if (!filtered.length) {
     grid.innerHTML = '<div class="col-12 text-center py-5 text-muted">No roles found in this category.</div>';
