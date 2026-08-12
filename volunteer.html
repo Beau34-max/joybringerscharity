@@ -651,270 +651,10 @@ fetch('/data/impact.json').then(r=>r.json()).then(d=>{
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   VOLUNTEER ROLES DATA
+   VOLUNTEER ROLES DATA  (loaded from /data/roles.json)
 ═══════════════════════════════════════════════════════ */
-const ROLES = [
-  {
-    id: 'director-comms',
-    title: 'Director of Communications',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-bullhorn', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: true,
-    summary: 'Shape and lead Joybringers\' voice across social media, press, and community channels.',
-    about: 'As Director of Communications you will be the strategic voice of Joybringers, ensuring our message reaches the right people at the right time. You will work closely with the charity director to build brand awareness, manage our media presence, and inspire our community.',
-    responsibilities: ['Develop and oversee the overall communications strategy', 'Manage and grow all social media platforms', 'Write and distribute press releases and newsletters', 'Liaise with media outlets and community partners', 'Oversee brand identity and tone of voice', 'Support event promotion and fundraising campaigns'],
-    requirements: ['Experience in communications, PR, or marketing', 'Strong written and verbal communication skills', 'Confidence with social media platforms', 'Ability to work independently and lead a small team'],
-    gains: ['Senior leadership experience in a registered charity', 'Portfolio of real campaign work', 'Reference letter from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'accountant',
-    title: 'Accountant Volunteer',
-    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
-    icon: 'fa-calculator', location: 'Remote / Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Keep our books accurate and support financial reporting for trustees and funders.',
-    about: 'Our Accountant Volunteer will play a vital role in maintaining the financial integrity of Joybringers. You will assist with bookkeeping, help prepare financial statements, and ensure our accounts comply with charity regulations.',
-    responsibilities: ['Process income and expenditure transactions', 'Maintain accurate financial records using accounting software', 'Prepare monthly/quarterly financial summaries for trustees', 'Assist with annual accounts and Charity Commission submissions', 'Support grant reporting with financial data', 'Flag financial risks to leadership'],
-    requirements: ['AAT qualified or working towards ACCA/CIMA', 'Experience with bookkeeping or accounting software (Xero/QuickBooks)', 'Good attention to detail and numerical accuracy', 'Understanding of charity finance regulations is a bonus'],
-    gains: ['Practical charity accounting experience', 'Exposure to charity governance and trustee reporting', 'Professional reference for accounting roles', 'Certificate of volunteering']
-  },
-  {
-    id: 'digital-analyst',
-    title: 'Digital Analyst',
-    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
-    icon: 'fa-chart-line', location: 'Remote', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Turn website and social data into actionable insights that drive our digital growth.',
-    about: 'As our Digital Analyst, you will transform raw data from Google Analytics, social media platforms, and fundraising tools into clear reports and strategic recommendations that help Joybringers reach more people and measure our digital impact.',
-    responsibilities: ['Monitor and report on website traffic using Google Analytics', 'Track and analyse performance across Facebook, Instagram, LinkedIn, and TikTok', 'Identify trends and make data-led recommendations', 'Create monthly performance dashboards', 'Support A/B testing on website and email campaigns', 'Evaluate ROI of fundraising and awareness campaigns'],
-    requirements: ['Proficiency in Google Analytics or similar tools', 'Strong data analysis and visualisation skills', 'Ability to communicate insights to non-technical staff', 'Experience with Excel, Power BI, or Google Data Studio is a plus'],
-    gains: ['Real-world portfolio with measurable impact data', 'Experience reporting to charity leadership', 'Opportunity to shape digital strategy', 'Certificate of volunteering']
-  },
-  {
-    id: 'hr-assistant',
-    title: 'HR Assistant',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-users-cog', location: 'Remote / Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Support our people operations — from volunteer recruitment to onboarding and records.',
-    about: 'Our HR Assistant will help ensure that volunteers and staff at Joybringers are well-supported from day one. You will work with our HR lead to manage recruitment, onboarding, and volunteer welfare.',
-    responsibilities: ['Support recruitment process for new volunteers and staff', 'Coordinate induction and onboarding procedures', 'Maintain volunteer and staff records', 'Assist with drafting HR policies and guidelines', 'Handle routine HR enquiries and correspondence', 'Help organise volunteer appreciation events'],
-    requirements: ['Interest in or experience of HR, people management, or recruitment', 'Excellent organisational skills', 'Discretion and ability to handle confidential information', 'CIPD qualification or studying towards it is advantageous'],
-    gains: ['Hands-on HR experience in a diverse charity environment', 'Exposure to recruitment, onboarding, and HR policy', 'Professional reference from HR leadership', 'Certificate of volunteering']
-  },
-  {
-    id: 'admin-assistant',
-    title: 'Administrative Assistant',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-clipboard-list', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Keep day-to-day operations running smoothly with strong organisational and admin support.',
-    about: 'As our Administrative Assistant, you will be the backbone of Joybringers\' daily operations — supporting the team with scheduling, correspondence, document management, and general enquiries.',
-    responsibilities: ['Manage emails, calendar bookings, and meetings', 'Prepare and format documents, reports, and presentations', 'Maintain filing systems and digital records', 'Liaise with external partners and community contacts', 'Support event coordination and logistics', 'Handle general enquiries from the public and volunteers'],
-    requirements: ['Strong organisational and time management skills', 'Proficiency in Microsoft Office (Word, Excel, Outlook)', 'Excellent written and verbal communication', 'Ability to multitask and meet deadlines'],
-    gains: ['Broad office administration experience', 'Understanding of charity operations', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'secretary',
-    title: 'Secretary Volunteer',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-file-alt', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Support board meetings, take minutes, and manage official correspondence for the charity.',
-    about: 'Our Secretary Volunteer plays a key governance role, supporting the board of trustees with meeting administration, minute-taking, and correspondence. An excellent opportunity for someone interested in charity governance.',
-    responsibilities: ['Organise and schedule trustee board meetings', 'Prepare and distribute agendas and supporting papers', 'Take accurate minutes and circulate promptly', 'Maintain register of trustees and statutory documents', 'Handle official correspondence on behalf of the charity', 'Support compliance with Charity Commission requirements'],
-    requirements: ['Experience in administration, PA, or executive support', 'Excellent written English and minute-taking skills', 'High level of discretion and professionalism', 'Knowledge of charity governance is beneficial but not essential'],
-    gains: ['Experience in charity board governance', 'Exposure to trustee-level decision making', 'Professional reference from the Chair or Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'compliance-manager',
-    title: 'Compliance Manager',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-shield-alt', location: 'Remote / Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Ensure Joybringers meets all safeguarding, legal, and governance standards.',
-    about: 'Our Compliance Manager Volunteer will ensure Joybringers operates within all relevant legal, regulatory, and ethical frameworks — including safeguarding, GDPR, and Charity Commission obligations.',
-    responsibilities: ['Review and maintain all charity policies (safeguarding, GDPR, H&S)', 'Monitor compliance with Charity Commission requirements', 'Conduct internal compliance reviews and risk assessments', 'Train staff and volunteers on key compliance topics', 'Keep up to date with changes in charity law and regulation', 'Escalate safeguarding concerns appropriately'],
-    requirements: ['Background in compliance, law, HR, or governance', 'Knowledge of GDPR and charity safeguarding regulations', 'Strong analytical and report-writing skills', 'Systematic, thorough approach with attention to detail'],
-    gains: ['Senior compliance experience in the charity sector', 'Portfolio of real policy and governance work', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'project-manager',
-    title: 'Project Manager',
-    category: 'operations', catLabel: 'Leadership & Ops', catColor: '#006526',
-    icon: 'fa-tasks', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: true,
-    summary: 'Lead charity projects from planning to delivery, keeping teams on track and on time.',
-    about: 'Our Project Manager Volunteer will oversee the planning, execution, and evaluation of key Joybringers programmes and events — coordinating across teams, managing timelines, and ensuring successful delivery.',
-    responsibilities: ['Define project scope, goals, and deliverables with stakeholders', 'Create and manage detailed project plans and timelines', 'Coordinate resources across volunteer teams', 'Monitor progress, manage risks and issues', 'Prepare project status reports for leadership', 'Evaluate project outcomes and write end-of-project reports'],
-    requirements: ['Proven project management experience (PMP, PRINCE2 or equivalent is a bonus)', 'Strong leadership and communication skills', 'Ability to manage multiple projects simultaneously', 'Proficiency with project tools (Asana, Trello, MS Project, etc.)'],
-    gains: ['Real-world project delivery experience in the charity sector', 'Leadership of cross-functional volunteer teams', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'food-bank',
-    title: 'Food Bank Volunteer',
-    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
-    icon: 'fa-shopping-basket', location: 'Newcastle / Gateshead', commitment: '5–8 hrs/week', urgent: true,
-    summary: 'Help collect surplus food from ASDA, Tesco, KFC, and Nando\'s to feed families in need.',
-    about: 'Our Food Bank Volunteers are at the heart of our community impact — collecting surplus food donations from retail partners, sorting food parcels, and helping ensure families across the North East have access to nutritious food.',
-    responsibilities: ['Collect food donations from partner stores (ASDA, Tesco, KFC, Nando\'s)', 'Sort, check, and pack food parcels', 'Assist with food distribution days', 'Help maintain the food bank storage area', 'Record and log donations accurately', 'Represent Joybringers professionally with retail partners'],
-    requirements: ['A valid driving licence (for collection shifts) is helpful but not essential', 'Physical ability to carry boxes and stand for periods', 'Friendly, approachable manner', 'Commitment to safeguarding and food safety guidelines'],
-    gains: ['Hands-on community impact experience', 'Food safety and handling knowledge', 'Warm, supportive team environment', 'Certificate of volunteering']
-  },
-  {
-    id: 'business-analyst',
-    title: 'Business Analyst',
-    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
-    icon: 'fa-chart-bar', location: 'Remote / Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Analyse our operations and data to identify improvements and support strategic decisions.',
-    about: 'As our Business Analyst, you will help Joybringers understand how we operate and where we can improve — gathering and analysing data on programmes, financials, and operations, then presenting clear recommendations to leadership.',
-    responsibilities: ['Gather and document business requirements from stakeholders', 'Analyse operational data to identify inefficiencies or opportunities', 'Develop process maps and improvement recommendations', 'Support strategic planning with data-driven insights', 'Assist with grant applications by providing impact evidence', 'Present findings in clear reports and visualisations'],
-    requirements: ['Experience in business analysis, strategy, or consulting', 'Strong analytical thinking and problem-solving skills', 'Proficiency in Excel, Power BI, or similar tools', 'Excellent written and verbal communication'],
-    gains: ['Impact-focused analytical experience in the charity sector', 'Portfolio of real business improvement work', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'website-designer',
-    title: 'Website Designer / Manager',
-    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
-    icon: 'fa-laptop-code', location: 'Remote', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Design, update, and maintain the Joybringers website to keep it accessible and effective.',
-    about: 'Our Website Designer / Manager Volunteer will own the look and feel of joybringerscharity.org, working with the communications team to ensure the website reflects our brand, is easy to use, and serves our beneficiaries well.',
-    responsibilities: ['Design and implement website updates and new pages', 'Ensure the site is mobile-responsive and accessible (WCAG AA)', 'Optimise website performance and SEO', 'Manage the events and volunteer sections', 'Collaborate with the comms team on campaigns', 'Monitor analytics and make data-driven improvements'],
-    requirements: ['Proficiency in HTML, CSS, and JavaScript', 'Experience with Bootstrap or similar CSS frameworks', 'Understanding of web accessibility standards', 'Eye for design and attention to detail — Git/GitHub a bonus'],
-    gains: ['Live website portfolio work for a registered charity', 'Cross-functional collaboration experience', 'Professional reference for web development roles', 'Certificate of volunteering']
-  },
-  {
-    id: 'fundraising-coordinator',
-    title: 'Fundraising Coordinator',
-    category: 'marketing', catLabel: 'Marketing & Fundraising', catColor: '#be185d',
-    icon: 'fa-hand-holding-heart', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: true,
-    summary: 'Plan and run fundraising campaigns to raise income and awareness for Joybringers.',
-    about: 'Our Fundraising Coordinator Volunteer will help us grow our income by planning, organising, and running fundraising activities — from community events to online campaigns — directly funding our programmes for young people and families.',
-    responsibilities: ['Research and develop new fundraising opportunities', 'Plan and coordinate fundraising events and campaigns', 'Manage relationships with individual donors and corporate supporters', 'Write compelling fundraising appeals and thank-you letters', 'Report on fundraising performance against targets', 'Work with the marketing team to promote campaigns'],
-    requirements: ['Experience in fundraising, sales, events, or similar', 'Strong written communication and persuasion skills', 'Self-motivated with the ability to work to targets', 'Knowledge of charity fundraising regulations is helpful'],
-    gains: ['Proven fundraising track record for your CV', 'Experience working to income targets in the charity sector', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'it-workshop-assistant',
-    title: 'IT Workshop Assistant',
-    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
-    icon: 'fa-chalkboard-teacher', location: 'Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Support our coding workshops, helping young people build confidence with technology.',
-    about: 'IT Workshop Assistants support delivery of Joybringers\' digital skills programmes for children and young people aged 7–25, providing hands-on support as participants learn coding, data skills, and digital literacy.',
-    responsibilities: ['Support the lead facilitator during coding and IT workshops', 'Provide one-to-one assistance to participants who need extra help', 'Help set up equipment and resources before sessions', 'Encourage and motivate young people during activities', 'Support safeguarding by maintaining appropriate supervision', 'Provide feedback to help improve future delivery'],
-    requirements: ['Basic coding knowledge (Scratch, Python, HTML or similar)', 'Patience and a genuine interest in supporting young people', 'Enhanced DBS check required (we will support this)', 'Punctual, reliable, and committed to scheduled sessions'],
-    gains: ['Teaching and facilitation experience with young people', 'Enhanced DBS certificate', 'Training in safeguarding and youth work', 'Certificate of volunteering']
-  },
-  {
-    id: 'community-outreach',
-    title: 'Community Outreach Volunteer',
-    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
-    icon: 'fa-hands-helping', location: 'Newcastle & surrounding areas', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Be the face of Joybringers — build connections, raise awareness, and bring people in.',
-    about: 'As our Community Outreach Volunteer, you will help grow Joybringers\' reach by engaging with local communities, attending events, and building relationships with schools, community centres, and partner organisations.',
-    responsibilities: ['Attend local community events and represent Joybringers', 'Visit schools, libraries, and community centres to share information', 'Distribute leaflets, posters, and promotional materials', 'Build relationships with local organisations and community leaders', 'Recruit new participants to our programmes and events', 'Report back on community needs and feedback'],
-    requirements: ['Friendly, outgoing, and confident speaking to new people', 'Passion for community development and social inclusion', 'Reliable transport or willingness to travel locally', 'Enhanced DBS check required for work near young people'],
-    gains: ['Real community engagement experience', 'Understanding of community development in the charity sector', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'counselling-support',
-    title: 'Counselling Support Manager',
-    category: 'support', catLabel: 'Support Services', catColor: '#0e7490',
-    icon: 'fa-heart', location: 'Newcastle / Hybrid', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Provide emotional support and coordinate counselling for children and young people.',
-    about: 'Our Counselling Support Manager Volunteer will help develop and coordinate Joybringers\' mental health and emotional wellbeing support — a sensitive, important role that directly improves lives.',
-    responsibilities: ['Coordinate referrals to internal and external counselling services', 'Provide first-line emotional support (within your qualifications)', 'Develop relationships with external counselling and CAMHS services', 'Maintain accurate, confidential case records', 'Deliver or coordinate wellbeing workshops for young people', 'Ensure all work aligns with safeguarding policies'],
-    requirements: ['Qualified or trainee counsellor (BACP or equivalent)', 'Experience working with children and young people', 'Enhanced DBS check required', 'Strong empathy, active listening, and professional boundaries'],
-    gains: ['Supervised practice hours towards counselling qualification', 'Experience in community mental health settings', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'marketing-manager',
-    title: 'Marketing Manager',
-    category: 'marketing', catLabel: 'Marketing & Fundraising', catColor: '#be185d',
-    icon: 'fa-megaphone', location: 'Remote / Hybrid', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Lead our marketing strategy to grow Joybringers\' audience, impact, and community engagement.',
-    about: 'As Marketing Manager Volunteer, you will develop and implement Joybringers\' overall marketing strategy — overseeing campaigns across digital, print, and social channels to inspire more people to engage with our mission.',
-    responsibilities: ['Develop and implement the annual marketing strategy', 'Manage and grow social media presence', 'Plan and oversee email marketing campaigns', 'Coordinate content creation with design and comms teams', 'Monitor marketing KPIs and report on performance', 'Identify partnership opportunities to grow our reach'],
-    requirements: ['Proven marketing experience (CIM qualified or similar is advantageous)', 'Strong knowledge of digital marketing channels', 'Experience managing campaigns end-to-end', 'Creative thinking with a data-driven approach'],
-    gains: ['Leadership of a real charity marketing function', 'Portfolio of campaign work across multiple channels', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'graphic-designer',
-    title: 'Graphic Designer',
-    category: 'digital', catLabel: 'Digital & Technology', catColor: '#7c3aed',
-    icon: 'fa-paint-brush', location: 'Remote', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Create stunning visuals for events, campaigns, and social media that reflect our brand.',
-    about: 'Our Graphic Designer Volunteer will bring the Joybringers brand to life — designing social media graphics, event flyers, reports, and campaign visuals that help us stand out and communicate our impact.',
-    responsibilities: ['Create social media graphics, event flyers, and promotional materials', 'Design branded templates for internal and external communications', 'Develop visual assets for fundraising campaigns', 'Maintain and evolve the Joybringers brand identity guidelines', 'Collaborate with marketing and comms teams on creative briefs', 'Ensure designs are accessible and brand-consistent'],
-    requirements: ['Proficiency in Adobe Creative Suite or Canva Pro', 'Strong portfolio demonstrating creative range', 'Understanding of brand consistency and visual identity', 'Ability to work to creative briefs and deadlines'],
-    gains: ['Real charity design portfolio with purpose', 'Collaboration with marketing and communications teams', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'parenting-facilitator',
-    title: 'Parenting Workshop Facilitator',
-    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
-    icon: 'fa-child', location: 'Newcastle', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Lead engaging parenting workshops that build confidence and community among local families.',
-    about: 'Our Parenting Workshop Facilitator Volunteer will plan and deliver supportive workshops for parents and carers — covering positive parenting, child development, wellbeing, and family communication.',
-    responsibilities: ['Plan and facilitate regular parenting workshops', 'Develop session plans and supporting resources', 'Create a safe, inclusive, and supportive learning environment', 'Gather participant feedback and adapt content accordingly', 'Signpost families to additional support services', 'Maintain safeguarding standards throughout all sessions'],
-    requirements: ['Experience in parenting support, family work, or community education', 'Strong facilitation and group management skills', 'Enhanced DBS check required', 'Empathy, patience, and a non-judgmental approach'],
-    gains: ['Facilitation and adult education experience', 'Knowledge of evidence-based parenting approaches', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'language-tutor',
-    title: 'Language Tutor',
-    category: 'community', catLabel: 'Community & Education', catColor: '#b45309',
-    icon: 'fa-book-open', location: 'Newcastle / Online', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Support children and young people to improve reading, writing, and communication.',
-    about: 'Our Language Tutor Volunteers work directly with children and young people to build literacy and communication skills, in person in Newcastle or online — tailored to individual learner needs.',
-    responsibilities: ['Deliver one-to-one or small group literacy support sessions', 'Assess learner needs and set achievable goals', 'Plan engaging and age-appropriate session activities', 'Track learner progress and share updates with the team', 'Encourage confidence and a love of reading and writing', 'Follow safeguarding policies throughout all sessions'],
-    requirements: ['Strong literacy skills and a passion for education', 'Experience tutoring, teaching, or mentoring young people', 'Enhanced DBS check required', 'Patience, encouragement, and a positive approach'],
-    gains: ['Teaching and mentoring experience with young people', 'Enhanced DBS certificate', 'Training in literacy support approaches', 'Certificate of volunteering']
-  },
-  {
-    id: 'data-research-analyst',
-    title: 'Data & Research Analyst',
-    category: 'finance', catLabel: 'Finance & Business', catColor: '#1e40af',
-    icon: 'fa-database', location: 'Remote', commitment: '5–8 hrs/week', urgent: false,
-    summary: 'Measure our programme impact through data collection, analysis, and clear reporting.',
-    about: 'Our Data & Research Analyst Volunteer will design data collection tools, analyse programme data, and produce clear impact reports that support funding applications and strategic planning.',
-    responsibilities: ['Design surveys and data collection tools for programmes', 'Analyse participant data and programme outcomes', 'Produce clear impact reports and infographics', 'Support grant applications with robust evidence', 'Monitor relevant trends in the charity sector', 'Present findings to leadership in accessible formats'],
-    requirements: ['Strong data analysis skills (Excel, SPSS, R, Python, or similar)', 'Experience with survey design and impact measurement', 'Ability to communicate complex data simply', 'Interest in social impact and the charity sector'],
-    gains: ['Real impact measurement experience in the charity sector', 'Published impact reports for your portfolio', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  },
-  {
-    id: 'volunteer-recruitment',
-    title: 'Volunteer Recruitment Specialist',
-    category: 'support', catLabel: 'Support Services', catColor: '#0e7490',
-    icon: 'fa-user-plus', location: 'Remote / Newcastle', commitment: '5–8 hrs/week', urgent: true,
-    summary: 'Lead our volunteer recruitment — attracting, selecting, and onboarding the right people.',
-    about: 'As our Volunteer Recruitment Specialist, you will own the end-to-end volunteer recruitment process — from writing role descriptions and advertising on Do-it and Reach Volunteering, to interviewing and onboarding new volunteers.',
-    responsibilities: ['Write and update volunteer role descriptions', 'Advertise vacancies on Do-it, Reach, and LinkedIn', 'Screen applications and conduct volunteer interviews', 'Manage the onboarding and DBS check process', 'Maintain the volunteer database and communications', 'Develop retention initiatives to keep volunteers engaged'],
-    requirements: ['Experience in recruitment, HR, or volunteer management', 'Strong interviewing and assessment skills', 'Knowledge of volunteer management platforms is helpful', 'Excellent communication and relationship-building skills'],
-    gains: ['Full-cycle recruitment experience in the charity sector', 'Exposure to volunteer management best practices', 'Professional reference from the Charity Director', 'Certificate of volunteering']
-  }
-];
+let ROLES = [];
 
-/* ── Role tier: trustee | senior | volunteer ─────────────
-   trustee  = board/director level — full expenses policy
-   senior   = specialist/manager/coordinator/analyst
-   volunteer = frontline/assistant/facilitator/tutor
-───────────────────────────────────────────────────── */
-const ROLE_TIERS = {
-  'director-comms':          'trustee',
-  'secretary':               'trustee',
-  'accountant':              'senior',
-  'digital-analyst':         'senior',
-  'hr-assistant':            'senior',
-  'compliance-manager':      'senior',
-  'project-manager':         'senior',
-  'business-analyst':        'senior',
-  'website-designer':        'senior',
-  'fundraising-coordinator': 'senior',
-  'counselling-support':     'senior',
-  'marketing-manager':       'senior',
-  'data-research-analyst':   'senior',
-  'volunteer-recruitment':   'senior',
-  'admin-assistant':         'volunteer',
-  'graphic-designer':        'volunteer',
-  'food-bank':               'volunteer',
-  'it-workshop-assistant':   'volunteer',
-  'community-outreach':      'volunteer',
-  'parenting-facilitator':   'volunteer',
-  'language-tutor':          'volunteer'
-};
 
 function remunerationHTML(tier) {
   if (tier === 'trustee') {
@@ -989,7 +729,7 @@ function openRole(id) {
   document.getElementById('d-responsibilities').innerHTML = r.responsibilities.map(x => `<li>${x}</li>`).join('');
   document.getElementById('d-requirements').innerHTML   = r.requirements.map(x => `<li>${x}</li>`).join('');
   document.getElementById('d-gains').innerHTML          = r.gains.map(x => `<li>${x}</li>`).join('');
-  document.getElementById('d-remuneration').innerHTML   = remunerationHTML(ROLE_TIERS[r.id] || 'volunteer');
+  document.getElementById('d-remuneration').innerHTML   = remunerationHTML(r.tier || 'volunteer');
 
   document.getElementById('roleApplied').value    = r.title;
   document.getElementById('a-role-title').textContent = r.title;
@@ -1018,8 +758,14 @@ document.querySelectorAll('.vol-filter-btn').forEach(btn => {
   });
 });
 
-// Initial render
-renderCards('all');
+// Load roles from JSON and render
+fetch('/data/roles.json')
+  .then(r => r.json())
+  .then(data => { ROLES = data.items || []; renderCards('all'); })
+  .catch(() => {
+    document.getElementById('roles-grid').innerHTML =
+      '<div class="col-12 text-center py-5 text-muted">Unable to load roles. Please refresh the page.</div>';
+  });
 
 /* ═══════════════════════════════════════════════════════
    CV DRAG & DROP

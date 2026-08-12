@@ -84,6 +84,9 @@
       <a href="#" class="sidebar-link active" data-tab="events" data-roles="admin,editor" onclick="switchTab('events');return false;">
         <i class="fas fa-calendar-alt"></i> Events
       </a>
+      <a href="#" class="sidebar-link" data-tab="roles" data-roles="admin,editor" onclick="switchTab('roles');return false;">
+        <i class="fas fa-user-check"></i> Volunteer Roles
+      </a>
       <a href="#" class="sidebar-link" data-tab="photos" data-roles="admin,editor" onclick="switchTab('photos');return false;">
         <i class="fas fa-images"></i> Photos &amp; Gallery
       </a>
@@ -175,6 +178,41 @@
         </div>
         <div class="card-body p-3" id="events-list">
           <p class="text-muted">Loading events...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ROLES TAB ============ -->
+    <div id="tab-roles" class="admin-tab" style="display:none">
+      <div class="tab-header">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-user-check text-success"></i> Volunteer Roles</h2>
+          <p class="text-muted mb-0 small">Add, edit or delete volunteer role listings. Changes go live on the website in ~1 minute.</p>
+        </div>
+        <button class="btn btn-success" onclick="openNewRoleModal()">
+          <i class="fas fa-plus"></i> Add New Role
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between gap-3">
+          <span><i class="fas fa-list-ul"></i> All Roles</span>
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" style="max-width:160px" id="roles-category-filter" onchange="renderRolesList()">
+              <option value="">All categories</option>
+              <option value="operations">Leadership &amp; Ops</option>
+              <option value="finance">Finance &amp; Business</option>
+              <option value="digital">Digital &amp; Technology</option>
+              <option value="community">Community &amp; Education</option>
+              <option value="marketing">Marketing &amp; Fundraising</option>
+              <option value="support">Support Services</option>
+            </select>
+            <input type="text" class="form-control form-control-sm" style="max-width:200px"
+                   id="roles-search" placeholder="Search..." oninput="renderRolesList()">
+          </div>
+        </div>
+        <div class="card-body p-3" id="roles-list">
+          <p class="text-muted">Loading roles...</p>
         </div>
       </div>
     </div>
@@ -1168,6 +1206,104 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success fw-semibold" onclick="saveEvent()">
           <i class="fas fa-save"></i> Save Event
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ROLE MODAL ===================== -->
+<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="role-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#006526;color:white">
+        <h5 class="modal-title" id="role-modal-title">Add New Role</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="role-edit-index">
+
+        <div class="row g-3">
+
+          <div class="col-md-8">
+            <label class="form-label fw-semibold">Role Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="role-title" placeholder="e.g. Marketing Manager">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Tier</label>
+            <select class="form-select" id="role-tier">
+              <option value="volunteer">Volunteer</option>
+              <option value="senior">Senior / Specialist</option>
+              <option value="trustee">Trustee / Director</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+            <select class="form-select" id="role-category" onchange="onRoleCategoryChange(this.value)">
+              <option value="operations">Leadership &amp; Ops</option>
+              <option value="finance">Finance &amp; Business</option>
+              <option value="digital">Digital &amp; Technology</option>
+              <option value="community">Community &amp; Education</option>
+              <option value="marketing">Marketing &amp; Fundraising</option>
+              <option value="support">Support Services</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Icon <small class="text-muted">(fa-xxx)</small></label>
+            <input type="text" class="form-control" id="role-icon" placeholder="fa-bullhorn">
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="role-urgent">
+              <label class="form-check-label fw-semibold" for="role-urgent">Mark as Urgent</label>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Location</label>
+            <input type="text" class="form-control" id="role-location" placeholder="Newcastle / Remote">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Time Commitment</label>
+            <input type="text" class="form-control" id="role-commitment" placeholder="5–8 hrs/week">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Summary <span class="text-danger">*</span> <small class="text-muted">(1–2 sentences shown on the card)</small></label>
+            <textarea class="form-control" id="role-summary" rows="2" placeholder="Short description shown on the volunteer page card..."></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">About the Role</label>
+            <textarea class="form-control" id="role-about" rows="3" placeholder="Longer description shown when the role is opened..."></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Responsibilities <small class="text-muted">(one per line)</small></label>
+            <textarea class="form-control" id="role-responsibilities" rows="5" placeholder="Manage social media platforms&#10;Write and distribute newsletters&#10;Liaise with media outlets"></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Requirements <small class="text-muted">(one per line)</small></label>
+            <textarea class="form-control" id="role-requirements" rows="4" placeholder="Experience in communications&#10;Strong written and verbal skills"></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">What You Gain <small class="text-muted">(one per line)</small></label>
+            <textarea class="form-control" id="role-gains" rows="4" placeholder="Senior leadership experience&#10;Portfolio of real campaign work&#10;Certificate of volunteering"></textarea>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success fw-semibold" onclick="saveRole()">
+          <i class="fas fa-save"></i> Save Role
         </button>
       </div>
     </div>

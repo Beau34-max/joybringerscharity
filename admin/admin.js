@@ -121,12 +121,13 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).style.display = 'block';
   const link = document.querySelector(`[data-tab="${tabId}"]`);
   if (link) link.classList.add('active');
-  const titles = { events: 'Events', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', attendance: 'Event Attendance', exports: 'Export Data', settings: 'Settings' };
+  const titles = { events: 'Events', roles: 'Volunteer Roles', photos: 'Photos & Gallery', content: 'Website Content', dataentry: 'Data Entry', visitors: 'Visitor Log', attendance: 'Event Attendance', exports: 'Export Data', settings: 'Settings' };
   document.getElementById('page-title').textContent = titles[tabId] || tabId;
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-backdrop').classList.remove('open');
 
   if (tabId === 'events')     loadEvents();
+  if (tabId === 'roles')      loadRoles();
   if (tabId === 'photos')     { renderGallery('events'); renderGallery('partners'); }
   if (tabId === 'content')    loadContentTab();
   if (tabId === 'dataentry')  loadDataEntryTab();
@@ -1814,4 +1815,189 @@ function exportVisitorsCsv() {
   a.download = `joybringers-visitors-${date}.csv`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/* ── VOLUNTEER ROLES ─────────────────────────────────────── */
+
+const ROLES_PATH = 'data/roles.json';
+let rolesData = { items: [], sha: null };
+
+const CAT_META = {
+  operations: { label: 'Leadership & Ops',       color: '#006526' },
+  finance:    { label: 'Finance & Business',      color: '#1e40af' },
+  digital:    { label: 'Digital & Technology',    color: '#7c3aed' },
+  community:  { label: 'Community & Education',   color: '#b45309' },
+  marketing:  { label: 'Marketing & Fundraising', color: '#be185d' },
+  support:    { label: 'Support Services',        color: '#0e7490' }
+};
+
+async function loadRoles() {
+  document.getElementById('roles-list').innerHTML = '<p class="text-muted">Loading roles...</p>';
+  try {
+    const { data, sha } = await apiReadJSON(ROLES_PATH);
+    rolesData = { items: data.items || [], sha };
+    renderRolesList();
+  } catch (e) {
+    document.getElementById('roles-list').innerHTML = `<p class="text-danger">Error: ${e.message}</p>`;
+  }
+}
+
+function renderRolesList() {
+  const search   = (document.getElementById('roles-search')?.value || '').toLowerCase();
+  const catFilter = document.getElementById('roles-category-filter')?.value || '';
+
+  const filtered = rolesData.items.filter((r, i) => {
+    if (catFilter && r.category !== catFilter) return false;
+    if (search && !r.title.toLowerCase().includes(search) && !r.summary.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    document.getElementById('roles-list').innerHTML = '<p class="text-muted">No roles found.</p>';
+    return;
+  }
+
+  const tierBadge = { trustee: 'warning', senior: 'info', volunteer: 'secondary' };
+  const tierLabel  = { trustee: 'Trustee', senior: 'Senior', volunteer: 'Volunteer' };
+
+  document.getElementById('roles-list').innerHTML = filtered.map(r => {
+    const idx   = rolesData.items.indexOf(r);
+    const meta  = CAT_META[r.category] || { label: r.category, color: '#555' };
+    return `<div class="d-flex align-items-center justify-content-between gap-3 py-2 border-bottom">
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <span class="badge rounded-pill" style="background:${meta.color}18;color:${meta.color};border:1px solid ${meta.color}35;font-size:0.75rem;">${meta.label}</span>
+        <span class="fw-semibold">${r.title}</span>
+        <span class="badge bg-${tierBadge[r.tier] || 'secondary'}">${tierLabel[r.tier] || r.tier}</span>
+        ${r.urgent ? '<span class="badge bg-danger">Urgent</span>' : ''}
+        <small class="text-muted">${r.location || ''}</small>
+      </div>
+      <div class="d-flex gap-2 flex-shrink-0">
+        <button class="btn btn-sm btn-outline-secondary" onclick="openEditRoleModal(${idx})"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-outline-danger" onclick="deleteRole(${idx})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function onRoleCategoryChange(val) {
+  /* auto-populate catLabel/catColor from the selected category — stored invisibly */
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function openNewRoleModal() {
+  document.getElementById('role-modal-title').textContent = 'Add New Role';
+  document.getElementById('role-edit-index').value = '';
+  document.getElementById('role-title').value        = '';
+  document.getElementById('role-tier').value         = 'volunteer';
+  document.getElementById('role-category').value     = 'operations';
+  document.getElementById('role-icon').value         = '';
+  document.getElementById('role-urgent').checked     = false;
+  document.getElementById('role-location').value     = '';
+  document.getElementById('role-commitment').value   = '5–8 hrs/week';
+  document.getElementById('role-summary').value      = '';
+  document.getElementById('role-about').value        = '';
+  document.getElementById('role-responsibilities').value = '';
+  document.getElementById('role-requirements').value = '';
+  document.getElementById('role-gains').value        = '';
+  new bootstrap.Modal(document.getElementById('roleModal')).show();
+}
+
+function openEditRoleModal(idx) {
+  const r = rolesData.items[idx];
+  if (!r) return;
+  document.getElementById('role-modal-title').textContent = 'Edit Role';
+  document.getElementById('role-edit-index').value        = idx;
+  document.getElementById('role-title').value             = r.title || '';
+  document.getElementById('role-tier').value              = r.tier  || 'volunteer';
+  document.getElementById('role-category').value          = r.category || 'operations';
+  document.getElementById('role-icon').value              = r.icon || '';
+  document.getElementById('role-urgent').checked          = !!r.urgent;
+  document.getElementById('role-location').value          = r.location || '';
+  document.getElementById('role-commitment').value        = r.commitment || '';
+  document.getElementById('role-summary').value           = r.summary || '';
+  document.getElementById('role-about').value             = r.about || '';
+  document.getElementById('role-responsibilities').value  = (r.responsibilities || []).join('\n');
+  document.getElementById('role-requirements').value      = (r.requirements     || []).join('\n');
+  document.getElementById('role-gains').value             = (r.gains            || []).join('\n');
+  new bootstrap.Modal(document.getElementById('roleModal')).show();
+}
+
+async function saveRole() {
+  const title = document.getElementById('role-title').value.trim();
+  if (!title) { showAlert('warning', 'Role title is required.'); return; }
+
+  const category = document.getElementById('role-category').value;
+  const meta     = CAT_META[category] || { label: category, color: '#555' };
+
+  const splitLines = v => v.split('\n').map(s => s.trim()).filter(Boolean);
+
+  const role = {
+    id:              slugify(title),
+    title,
+    category,
+    catLabel:        meta.label,
+    catColor:        meta.color,
+    icon:            document.getElementById('role-icon').value.trim() || 'fa-hands-helping',
+    location:        document.getElementById('role-location').value.trim(),
+    commitment:      document.getElementById('role-commitment').value.trim(),
+    tier:            document.getElementById('role-tier').value,
+    urgent:          document.getElementById('role-urgent').checked,
+    summary:         document.getElementById('role-summary').value.trim(),
+    about:           document.getElementById('role-about').value.trim(),
+    responsibilities: splitLines(document.getElementById('role-responsibilities').value),
+    requirements:    splitLines(document.getElementById('role-requirements').value),
+    gains:           splitLines(document.getElementById('role-gains').value)
+  };
+
+  const idxVal = document.getElementById('role-edit-index').value;
+  const idx    = idxVal !== '' ? parseInt(idxVal, 10) : -1;
+
+  const updated = [...rolesData.items];
+  if (idx >= 0) {
+    role.id = rolesData.items[idx].id || role.id;
+    updated[idx] = role;
+  } else {
+    /* ensure unique id */
+    let base = role.id, n = 2;
+    while (updated.find(r => r.id === role.id)) role.id = `${base}-${n++}`;
+    updated.push(role);
+  }
+
+  showLoading('Saving role...');
+  try {
+    const { sha } = await apiReadJSON(ROLES_PATH);
+    await apiWriteJSON(ROLES_PATH, { items: updated }, sha, `Admin: ${idx >= 0 ? 'update' : 'add'} role "${title}"`);
+    rolesData.items = updated;
+    rolesData.sha   = null;
+    bootstrap.Modal.getInstance(document.getElementById('roleModal'))?.hide();
+    renderRolesList();
+    showAlert('success', `Role "${title}" saved successfully.`);
+  } catch (e) {
+    showAlert('danger', `Save failed: ${e.message}`);
+  } finally {
+    hideLoading();
+  }
+}
+
+async function deleteRole(idx) {
+  const r = rolesData.items[idx];
+  if (!r) return;
+  if (!confirm(`Delete "${r.title}"? This cannot be undone.`)) return;
+
+  showLoading('Deleting role...');
+  try {
+    const { data, sha } = await apiReadJSON(ROLES_PATH);
+    const updated = (data.items || []).filter((_, i) => i !== idx);
+    await apiWriteJSON(ROLES_PATH, { items: updated }, sha, `Admin: delete role "${r.title}"`);
+    rolesData.items = updated;
+    renderRolesList();
+    showAlert('success', `Role "${r.title}" deleted.`);
+  } catch (e) {
+    showAlert('danger', `Delete failed: ${e.message}`);
+  } finally {
+    hideLoading();
+  }
 }
