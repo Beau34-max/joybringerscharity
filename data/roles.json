@@ -315,6 +315,41 @@
       "open": true
     },
     {
+      "id": "trustee-business-management",
+      "title": "Trustee — Business Management & Development",
+      "category": "finance",
+      "catLabel": "Finance & Business",
+      "catColor": "#1e40af",
+      "icon": "fa-briefcase",
+      "location": "Newcastle / Hybrid",
+      "commitment": "4–6 hrs/month",
+      "tier": "trustee",
+      "open": true,
+      "urgent": false,
+      "summary": "Help shape the strategic direction and long-term growth of Joybringers as a Board Trustee with business management expertise.",
+      "about": "We are seeking a Trustee with a strong background in business management and development to join the Joybringers Board. You will contribute strategic insight to help the charity grow sustainably, develop new income streams, build partnerships, and ensure our operations are run effectively and efficiently.",
+      "responsibilities": [
+        "Contribute to the development and review of the charity’s strategic plan",
+        "Advise on business development opportunities, partnerships, and income diversification",
+        "Attend and contribute to quarterly Board meetings",
+        "Support organisational growth by applying commercial and management expertise",
+        "Help identify and mitigate operational and strategic risks",
+        "Mentor senior staff on business planning and performance management"
+      ],
+      "requirements": [
+        "Proven track record in business management, development, or strategy",
+        "Experience in organisational growth, partnerships, or income generation",
+        "Strong commercial acumen with the ability to think strategically",
+        "Commitment to Joybringers’ mission and values"
+      ],
+      "gains": [
+        "Non-executive board experience with a registered charity",
+        "Opportunity to shape the strategic direction of a growing community organisation",
+        "Broader exposure to charity governance and social impact",
+        "Certificate of trusteeship and professional reference"
+      ]
+    },
+    {
       "id": "business-analyst",
       "title": "Business Analyst",
       "category": "finance",
@@ -832,41 +867,6 @@
         "Non-executive board experience with a registered charity",
         "Direct influence over programmes that improve lives in the community",
         "Broader exposure to charity governance and strategic planning",
-        "Certificate of trusteeship and professional reference"
-      ]
-    },
-    {
-      "id": "trustee-business-management",
-      "title": "Trustee — Business Management & Development",
-      "category": "finance",
-      "catLabel": "Finance & Business",
-      "catColor": "#1e40af",
-      "icon": "fa-briefcase",
-      "location": "Newcastle / Hybrid",
-      "commitment": "4–6 hrs/month",
-      "tier": "trustee",
-      "open": true,
-      "urgent": false,
-      "summary": "Help shape the strategic direction and long-term growth of Joybringers as a Board Trustee with business management expertise.",
-      "about": "We are seeking a Trustee with a strong background in business management and development to join the Joybringers Board. You will contribute strategic insight to help the charity grow sustainably, develop new income streams, build partnerships, and ensure our operations are run effectively and efficiently.",
-      "responsibilities": [
-        "Contribute to the development and review of the charity’s strategic plan",
-        "Advise on business development opportunities, partnerships, and income diversification",
-        "Attend and contribute to quarterly Board meetings",
-        "Support organisational growth by applying commercial and management expertise",
-        "Help identify and mitigate operational and strategic risks",
-        "Mentor senior staff on business planning and performance management"
-      ],
-      "requirements": [
-        "Proven track record in business management, development, or strategy",
-        "Experience in organisational growth, partnerships, or income generation",
-        "Strong commercial acumen with the ability to think strategically",
-        "Commitment to Joybringers’ mission and values"
-      ],
-      "gains": [
-        "Non-executive board experience with a registered charity",
-        "Opportunity to shape the strategic direction of a growing community organisation",
-        "Broader exposure to charity governance and social impact",
         "Certificate of trusteeship and professional reference"
       ]
     }
