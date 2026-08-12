@@ -702,7 +702,7 @@
     },
     {
       "id": "volunteer-recruitment",
-      "title": "Volunteer Recruitment Specialist",
+      "title": "Recruitment Specialist",
       "category": "support",
       "catLabel": "Support Services",
       "catColor": "#0e7490",
@@ -711,8 +711,8 @@
       "commitment": "5–8 hrs/week",
       "tier": "senior",
       "urgent": true,
-      "summary": "Lead our volunteer recruitment — attracting, selecting, and onboarding the right people.",
-      "about": "As our Volunteer Recruitment Specialist, you will own the end-to-end volunteer recruitment process — from writing role descriptions and advertising on Do-it and Reach Volunteering, to interviewing and onboarding new volunteers.",
+      "summary": "Lead our recruitment — attracting, selecting, and onboarding the right people.",
+      "about": "As our Recruitment Specialist, you will own the end-to-end volunteer recruitment process — from writing role descriptions and advertising on Do-it and Reach Volunteering, to interviewing and onboarding new volunteers.",
       "responsibilities": [
         "Write and update volunteer role descriptions",
         "Advertise vacancies on Do-it, Reach, and LinkedIn",
@@ -732,8 +732,7 @@
         "Exposure to volunteer management best practices",
         "Professional reference from the Charity Director",
         "Certificate of volunteering"
-      ],
-      "open": true
+      ]
     }
   ]
 }
