@@ -36,6 +36,40 @@
       "open": false
     },
     {
+      "id": "trustee-health-safety",
+      "title": "Trustee — Health & Safety",
+      "category": "operations",
+      "catLabel": "Leadership & Ops",
+      "catColor": "#006526",
+      "icon": "fa-hard-hat",
+      "location": "Newcastle / Hybrid",
+      "commitment": "4–6 hrs/Week",
+      "tier": "trustee",
+      "urgent": true,
+      "summary": "Bring your health and safety expertise to our Board to keep our programmes and people safe.",
+      "about": "We are looking for a Trustee with health and safety expertise to join the Joybringers Board of Trustees. You will provide strategic oversight of our health and safety obligations, ensuring that all programmes, events, and activities are carried out safely and in compliance with relevant legislation.",
+      "responsibilities": [
+        "Provide board-level oversight of health and safety policies and practices",
+        "Review and challenge H&S risk assessments and incident reports",
+        "Attend and contribute to quarterly Board meetings",
+        "Advise on compliance with health and safety legislation (Health and Safety at Work Act, etc.)",
+        "Champion a culture of safety and wellbeing across the organisation",
+        "Support the development and review of safeguarding and H&S policies"
+      ],
+      "requirements": [
+        "Professional background in health and safety (NEBOSH, IOSH or equivalent preferred)",
+        "Experience conducting or reviewing risk assessments",
+        "Knowledge of health and safety legislation relevant to community organisations",
+        "Commitment to Joybringers’ mission and values"
+      ],
+      "gains": [
+        "Non-executive board experience with a registered charity",
+        "Opportunity to embed best-practice safety culture in a growing organisation",
+        "Broader exposure to charity governance and strategy",
+        "Certificate of trusteeship and professional reference"
+      ]
+    },
+    {
       "id": "accountant",
       "title": "Accountant Volunteer",
       "category": "finance",
@@ -313,40 +347,6 @@
         "Certificate of volunteering"
       ],
       "open": true
-    },
-    {
-      "id": "trustee-health-safety",
-      "title": "Trustee — Health & Safety",
-      "category": "operations",
-      "catLabel": "Leadership & Ops",
-      "catColor": "#006526",
-      "icon": "fa-hard-hat",
-      "location": "Newcastle / Hybrid",
-      "commitment": "4–6 hrs/Week",
-      "tier": "trustee",
-      "urgent": true,
-      "summary": "Bring your health and safety expertise to our Board to keep our programmes and people safe.",
-      "about": "We are looking for a Trustee with health and safety expertise to join the Joybringers Board of Trustees. You will provide strategic oversight of our health and safety obligations, ensuring that all programmes, events, and activities are carried out safely and in compliance with relevant legislation.",
-      "responsibilities": [
-        "Provide board-level oversight of health and safety policies and practices",
-        "Review and challenge H&S risk assessments and incident reports",
-        "Attend and contribute to quarterly Board meetings",
-        "Advise on compliance with health and safety legislation (Health and Safety at Work Act, etc.)",
-        "Champion a culture of safety and wellbeing across the organisation",
-        "Support the development and review of safeguarding and H&S policies"
-      ],
-      "requirements": [
-        "Professional background in health and safety (NEBOSH, IOSH or equivalent preferred)",
-        "Experience conducting or reviewing risk assessments",
-        "Knowledge of health and safety legislation relevant to community organisations",
-        "Commitment to Joybringers’ mission and values"
-      ],
-      "gains": [
-        "Non-executive board experience with a registered charity",
-        "Opportunity to embed best-practice safety culture in a growing organisation",
-        "Broader exposure to charity governance and strategy",
-        "Certificate of trusteeship and professional reference"
-      ]
     },
     {
       "id": "trustee-accounting",
