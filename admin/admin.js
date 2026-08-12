@@ -1843,10 +1843,11 @@ async function loadRoles() {
 }
 
 function renderRolesList() {
-  const search   = (document.getElementById('roles-search')?.value || '').toLowerCase();
+  const search    = (document.getElementById('roles-search')?.value || '').toLowerCase();
   const catFilter = document.getElementById('roles-category-filter')?.value || '';
+  const isFiltering = search || catFilter;
 
-  const filtered = rolesData.items.filter((r, i) => {
+  const filtered = rolesData.items.filter(r => {
     if (catFilter && r.category !== catFilter) return false;
     if (search && !r.title.toLowerCase().includes(search) && !r.summary.toLowerCase().includes(search)) return false;
     return true;
@@ -1860,12 +1861,19 @@ function renderRolesList() {
   const tierBadge = { trustee: 'warning', senior: 'info', volunteer: 'secondary' };
   const tierLabel  = { trustee: 'Trustee', senior: 'Senior', volunteer: 'Volunteer' };
 
-  document.getElementById('roles-list').innerHTML = filtered.map(r => {
+  const list = document.getElementById('roles-list');
+  list.innerHTML = filtered.map(r => {
     const idx    = rolesData.items.indexOf(r);
     const meta   = CAT_META[r.category] || { label: r.category, color: '#555' };
     const isOpen = r.open !== false;
-    return `<div class="d-flex align-items-center justify-content-between gap-3 py-2 border-bottom ${isOpen ? '' : 'opacity-50'}">
-      <div class="d-flex align-items-center gap-3 flex-wrap">
+    return `<div class="roles-row d-flex align-items-center gap-3 py-2 border-bottom ${isOpen ? '' : 'opacity-50'}"
+                 draggable="${!isFiltering}" data-idx="${idx}"
+                 ondragstart="rolesDragStart(event)" ondragover="rolesDragOver(event)"
+                 ondragleave="rolesDragLeave(event)" ondrop="rolesDrop(event)" ondragend="rolesDragEnd(event)">
+      <span class="roles-drag-handle text-muted ${isFiltering ? 'invisible' : ''}" title="Drag to reorder">
+        <i class="fas fa-grip-vertical"></i>
+      </span>
+      <div class="d-flex align-items-center gap-3 flex-wrap flex-grow-1">
         <span class="badge rounded-pill" style="background:${meta.color}18;color:${meta.color};border:1px solid ${meta.color}35;font-size:0.75rem;">${meta.label}</span>
         <span class="fw-semibold">${r.title}</span>
         <span class="badge bg-${tierBadge[r.tier] || 'secondary'}">${tierLabel[r.tier] || r.tier}</span>
@@ -1882,6 +1890,59 @@ function renderRolesList() {
       </div>
     </div>`;
   }).join('');
+}
+
+/* ── Drag-and-drop reorder ───────────────────────────────── */
+
+let _dragSrcIdx = null;
+
+function rolesDragStart(e) {
+  _dragSrcIdx = parseInt(e.currentTarget.dataset.idx, 10);
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function rolesDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const row = e.currentTarget;
+  if (parseInt(row.dataset.idx, 10) !== _dragSrcIdx) {
+    row.classList.add('drag-over');
+  }
+}
+
+function rolesDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function rolesDragEnd(e) {
+  document.querySelectorAll('.roles-row').forEach(r => r.classList.remove('dragging', 'drag-over'));
+}
+
+async function rolesDrop(e) {
+  e.preventDefault();
+  const targetIdx = parseInt(e.currentTarget.dataset.idx, 10);
+  e.currentTarget.classList.remove('drag-over');
+  if (_dragSrcIdx === null || _dragSrcIdx === targetIdx) return;
+
+  const items   = [...rolesData.items];
+  const [moved] = items.splice(_dragSrcIdx, 1);
+  items.splice(targetIdx, 0, moved);
+  _dragSrcIdx = null;
+
+  /* optimistic update */
+  rolesData.items = items;
+  renderRolesList();
+
+  showLoading('Saving order...');
+  try {
+    const { sha } = await apiReadJSON(ROLES_PATH);
+    await apiWriteJSON(ROLES_PATH, { items }, sha, `Admin: reorder roles`);
+  } catch (e) {
+    showAlert('danger', `Could not save order: ${e.message}`);
+  } finally {
+    hideLoading();
+  }
 }
 
 function onRoleCategoryChange(val) {

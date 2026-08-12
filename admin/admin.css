@@ -458,3 +458,20 @@ body {
     align-items: stretch;
   }
 }
+
+/* ── Roles drag-and-drop ─────────────────────────────────── */
+.roles-drag-handle {
+  cursor: grab;
+  padding: 0 4px;
+  font-size: 0.9rem;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.roles-row:hover .roles-drag-handle { opacity: 1; }
+.roles-row[draggable="true"] { cursor: default; }
+.roles-row.dragging { opacity: 0.4; background: #f8fafc; }
+.roles-row.drag-over {
+  border-top: 2px solid #006526 !important;
+  background: #f0fdf4;
+}
