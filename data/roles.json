@@ -810,10 +810,9 @@
       "catColor": "#b45309",
       "icon": "fa-project-diagram",
       "location": "Newcastle / Hybrid",
-      "commitment": "4–6 hrs/month",
+      "commitment": "4–6 hrs/Week",
       "tier": "trustee",
-      "open": true,
-      "urgent": false,
+      "urgent": true,
       "summary": "Shape how we deliver programmes that change lives as a Trustee with programme delivery expertise.",
       "about": "We are seeking a Trustee with experience in programme design and delivery to join our Board. You will provide strategic oversight of Joybringers’ core programmes — helping to ensure they are well-designed, evidence-based, impactful, and delivered to the highest standard for our beneficiaries.",
       "responsibilities": [
