@@ -350,6 +350,40 @@
       ]
     },
     {
+      "id": "trustee-programme-delivery",
+      "title": "Trustee — Programme Delivery",
+      "category": "community",
+      "catLabel": "Community & Education",
+      "catColor": "#b45309",
+      "icon": "fa-project-diagram",
+      "location": "Newcastle / Hybrid",
+      "commitment": "4–6 hrs/Week",
+      "tier": "trustee",
+      "urgent": true,
+      "summary": "Shape how we deliver programmes that change lives as a Trustee with programme delivery expertise.",
+      "about": "We are seeking a Trustee with experience in programme design and delivery to join our Board. You will provide strategic oversight of Joybringers’ core programmes — helping to ensure they are well-designed, evidence-based, impactful, and delivered to the highest standard for our beneficiaries.",
+      "responsibilities": [
+        "Provide strategic oversight of programme quality and impact",
+        "Challenge and support the development of new and existing programmes",
+        "Attend and contribute to quarterly Board meetings",
+        "Help evaluate programme outcomes and use data to drive improvements",
+        "Advise on best practice in community programme design and delivery",
+        "Support grant applications by contributing programme expertise"
+      ],
+      "requirements": [
+        "Significant experience in programme design, delivery, or evaluation",
+        "Background in community development, education, youth work, or social services is advantageous",
+        "Ability to think strategically about programme impact and sustainability",
+        "Commitment to Joybringers’ mission and values"
+      ],
+      "gains": [
+        "Non-executive board experience with a registered charity",
+        "Direct influence over programmes that improve lives in the community",
+        "Broader exposure to charity governance and strategic planning",
+        "Certificate of trusteeship and professional reference"
+      ]
+    },
+    {
       "id": "business-analyst",
       "title": "Business Analyst",
       "category": "finance",
@@ -833,40 +867,6 @@
         "Non-executive board experience with a registered charity",
         "Opportunity to embed best-practice safety culture in a growing organisation",
         "Broader exposure to charity governance and strategy",
-        "Certificate of trusteeship and professional reference"
-      ]
-    },
-    {
-      "id": "trustee-programme-delivery",
-      "title": "Trustee — Programme Delivery",
-      "category": "community",
-      "catLabel": "Community & Education",
-      "catColor": "#b45309",
-      "icon": "fa-project-diagram",
-      "location": "Newcastle / Hybrid",
-      "commitment": "4–6 hrs/Week",
-      "tier": "trustee",
-      "urgent": true,
-      "summary": "Shape how we deliver programmes that change lives as a Trustee with programme delivery expertise.",
-      "about": "We are seeking a Trustee with experience in programme design and delivery to join our Board. You will provide strategic oversight of Joybringers’ core programmes — helping to ensure they are well-designed, evidence-based, impactful, and delivered to the highest standard for our beneficiaries.",
-      "responsibilities": [
-        "Provide strategic oversight of programme quality and impact",
-        "Challenge and support the development of new and existing programmes",
-        "Attend and contribute to quarterly Board meetings",
-        "Help evaluate programme outcomes and use data to drive improvements",
-        "Advise on best practice in community programme design and delivery",
-        "Support grant applications by contributing programme expertise"
-      ],
-      "requirements": [
-        "Significant experience in programme design, delivery, or evaluation",
-        "Background in community development, education, youth work, or social services is advantageous",
-        "Ability to think strategically about programme impact and sustainability",
-        "Commitment to Joybringers’ mission and values"
-      ],
-      "gains": [
-        "Non-executive board experience with a registered charity",
-        "Direct influence over programmes that improve lives in the community",
-        "Broader exposure to charity governance and strategic planning",
         "Certificate of trusteeship and professional reference"
       ]
     }
