@@ -119,5 +119,40 @@ module.exports = async (req, res) => {
     return res.status(200).json({ family_members: safeFam, participant_id: rows[0].participant_id || null });
   }
 
+  // Inserts a walk-in registration with main_attended:true (no prior booking)
+  if (action === 'walkin') {
+    const { event_name, event_date, name, email, phone } = body;
+    if (!event_name || !name || !email || !email.includes('@'))
+      return res.status(400).json({ error: 'Event, name and email are required.' });
+
+    const parts      = name.trim().split(/\s+/);
+    const first_name = parts[0];
+    const last_name  = parts.slice(1).join(' ') || '—';
+
+    const insertR = await fetch(`${SUPABASE_URL}/rest/v1/event_registrations`, {
+      method:  'POST',
+      headers: { ...sbHeaders(), Prefer: 'return=representation' },
+      body:    JSON.stringify({
+        event_name,
+        event_date:     event_date || null,
+        first_name,
+        last_name,
+        email:          email.toLowerCase().trim(),
+        phone:          phone || null,
+        main_attended:  true,
+        family_members: []
+      })
+    });
+
+    if (!insertR.ok) {
+      const msg = await insertR.text().catch(() => '');
+      console.error('Walk-in insert error:', insertR.status, msg);
+      return res.status(500).json({ error: 'Could not save walk-in. Please try again.' });
+    }
+
+    const rows = insertR.status !== 204 ? await insertR.json().catch(() => []) : [];
+    return res.status(200).json({ ok: true, reg_ref: rows[0]?.reg_ref || null });
+  }
+
   return res.status(400).json({ error: 'Unknown action.' });
 };

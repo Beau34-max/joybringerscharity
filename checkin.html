@@ -156,6 +156,27 @@
     .empty-msg { text-align: center; padding: 40px 20px; color: #6b7280; }
     .empty-msg i { font-size: 2.5rem; color: #d1d5db; margin-bottom: 12px; }
 
+    /* walk-in form */
+    .walkin-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0 14px; color: #9ca3af; font-size: .8rem; font-weight: 600;
+    }
+    .walkin-divider::before, .walkin-divider::after {
+      content: ''; flex: 1; height: 1px; background: #e5e7eb;
+    }
+    .walkin-field { margin-bottom: 12px; }
+    .walkin-field label { font-size: .85rem; font-weight: 600; display: block; margin-bottom: 5px; color: #374151; }
+    .walkin-field input { width: 100%; border: 2px solid #e5e7eb; border-radius: 10px; padding: 10px 13px; font-size: .95rem; transition: border .15s; }
+    .walkin-field input:focus { outline: none; border-color: var(--jb); }
+    .btn-walkin {
+      width: 100%; background: #fff; color: var(--jb);
+      border: 2px solid var(--jb); border-radius: 10px;
+      font-weight: 700; font-size: .95rem; padding: 11px;
+      cursor: pointer; transition: all .15s;
+    }
+    .btn-walkin:hover { background: var(--jb); color: #fff; }
+    .btn-walkin:disabled { opacity: .6; cursor: not-allowed; }
+
     .booking-header {
       display: flex;
       align-items: center;
@@ -316,8 +337,30 @@ function onSearch(q) {
   });
 
   if (!matches.length) {
-    el.innerHTML = `<p class="text-muted small text-center py-2 mb-0">
-      No results for "<strong>${q.trim()}</strong>". Try a different spelling or your booking ref.</p>`;
+    const evtVal = document.getElementById('event-select').value;
+    const [_ename, _edate] = evtVal ? evtVal.split('|||') : ['', ''];
+    el.innerHTML = `
+      <p class="text-muted small text-center py-2 mb-0">
+        No results for "<strong>${q.trim()}</strong>". Try a different spelling or your booking ref.
+      </p>
+      <div class="walkin-divider">Not registered?</div>
+      <div id="walkin-form">
+        <div class="walkin-field">
+          <label>Full Name <span style="color:#ef4444">*</span></label>
+          <input type="text" id="wi-name" value="${q.trim().replace(/"/g,'&quot;')}" placeholder="e.g. Sarah Johnson" autocapitalize="words">
+        </div>
+        <div class="walkin-field">
+          <label>Email Address <span style="color:#ef4444">*</span></label>
+          <input type="email" id="wi-email" placeholder="e.g. sarah@email.com" autocomplete="email">
+        </div>
+        <div class="walkin-field">
+          <label>Phone Number <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+          <input type="tel" id="wi-phone" placeholder="e.g. 07700 900000" autocomplete="tel">
+        </div>
+        <button class="btn-walkin" id="btn-walkin" onclick="submitWalkin('${_ename.replace(/'/g,"\\'")}','${_edate}')">
+          <i class="fas fa-walking me-2"></i>Check Me In as a Walk-In
+        </button>
+      </div>`;
     return;
   }
 
@@ -420,6 +463,32 @@ async function submitCheckin() {
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Check In';
+    alert(err.message);
+  }
+}
+
+// ─── Walk-in check-in ─────────────────────────────────────────────────────────
+async function submitWalkin(event_name, event_date) {
+  const name  = (document.getElementById('wi-name')?.value  || '').trim();
+  const email = (document.getElementById('wi-email')?.value || '').trim();
+  const phone = (document.getElementById('wi-phone')?.value || '').trim();
+
+  if (!name)               { alert('Please enter your full name.');          return; }
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+  const btn = document.getElementById('btn-walkin');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving…'; }
+
+  try {
+    await post('walkin', { event_name, event_date, name, email, phone });
+    document.getElementById('success-msg').textContent =
+      `${name} has been checked in as a walk-in attendee for ${event_name}.`;
+    document.getElementById('search-results').innerHTML = '';
+    document.getElementById('search-input').value = '';
+    hide('card-search');
+    show('card-success');
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-walking me-2"></i>Check Me In as a Walk-In'; }
     alert(err.message);
   }
 }
