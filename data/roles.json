@@ -33,7 +33,7 @@
         "Reference letter from the Charity Director",
         "Certificate of volunteering"
       ],
-      "open": false
+      "open": true
     },
     {
       "id": "trustee-accounting",
