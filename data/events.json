@@ -69,14 +69,15 @@
     },
     {
       "title": "Pizza & Wrap Workshop",
-      "date": "2026-09-12",
+      "date": "2026-08-11",
       "time": "10:00 AM - 12:00 PM",
       "venue": "Suite 3, Neon, Quorum Business Park, NE12 8BU",
       "description": "A hands-on food workshop where participants will learn how to prepare simple pizzas and wraps. We'll cover basic kitchen skills, healthy choices, and safe food handling in a friendly environment. Great for young people and families. Please inform us of any allergies or dietary needs during registration.",
       "image": "images/events/fk0.jpeg",
       "featured": false,
       "paidEvent": false,
-      "regOverrideOpen": false
+      "regOverrideOpen": false,
+      "programmeType": "general"
     },
     {
       "title": "Photography & Video Editing Training (Free)",
