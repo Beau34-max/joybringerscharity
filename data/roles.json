@@ -36,6 +36,44 @@
       "open": true
     },
     {
+      "id": "company-secretary",
+      "title": "Company Secretary",
+      "category": "operations",
+      "catLabel": "Leadership & Ops",
+      "catColor": "#006526",
+      "icon": "fa-landmark",
+      "location": "Newcastle / Hybrid",
+      "commitment": "3–5 hrs/week",
+      "tier": "trustee",
+      "open": true,
+      "urgent": false,
+      "summary": "Fulfil the statutory duties of Company Secretary for Joybringers Ltd, ensuring compliance with Companies House and Charity Commission requirements.",
+      "about": "The Company Secretary is a key governance role responsible for ensuring Joybringers Ltd meets its legal obligations as a registered company and charity. You will work closely with the Board of Trustees and senior leadership to keep statutory records up to date, manage filings, and support good governance practice across the organisation.",
+      "responsibilities": [
+        "File annual confirmation statements and returns with Companies House",
+        "Maintain the statutory registers (directors, members, charges)",
+        "Ensure timely filing of accounts and reports with the Charity Commission",
+        "Support the Chair in scheduling and administering board meetings",
+        "Prepare and circulate board minutes and resolutions",
+        "Advise trustees on their legal and regulatory obligations",
+        "Manage official correspondence with regulators and Companies House"
+      ],
+      "requirements": [
+        "Understanding of UK company law and charity governance (Companies Act 2006)",
+        "Experience in a company secretary, legal, or governance role is desirable",
+        "High level of accuracy, confidentiality, and attention to detail",
+        "Ability to interpret and apply regulatory guidance",
+        "Strong written communication skills"
+      ],
+      "gains": [
+        "Hands-on experience in charity and company governance",
+        "Exposure to board-level decision making and strategy",
+        "Professional development in regulatory compliance",
+        "Professional reference from the Chair or CEO",
+        "Certificate of volunteering"
+      ]
+    },
+    {
       "id": "trustee-accounting",
       "title": "Trustee — Accounting & Finance",
       "category": "finance",
