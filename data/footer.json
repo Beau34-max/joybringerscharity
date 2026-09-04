@@ -8,10 +8,32 @@
   "cookies_link": "#",
   "privacy_link": "#",
   "socials": [
-    { "platform": "Facebook", "url": "https://www.facebook.com/Joybringero/", "icon": "icon-facebook" },
-    { "platform": "Instagram", "url": "https://www.instagram.com/joybringerscharity/", "icon": "icon-instagram" },
-    { "platform": "LinkedIn", "url": "https://www.linkedin.com/company/joybringers/", "icon": "icon-linkedin" },
-    { "platform": "Twitter", "url": "https://x.com/JoybringersC", "icon": "icon-twitter" },
-    { "platform": "TikTok", "url": "https://www.tiktok.com/@joybringersc", "icon": "icon-tiktok" }
-  ]
+    {
+      "platform": "Facebook",
+      "url": "https://www.facebook.com/Joybringero/",
+      "icon": "icon-facebook"
+    },
+    {
+      "platform": "Instagram",
+      "url": "https://www.instagram.com/joybringerscharity/",
+      "icon": "icon-instagram"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://www.linkedin.com/company/joybringers/",
+      "icon": "icon-linkedin"
+    },
+    {
+      "platform": "Twitter",
+      "url": "https://x.com/JoybringersC",
+      "icon": "icon-twitter"
+    },
+    {
+      "platform": "TikTok",
+      "url": "https://www.tiktok.com/@joybringersc",
+      "icon": "icon-tiktok"
+    }
+  ],
+  "address": "The Light Box Q2, Quorum Business Park, Newcastle upon Tyne",
+  "map_url": "https://maps.app.goo.gl/8WL8FbgUi5Z5DS4s6?g_st=iw"
 }

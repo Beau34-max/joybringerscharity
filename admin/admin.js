@@ -618,6 +618,8 @@ async function loadContentTab() {
     document.getElementById('footer-company').value    = data.company    || '';
     document.getElementById('footer-company-no').value = data.company_no || '';
     document.getElementById('footer-charity-no').value = data.charity_no || '';
+    document.getElementById('footer-address').value    = data.address    || '';
+    document.getElementById('footer-map-url').value    = data.map_url    || '';
     const get = (plat) => ((data.socials || []).find(s => s.platform.toLowerCase() === plat) || {}).url || '';
     document.getElementById('footer-facebook').value  = get('facebook');
     document.getElementById('footer-instagram').value = get('instagram');
@@ -707,6 +709,8 @@ async function saveFooter() {
       company:    document.getElementById('footer-company').value,
       company_no: document.getElementById('footer-company-no').value,
       charity_no: document.getElementById('footer-charity-no').value,
+      address:    document.getElementById('footer-address').value,
+      map_url:    document.getElementById('footer-map-url').value,
       socials:    updatedSocials
     };
     const r = await apiWriteJSON('data/footer.json', payload, sha, 'Admin: update footer info');
